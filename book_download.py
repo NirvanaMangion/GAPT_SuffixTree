@@ -9,14 +9,6 @@ def sanitize_filename(filename):
     """
     return re.sub(r'[\\/*?:"<>|]', "", filename).strip()
 
-def clean_text(text):
-    """
-    Convert text to lowercase and replace numbers & special symbols with spaces.
-    """
-    text = text.lower()
-    text = re.sub(r'[^a-z\s]', ' ', text)  # Keep only letters and spaces
-    return text
-
 # URL of the top books page on Project Gutenberg
 url = "https://www.gutenberg.org/browse/scores/top"
 
@@ -85,13 +77,9 @@ for link in book_links:
     # Attempt to download the book
     r = requests.get(book_text_url)
     if r.status_code == 200:
-        text = r.text  # Get the content as text
-        cleaned_text = clean_text(text)  # Apply text transformation
-        
-        with open(file_path, "w", encoding="utf-8") as f:
-            f.write(cleaned_text)
-        
-        print(f"Downloaded and cleaned: {book_title}")
+        with open(file_path, "wb") as f:
+            f.write(r.content)
+        print(f"Downloaded: {book_title}")
         downloaded_ids.add(book_id)
         downloaded_titles.add(lower_title)
         downloaded += 1

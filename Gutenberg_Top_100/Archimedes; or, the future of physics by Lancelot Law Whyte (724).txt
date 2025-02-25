@@ -1,0 +1,2524 @@
+ the project gutenberg ebook of archimedes  or  the future of physics
+    
+this ebook is for the use of anyone anywhere in the united states and
+most other parts of the world at no cost and with almost no restrictions
+whatsoever  you may copy it  give it away or re use it under the terms
+of the project gutenberg license included with this ebook or online
+at www gutenberg org  if you are not located in the united states 
+you will have to check the laws of the country where you are located
+before using this ebook 
+
+title  archimedes  or  the future of physics
+
+author  lancelot law whyte
+
+release date  february           ebook        
+
+language  english
+
+original publication  london  kegan paul  trench  trubner   co      
+
+credits  carla foust  tim lindell and the online distributed proofreading team at https   www pgdp net  this book was produced from images made available by the hathitrust digital library  
+
+
+    start of the project gutenberg ebook archimedes  or  the future of physics    
+
+
+
+
+
+  archimedes
+
+  or
+
+  the future of physics
+
+
+
+
+  to day and to morrow
+
+   for a full list of this series see the end
+  of this book 
+
+
+
+
+  archimedes
+
+  or
+  the future of physics
+
+  by
+  l  l  whyte
+
+
+  london 
+  kegan paul  trench  trubner   co   ltd 
+  new york  e  p  dutton   co 
+
+
+
+
+  to
+  lotte
+
+
+  made and printed in great britain by
+  m  f  robinson   co  ltd  at the library press  lowestoft
+
+
+
+
+contents
+
+
+  chap                                                          page
+
+    i the sciences converge                                         
+
+   ii a modern duel  einstein and eddington  v   bergson and
+      whitehead                                                     
+
+  iii time in astronomy and physics                                 
+
+   iv an evolutionary experiment                                    
+
+    v physics and the human mind                                    
+
+   vi the future of the sciences                                    
+
+      notes                                                         
+
+
+
+
+archimedes
+
+or
+
+the future of physics
+
+
+
+
+chapter i
+
+ the sciences converge 
+
+
+one of the most fascinating features in the history of thought is that
+on several occasions an important new idea has come simultaneously to
+independent minds  thus after euclid s geometry had remained without
+a rival for two thousand years the conception of an alternative
+non euclidean system was reached separately by gauss  lobatschewsky 
+and bolyai during the years          bolyai s father  while ignorant of
+the fact that gauss had already made the same discoveries  wrote to his
+son urging him to publish his results and used the following prophetic
+words 
+
+  there is some truth in this  that many things have an epoch  in which
+ they are found at the same time in several places  just as the violets
+ appear on every side in the spring  
+
+another example of the simultaneous emergence of an idea in the minds
+of different thinkers is given by darwin in his introduction to the
+ origin of species   he there calls attention to the fact that in
+       the broad idea of the evolution of species  though not its
+cause  was simultaneously formulated by goethe in germany  st hilaire
+in france  and his own grandfather  dr darwin  in england  moreover
+darwin himself had the remarkable experience of finding in an essay
+submitted to him in      by a  r  wallace a complete summary of his
+own unpublished theory of natural selection as the chief cause of the
+evolution of species 
+
+the last few years constitute another critical period of a similar
+kind  since an idea  which when made precise will transform scientific
+thought  has already come independently to many thinkers  since     
+many scientists have felt that in studying the emission and absorption
+of light physics has come near to the problem of life     others have
+proposed that in order to straighten out its atomic problems physics
+will have to take a hint from biology  but what this hint should be
+has not yet been indicated  the following pages suggest a definite
+line of advance for physics  and interpret these isolated flashes of
+intuition as evidence of a special feature in the present situation of
+the sciences 
+
+we stand at the eve of a new epoch  physics  biology  and psychology
+are converging towards a scientific synthesis of unprecedented
+importance  whose influence on thought and social custom will be so
+profound that it will mark a stage in human evolution  for centuries
+science has concentrated its highest genius on the study of inanimate
+matter  to day the three great sciences are at last reaching the
+problem of life  for their researches on matter  life  and mind are
+now overlapping at one common issue  the nature of the fundamental
+electrical processes which underlie radiation and chemical combination 
+
+thus physics is at present occupied with the changes that occur when
+an atom emits either light or electricity  biology is at the same
+problem in studying the electrical processes which are the basis of all
+organic behaviour  whether in primitive forms of protoplasm or in the
+highly developed central nervous system of man  meantime psychology is
+dealing with an identical process when it analyses the structure of
+mind  and considers the elementary changes of consciousness which are
+produced when light of a given colour falls on the retina and sends
+its influence to the brain 
+
+as the result of these convergent researches  life and consciousness
+will soon be subject to the first stages of a theoretically grounded
+control  compared with which the present tentative efforts of medicine
+and psychology will be looked back on much as we remember the haphazard
+work of the alchemists before the foundation of chemistry  but this
+development of human knowledge and powers will carry with it great
+responsibilities  and scientists have to prepare themselves for the new
+tasks that will very soon fall to them  by indicating the main ideas
+through which this broad scientific synthesis may come about  this
+essay aims at showing that this possibility has to be taken seriously 
+we shall first examine the situation in physics and then turn to
+consider the influence which future developments of physical theory
+may have on biology and psychology 
+
+two main types of process defy interpretation within the present scheme
+of physical conceptions  life itself  and the atomic processes of
+radiation and the building up of stable compounds  in organic processes
+on the one hand  and the energy interchanges of atoms on the other
+hand  we find something happening which cannot adequately be explained
+as a change in the  structure  of the system considered  by structure
+is meant a spatial pattern of particles  which are supposed to be
+permanent and to move about like cricket balls or planets  systems
+with a structure of this kind could not display the purposive quality
+of organic behaviour  and when we try to make a structural model
+of the atom we find that it fails to explain why the atom radiates
+energy in the abrupt packets which are called  quanta   instead of
+in a continuous wave  we shall return presently to the question of
+organisms  after making an endeavour to discover why the atom cannot be
+described in terms of a particle structure 
+
+in      rutherford achieved remarkable success in accounting for the
+results of his own researches in radioactivity by adopting a model of
+the atom as a miniature solar system  with planetary electrons rotating
+rapidly around a nucleus  but in order to explain the fact that the
+spectrum of the light emitted by an atom shows a characteristic series
+of lines  bohr suggested that an electron inside an atom could emit
+light only by making a discontinuous jump from one possible orbit to
+another quite distinct orbit  this apparent discontinuity in the motion
+of electrons has intrigued physicists for more than ten years  and the
+following interpretations have recently been offered for this puzzling
+behaviour 
+
+    nature is made up of electrons  but neither space nor time is
+ fundamentally discontinuous  the electron appears to have some freedom
+ of choice  and to be able to reappear unexpectedly at forbidden places 
+
+    nature is not discontinuous or arbitrary  but nevertheless
+ something prevents us determining all the things we should like to
+ know about an electron  for instance  if we try to determine exactly
+ where it is  it behaves so that we cannot simultaneously measure its
+ exact velocity   heisenberg   this view may perhaps be interpreted
+ to mean that we have made the atom model more complex than the atom
+ itself is  and that consequently we have been using more quantities
+ than are necessary for describing all we can observe of its behaviour 
+
+    nature is not made up of electrons  but of waves  the atom must be
+ considered as a system of electric waves spread over its whole volume 
+  electrons  are merely an inaccurate way of describing some of the
+ properties of these waves  the wave picture of the atom is  however 
+ to be considered only as a temporary expedient to be used until some
+ better description of the atom can be invented  in which both the wave
+ and the corpuscular properties of atoms will appear as aspects of some
+ more profound physical property   schr dinger  
+
+the first alternative is a mere cry of despair  since it does not
+propose any line of advance  but the other two suggestions may be
+combined thus 
+
+    the view of the atom as a structure of newtonian particles is wrong
+ since it gives rise to discontinuities  and provides more quantities
+ than we at present need  a new formulation of atomic processes must
+ be found using fewer quantities which will explain why we find wave
+ properties  and why sometimes the electron does behave like a small
+ billiard ball though really it is some different sort of thing 
+
+now since the newtonian mathematics of moving particles is inadequate
+for describing the changes that go on in the atom  just as it is for
+describing organic processes  there must be some assumption implicit in
+newton s laws which is valid neither for atom nor for organism  such
+an assumption can be found very easily  though physics has never given
+it much attention  it is that the elementary processes in nature are
+ reversible   or would be if they could be isolated  by reversible is
+here meant that the laws governing the process remain unchanged when
+the direction of time is reversed  i e  when  t is substituted for  t 
+if the law is changed by this substitution so that the reversed process
+never occurs or is recognizably different  then the process is called
+irreversible  an irreversible process can therefore be used to yield an
+objective criterion of past and future  when these terms have been once
+defined 
+
+to take an example  if i am standing behind a hedge and take a
+cinematograph film of a stone which suddenly rises in the air and
+disappears from sight  i could not tell from an examination of the
+film which way to wind it  thus if it is wound one way the stone
+appears to rise  and if wound the other way to fall from the sky 
+to tell which was the right way i should have to use my subjective
+sense of the direction of time  i e  remember the fact that i saw the
+stone low in the air before i saw it high up  this case  like every
+gravitational process  is reversible  and motions of this kind have
+provided the basis for modern physical conceptions 
+
+but suppose that instead i had taken a film of a cup of tea as it was
+cooling  one end of the film would show the steam above the cup and the
+spoon changing in length as it changed in temperature  passing along
+the film these effects would grow less marked until the successive
+photos showed no variation when the temperature of the tea was nearly
+that of the surrounding air  it would be obvious which way to wind
+this film  without using any subjective criterion supplied from memory
+of the individual process which had been photographed  this process is
+irreversible  but physics has hitherto assumed that all such processes
+are merely the statistical result of a chaos of molecular motions each
+of them perfectly reversible 
+
+the assumption of reversibility seems to some physicists so fundamental
+that they think there could be no science without it  but that is
+a mere prejudice arising from the fact that newton conceived one
+particular way of giving mathematical formulation to the measurable
+features of physical processes  by suggesting that all the laws of
+nature might take a form similar to his law of gravitation  he made
+the implicit assumption that all elementary processes were reversible 
+gravitational motions are so  at any rate within the accuracy of
+newton s law  and as a consequence of the confirmation of his law
+and the fact that it has been taken as a model for the whole system
+of modern physical conceptions  the latter are only appropriate for
+reversible processes 
+
+apparent irreversibility  such as the cooling of a cup of tea 
+is attributed to statistical effects  and the second law of
+thermodynamics  which asserts that temperatures tend to uniformity 
+is treated as merely a statement of what is highly probable  this is
+probably quite legitimate  but even where no statistical effect can
+enter and the process is clearly irreversible physics usually adopts
+any measure rather than assume that a fundamental elementary process
+is irreversible     we cannot be surprised at this  since if physics
+once admitted that any elementary process was irreversible it would
+have to give up the whole system of newtonian conceptions  matter 
+force  energy  action  and wave properties are all unsuitable for the
+treatment of irreversible effects since they all ultimately depend on
+newton s reversible law 
+
+an entirely new set of ideas is necessary for describing processes
+which necessarily proceed in one direction  so that one particular
+state of the system must precede another state  it appears conceivable
+that an alternative set of conceptions to replace the newtonian might
+be established by demanding the irreversibility of all natural laws  as
+well as the demands hitherto made by physics  i e  the permanence of
+matter and the conservation of energy 
+
+the question of the reversibility of natural processes provides the key
+to a great intellectual struggle which is now in progress behind the
+complexities of philosophic and scientific thought  the issue can be
+formulated thus 
+
+is there a real temporal process in nature  is the passage of
+irreversible time a necessary element in any view of the structure of
+nature  or  alternatively  is the subjective experience of time a
+mere illusion in the mind which cannot be given objective expression 
+these are not metaphysical questions that can still be neglected
+by science with impunity  for just as einstein made his advance by
+analysing conceptions such as simultaneity  which had been thought
+to be adequately understood for the purposes of empirical science 
+so the next development of physical theory will probably be made by
+carrying on the analysis of time from the point at which einstein left
+it  moreover  the above questions may be put into precise scientific
+form by asking if the causal relations which are studied by science
+are symmetrical and reversible so that we cannot obtain from them any
+criterion by which to distinguish past and future  if  on the other
+hand  they are asymmetrical and irreversible  the laws of nature lead
+us on necessarily from what went before to what comes afterwards 
+
+
+
+
+chapter ii
+
+ a modern duel  einstein and eddington v  bergson and whitehead 
+
+
+in this battle over the importance of time and process great names
+stand out as representatives of the two opposed views  einstein
+and bergson  with their lieutenants  eddington and whitehead  the
+two leaders use very different methods  einstein  as mathematical
+physicist  suggests that physical laws can best be expressed if we
+assume that space and time are so similar that physics can make no
+absolute distinction between them  thus in relativity theory the
+symmetry of space involves the symmetry of time  and therefore the
+reversibility of physical laws  as has been shown by birkhoff 
+bergson  as biologist and philosopher  denies that the view of time
+which is implicit in relativity mathematics is adequate when a wider
+range of experience is taken into account 
+
+einstein starts by excluding all but a very narrow range of physical
+experience  and finds that he can make successful predictions about
+light and gravitation by treating the irreversibility of the passage
+of time as of no importance for scientific measurements  bergson  by
+studying a wide range of biological and subjective experience  comes
+to assert the existence of a creative process  though the inherent
+limitations of the intellect and of science may leave the essence of
+this process outside their reach 
+
+both protagonists have left their flanks exposed  by omitting to
+present their view as a consistent logical system  einstein because he
+is concerned only with the equations that can be empirically tested 
+and bergson because his chief interest is non intellectual  it is here
+that their lieutenants step forward to develop the two points of view 
+and hence to intensify the conflict 
+
+eddington provides a logical basis for the theory of relativity and
+reveals that the significance of physical laws is not quite what we
+used to think  they are  he argues  identities which the human mind
+discovers in its search for something permanent that it can call
+ matter  beneath all the changing appearances of the world  we have
+made matter the real thing by demanding permanence or indestructibility
+as the basis of physical reality  now that we know that we have done
+this it need not trouble us too much to find that absolute unchanging
+matter doesn t exist  since this merely means that we started out with
+a demand that nature cannot fulfil  unfortunately eddington doesn t
+discuss what alternative demand we might now make in order to build
+up a more satisfactory system of scientific ideas  but in spite of his
+enthusiastic support of einstein s theory  with its implicit assumption
+of reversibility  eddington hesitates at least once in his advocacy
+of reversible laws  for facts are turning up which suggest that this
+undiscussed presupposition may not prove valid    
+
+meantime whitehead has been at work on the other side  and by
+sharpening his logic till few can understand him has made the idea of
+temporal process the basis of all intellectual and scientific thought 
+whereas up to now process has always presented many difficult problems
+for the intellect  he proposes that since the conception of matter
+has been found to be unsatisfactory we must start from the basic idea
+of process in building up a new physical theory  as a consequence of
+his line of thought  whitehead found it necessary to reject some of
+einstein s arguments and to show that einstein s law could be reached
+from quite different postulates  for instance  whitehead assumed that
+the motion of light was irreversible  and that light did not travel
+with the same velocity in the two opposed directions 
+
+so much for one aspect of the conflict  its logical and philosophical
+basis  but the issue must be decided by appeal to experimental
+confirmation over the widest range of phenomena  orthodox physics still
+assumes reversibility  and has on its side the explicit statement made
+by einstein in          but by doing so it excludes at the start any
+reference to organic processes  conceptions based on this assumption
+could never be legitimately applied to life  and all attempts made
+hitherto to explain the central controlling processes of organisms in
+terms of classical physics have necessarily failed  we know now that
+this failure could have been foreseen 
+
+the same objection cannot be made against the basic ideas of bergson
+and whitehead  nor against the new atomic physics as interpreted by
+born  as we shall see in a moment  to bergson and whitehead  as to many
+others amongst whom lloyd morgan must be mentioned  the process of
+nature is creative  i e  it involves the coming into being of the new 
+the appearance of new combinations essentially precluded before  this
+probably means that the laws of physics which are to describe what is
+actually happening in the world must be given irreversible form  for
+reversible equations make no distinction between to day and to morrow 
+and cannot express the fact that at later moments new forms may emerge 
+either in the evolution of organisms or of stars  on the other hand
+irreversible laws can be arranged so as to display time as an active
+factor in causation  i e  to emphasize the fact that a certain period
+of time necessarily has to pass before some new combination can be
+attained    
+
+the upholders of a real process in nature can appeal to the facts of
+organic life  human memory  and to biological and stellar evolution 
+but their case is still weak because fundamental irreversibility
+has not yet received explicit mathematical formulation suitable for
+experimental test  when this has been done the intellectual battle will
+be brought to its decision  and if irreversibility wins the day biology
+and psychology will find themselves in possession of a physical basis
+well suited to the facts with which they have to deal 
+
+there is reason to believe that the decision will be made very soon 
+we saw that the implicit assumption of reversibility underlies all
+newtonian conceptions  it may therefore be that the reason why we
+cannot interpret atomic behaviour in terms of particle motions is that
+electrical and radiational processes are essentially irreversible 
+particle motion and wave propagation  the two ideas on which all
+modern theories of matter are based  are both represented by
+mathematical expressions which are essentially reversible since time
+enters only through the square of  dt   if the quantum processes should
+prove to be irreversible  we have already found a reason why the old
+conceptions of particles and waves must be inadequate 
+
+this speculation may indeed be found correct  since born  one of
+the leading experts in quantum dynamics  asserts that all quantum
+processes are irreversible and that the apparent reversibility of
+classical processes is only an approximation due to the fact that their
+irreversibility happens to be negligible     we may therefore hope that
+the atomic physicists will soon formulate the quantum laws in a clearly
+irreversible form which admits of precise experimental test 
+
+but this may take some years  and in the meantime we must look around
+and see how this issue is affecting current thought  we find the doubt
+about process presented by mr sullivan  in  gallio    who has not yet
+made up his mind to which side science will grant the victory  thus on
+one page he writes   it seems to be true that events do not really take
+place  we come across them  and suggests that process may be  a totally
+irrelevant idea when applied to reality   but later we learn to our
+surprise that  it seems likely that  in scientific theory  the world
+will have to be regarded as an evolutionary process  where patterns of
+value emerge   however  this inconsistency need not bother us  since
+we are told that  the teachings of science so far as the spiritual
+problems of man are concerned are merely irrelevant  
+
+these views reflect perfectly the uncertainty of the time  and will be
+looked back on as a precious record of the state of mind which preceded
+the scientific synthesis  perhaps the most interesting feature of
+the essay is the indecision it displays with regard to the spiritual
+importance of science  this is a relic from the days when there were
+two worlds  the world of science and the world of religion and art  no
+one ever knew which of these worlds they were living in  and this is no
+wonder  for the division was made only because at one time it looked
+as though the scientific method could only deal with  quantities  
+and therefore that science could have nothing to say about values or
+qualities  this view is no longer tenable  for instance  there is a
+quality in organic integration which most of us value  and without this
+and many other such conceptions biology and psychology could not get
+far 
+
+before proceeding any further it is necessary to correct a common
+misunderstanding with regard to the significance of einstein s theory
+of relativity  this theory is mathematical  and is based on a series
+of postulates which rule out any claim to present an ultimate theory
+of space and time  one of these postulates    asserts that all our
+physical knowledge can be reduced to the space time coincidences
+of pairs of point events  or in other words the intersection of
+the world lines of electrons  no respect for the supreme genius
+who predicted two experimental results and eliminated the chief
+discrepancies remaining in newtonian theory should restrain scientists
+from pointing out that this postulate assumes something that has never
+been known to occur  and has no valuable reference to the world of
+physical experiment  the confirmation of einstein s final equations
+cannot give any validity to this postulate  for it is difficult to
+think of any physical experience considered by theoretical physics
+which does not involve the perception of light or colour  and one
+cannot assume that the perception of light is a perception of
+coincidences  light varies in colour and intensity  coincidence in
+space is too abstract to account for an effect which is subject to
+variation  moreover all physical experience requires a certain amount
+of time  and this fact is neglected if perception is reduced to the
+recognition of instantaneous coincidences  even if these two criticisms
+are left on one side we still have to notice that einstein s postulate
+rules out from the range of physics the important fact that many
+processes are irreversible  for instance  if we accept einstein s
+definition of physical experience  then the interesting fact that
+radioactivity is only observed in the form of disintegration  and not
+also as the reverse process of a spontaneous building up of heavier
+elements from lighter  has to be left over by physics to be dealt with
+by some other science 
+
+it almost always happens that the formulations of genius are
+exaggerated and form the basis of a pernicious orthodoxy  and it has
+certainly happened to relativity theory  against a tide of exaggerated
+praise whitehead  larmor  and bridgman  as well as some continental
+astronomers  have debated the general assumption that the theory of
+relativity is adequate to its task  but those in whose hands the power
+of orthodoxy lies have not yet answered their criticisms in print 
+neglect has always been the weapon by which orthodoxy has unknowingly
+hindered the advance of new ideas  but while this neglect is easy to
+understand  it is really remarkable that the postulates of relativity
+theory were not subjected to closer examination before it was made the
+basis of wide philosophical speculation  the experimental confirmation
+of einstein s law of gravitation does not guarantee his postulates 
+since whitehead has reached a similar law  identical within the
+accuracy of the observations  from different assumptions 
+
+einstein s profound creative intuition and use of a difficult
+technique compel our deepest respect  but his work should never have
+been regarded as a  general  theory of time and space  not only does
+he neglect the question of irreversibility but it is very doubtful if
+periodic processes can be made to fit into his scheme  as has been
+pointed out by russell and bridgman during the last year  probably
+einstein himself has never regarded his theory as more than a stage in
+the attempt to create a still wider physical synthesis  and we must
+not interpret in a broad sense his statement that one of the demands
+of his theory  takes away from space and time the last remnant of
+physical objectivity      this could only be true if physical time
+shared the absolute symmetry of space  i e  if physical processes
+were all reversible  but there are processes from which we can obtain
+an objective criterion of the direction of time  and hence time does
+retain an element of physical objectivity as distinct from the
+absolute symmetry of space  one of the most interesting features in the
+future of physics will be the explanation of the fact that einstein
+reached a correct law from postulates of limited validity  and in
+this connection whitehead s alternative derivation may prove to be of
+importance 
+
+
+
+
+chapter iii
+
+ time in astronomy and physics 
+
+
+the real discrepancy between the world of physics and that of life lies
+in the fact that physics has never recognized the irreversibility of
+time  while this is fundamental to life  we may even feel a doubt if
+the  t  of physics has the same significance as the time of biology 
+evolution  history  and human experience  the physical conception of
+time arose from the practical utility of clocks for describing natural
+processes  and finally took the form of defining astronomical time in
+terms of the rotation of the earth  the day was in fact taken as an
+absolute measure of time  and this remained quite satisfactory so long
+as the laws of physics were found to take a simple form with reference
+to the time so defined 
+
+but then a complication arose  the study of the moon s motion suggested
+to astronomers that the earth s rotation was slowing down  i e  to
+account for the apparent motion of the moon they had to assume that
+the day was increasing in length  the theory of the tides revealed
+a possible cause for this slowing down in the tidal friction on the
+bottom of shallow water basins  for instance the rush of the atlantic
+tides into the irish sea provides an appreciable frictional force
+retarding the spin of the earth  in addition to this slowing down there
+appears to be a very slow periodic variation in the length of the day
+such as would be accounted for by a rhythmic expansion and contraction
+of the earth s crust 
+
+the astronomers declare that our old measure of time is not only
+getting slower and slower  it is even varying rhythmically  it is clear
+that they have thrown over the earth as their definition of equal
+time intervals and have surreptitiously substituted something else 
+yet one cannot discover any formal announcement of this  or find out
+if they realize that by doing this they have altered the theoretical
+significance of all physical measurements  in earlier days physics
+defined time in terms of a selected clock  and then set about finding
+the laws of nature  but the old ways aren t good enough for the modern
+astronomer who gives us our time and sets the clocks of our physical
+laboratories  he has reasons for disapproving of the earth  and has
+almost reversed the procedure  in order to save the laws of inertia
+and gravitation in connection with the moon s motion  and to a lesser
+degree in the cases of the planets and the sun  he has made these laws
+his standard of equal time intervals in place of the earth s rotation 
+
+it is a curious situation  especially in view of the fact that
+einstein s law  which has superseded newton s  is not very suitable
+for use as an astronomical clock  as has been pointed out by larmor 
+perhaps the physicist will soon be able to use the atom as the
+theoretical clock for physics  and we can go on using the corrected
+rotation of the earth as our practical standard  there is a faint
+chance  for instance  that if physics can invent some way of measuring
+the minute time intervals along the track of an electron  then
+electrons might be used as giving the fundamental measure of time  thus
+if the velocity of an electron were first measured by some indirect
+method the electron itself might then be used as a clock  but in the
+meantime the astronomers should make a formal announcement to the royal
+society of what they have been up to  it then might be found necessary
+to appoint a commission to discover exactly what physics is now doing 
+for by using an astronomical clock of the new type it is assuming
+classical laws while researching on processes which are already
+known to undermine the absolute validity of these laws  theoretical
+physics cannot hope to clear up its fundamental problems until it has
+considered exactly what is involved in this suspicious procedure 
+
+like most professions  physics includes a good deal of bluff  but
+unlike the others physics is now occupied on a campaign to get rid of
+all pretence  for instance  physical text books have been filled for
+twenty years with phrases of this kind   an electron with a velocity
+of so many cms per sec   yet the professors omitted to tell their
+students the awful secret that this hypothesis of electron velocities
+is one that has never yet received direct experimental confirmation 
+to day a reaction has set in and the demand is being made that physical
+theory shall not make use of conceptions that do not correspond to
+directly observed quantities  thus the latest theories of the atom have
+eliminated the idea of electron orbits because it was realized that
+these were nothing more than a mathematical trick for calculating
+something quite different  the wave length of the light an atom can
+emit  in place of the orbits it is hoped to substitute something which
+only makes use of the directly observed features of the atom  but this
+new picture is not complete 
+
+yet physics still makes use of ideas that have not been adequately
+justified  for though the idea of moving electrons has been removed
+from the latest atomic model  no substitute for it has yet been
+proposed for the case of electrons outside the atom  it therefore
+becomes very important for the experimental physicist to discover
+whether he can measure the distance travelled by an electron in a
+measured fraction of a second  as yet we have no proof that nature
+has not confused us by making electrons behave rather like moving
+particles  though really they are something different  in fact we
+have not yet made enough direct experiments to know even whether
+the dimensional system which is used for electrons is correct  since
+no electron velocity has ever been directly measured we cannot be
+sure that the dimensions of the new constant  h   called planck s
+constant  are really what we suppose  energy multiplied by time  until
+a way has been invented of making a direct measurement of some  time 
+involved in electronic motions  it is impossible for physical theory to
+know how it should deal with the quantum processes 
+
+when we realize how uncertain are the conceptions on which the whole
+of electron theory is based  we may wonder what is really known about
+the atom itself  yet it is possible that we know more about the atom
+than we think  and that what are talked about as facts concerning
+electrons and radiation may really be better viewed as information
+about individual atoms and the way in which they influence one another 
+the emission of light is an atomic process  and we only know about
+light when it has reached some atom and been at least partially
+absorbed  some un understood change of condition occurs in an atom when
+it radiates and passes this changed condition on to another atom  the
+absorbed energy may cause chemical change  as on a photographic plate 
+but if a human mind is to become aware of this change of condition 
+then sooner or later  directly or indirectly  its influence must be
+passed on to an atom in the retina  we know very little about this
+change of atomic condition  and though it is usually called a change of
+the internal electrical energy of the atom this supposes more than we
+really know until some electron velocity has been directly measured 
+the dimensions of electrical energy are taken as those of kinetic
+energy  i e  mass times square of velocity  but we do not yet know if
+this describes atomic changes correctly  since no one has ever measured
+a  time  involved in an electronic process  the scale of time in the
+atom might be quite different from that given by our calculations 
+
+our ignorance of what this change of atomic condition really signifies
+is so profound that some writers have begun to treat the atom as though
+it were an organism  alive when the atom is excited  and dead when in
+a state of minimum energy  thus whitehead proposes that we should call
+the atom an organism  though this of course may only muddle us since we
+know even less about life than we do about the atom 
+
+yet we do know one very interesting thing about this change which
+happens to atoms but cannot be reduced to a change of structure  when
+light reaches an atom in the retina  an electrical stimulus passes
+up a nerve and alters the condition of the protoplasm somewhere in
+the brain  this change in brain condition is known to us directly as
+the perception of colour  therefore in one sense we know more about
+this change of atomic condition than we ever did about  electric
+fields  or  gravitational potential  or any other of the mathematical
+conveniences used by physics in correlating observed quantities  the
+change in a sodium atom when we put salt in a flame is not a change
+in the consciousness of the sodium atom  because it is not part of a
+complex nervous system with the same high co ordination as is found in
+the human being  and therefore the atom has no consciousness  but when
+an atom in the brain undergoes the same change we may become conscious
+of it  and the changes in matter which occur when light is absorbed are
+undoubtedly associated with the problem of consciousness 
+
+thus we are led to ask  how are single atoms built up into complex
+systems which have the characteristics of life  and finally into still
+more complex systems which have human consciousness 
+
+
+
+
+chapter iv
+
+ an evolutionary experiment 
+
+
+questions are often made unnecessarily difficult by their being
+expressed in an abstract or theoretical form  and instead of asking
+what is life  it will be more valuable to put forward a practical issue
+for discussion  could an infinitely wise physicist order the necessary
+chemicals to day  and to morrow put together a synthetic man  if not 
+why not  what are we really up against  that seems to put some aspects
+of life beyond our control 
+
+let us watch this ambitious physicist as he enters his laboratory 
+he has started quite easily and has in a moment prepared some simple
+molecules from their elements  now he has completed the first colloid
+that he will require  and is starting on his first organic synthesis 
+but his infinite wisdom does not give him eternity within a minute 
+and we notice that he is getting on more slowly  while the actual
+combination of the first molecules took only about a thousandth of a
+second  once he had the apparatus ready  the simplest colloid took
+about a second  the organic colloid has taken him about a minute  it
+seems that nature won t work faster than that  she has her own rhythm
+and won t be rushed  if we wait patiently till the end of the day our
+friend may have his first speck of protoplasm  and all the skill in the
+world would only have helped him to make more of it  not to have got
+any further in his game of evolution 
+
+but look at him now  he is making a hasty calculation as though he had
+just realized some great secret of nature  and knew that he could never
+create his homunculus  we look over his shoulder and read 
+
+
+  estimated minimum time required by the synthetic processes of nature
+ to attain various evolutionary stages  
+
+  starting from the                        minimum
+    elements  to                             time
+
+  simple inorganic compound                        sec 
+  simple colloid                              sec 
+  protein                                     hour
+  primitive protoplasm                        month
+  simplest uni cellular organism               years
+  flagellate                                      years
+  mammal  including  homo sapiens                     years
+
+this highly speculative estimate is based on suggestive facts  a
+certain amount of time is necessary for two atoms to approach one
+another and form a molecule  the time required will be greater if many
+atoms have to settle down together into some special arrangement  for
+instance  the metal silver is normally crystalline  but if silver
+vapour is condensed too quickly the atoms will not have time to
+arrange themselves  and it is found that they pile up anyhow into an
+amorphous mass 
+
+colloidal processes require even longer periods  because great clumsy
+molecules have to arrange themselves on the surface of the colloidal
+particles  in elementary forms of protoplasm the molecular patterns
+are still more complex  and yet more time must be necessary to get the
+molecules properly adjusted 
+
+it is probable that only our ignorance prevents us from building up
+protoplasm  but that we shall require rapidly increasing amounts of
+time for each successive stage of evolution  this will certainly be
+the case when we have reached organisms which can only be rendered
+more complex by controlling their environment while they reproduce
+themselves for many generations  a higher organism cannot be built up
+directly  the molecular arrangements in its body can only be reached
+through the synthesis of some simple form of life which must then be
+allowed to evolve through countless generations  organic heredity
+resides in molecular patterns which can only be built up by this very
+slow process of repeated reproduction  thus it is  shortage of time 
+that our ambitious scientist is up against in his haste to create a
+homunculus  only the synthetic alchemy of time can build up organisms 
+each bearing within itself a long heredity 
+
+the estimates given for the minimum time required in each case are
+about a thousandth of the actual time taken in a laboratory experiment
+or in the history of evolution as known from geological records  it may
+have taken a million years or more for the first mobile cells to have
+developed from inorganic materials and a thousand million years for the
+mammals  yet perhaps these processes might have gone on more quickly 
+the times given are mere suggestions of a minimum time which may be
+necessary under ideal conditions  we waste a lot of time adjusting
+the apparatus in a laboratory experiment  and in evolution there may
+have been stationary periods with little or no new development  but it
+seems likely that when we know more about it we shall discover that a
+certain time is required for the formation of organic systems of given
+complexity  in this sense we may say that then human spermatozoon and
+ovum carry within them the synthesis of at least a million years 
+
+only an international institute of evolutionary research under the
+most stable of leagues of nations could hope to create an artificial
+man  and even then man could hardly take the credit  for time would
+have done more than man  but with sufficient consistency of purpose
+man could do this  provided he learnt how to make use of every moment
+of the creative power of time  and never made a slip by which the
+accumulated treasure of the years  i e  heredity  might be broken  how
+man would learn to value life  and how profoundly such an experiment
+might alter his view of human beings  each one a priceless miracle 
+fruit of a million years 
+
+in twenty years  time scientific knowledge will be adequate for the
+beginning of this giant task  and we shall be subscribing our guineas
+for the foundation of the institute  time has created man  man may use
+time to create man once more  with a million years ahead of us before
+we reach the sensitive mammals  we need hardly fear criticism from the
+society for the prevention of cruelty to animals  we are simply going
+to allow life to evolve itself under ideal conditions with switzerland
+as the state for evolutionary research 
+
+it may happen that under such perfect conditions life will evolve more
+swiftly than it did on this rough and ready planet  but equally well
+we  or rather our descendants  may find that the darwinian struggle for
+survival is essential for evolution  and then the nations would have to
+debate on the morals of reproducing the  cruelty of nature  inside the
+world s evolutionary zoo  perhaps a wrathful god will seek to punish
+mankind for attempting to build this ladder to the secret of life  this
+modern tower of babel  and amuse himself by watching the community of
+scientists stricken by a plague of inconsistency amongst their weights
+and measures 
+
+the possibilities of such grand schemes have to be taken seriously  we
+are now highly self conscious beings with a tremendous technique for
+research  men with genuine creative imagination who reverence life must
+shoulder the responsibilities of the twentieth century consciousness 
+and use scientific technique for creative not life destroying purposes 
+one can imagine a growing fraction of the interest now given to
+war  other people s adultery  and greyhound racing  turned towards
+switzerland  whence at critical moments wireless bulletins would
+announce that the first amoeba had just successfully taken nourishment 
+if we wish it  the future of science can be such as to recompense for
+its recent occupation with gunpowder  governments would be powerless
+to make war if the physicists refused to make the guns and the royal
+society called upon scientists to go on strike until each war crisis
+had been settled by arbitration 
+
+the problem of life may be seen in a new light if the speculations of
+the last section are accepted and we assume that a definite period
+of time is necessary for the building up of any living organism  for
+if this is so the laws which govern life must involve the age of the
+organism since some definite moment in its history  we might choose for
+this moment the instant when the parent spermatozoon entered the ovum
+in the case of a higher organism  or in the evolutionary experiment
+just described the age might be reckoned from the moment when the first
+elementary chemicals were combined into molecules  the point is that
+this whole evolutionary process must be described by laws which take
+into account the age of the system under consideration 
+
+let us take a very simple  indeed the simplest possible  example 
+if two hydrogen atoms having just the correct total energy for the
+formation of a hydrogen molecule have approached one another and
+combined  the law describing what has happened must indicate that at
+a definite moment the combination was complete and the process at an
+end  this is an example of an irreversible process  since the molecule
+does not  spontaneously  break up again  moreover  the mathematical
+formulation of this process must include the definite age of the system
+at which the process was complete  this age being measured from some
+selected initial moment 
+
+this process provides an interesting limitation to a principle put
+forward by maxwell as the basis of physical science  he suggested that
+the laws of physics must be considered to be eternal and unchanging and
+that therefore they must be expressed in a form which does not contain
+the time explicitly  this means that for physical laws there can be no
+difference between to day and to morrow  the laws are concerned with
+small changes which systems undergo in small time intervals  and need
+not express any fundamental distinction between one moment and another 
+
+such laws cannot express the fact that anything sudden ever occurs
+which makes an essential change in the system as when two systems
+become one  or when one system breaks up into two  the laws of organic
+growth or the evolution of individual systems must display the fact
+that at a certain age of the system special things happen  such as the
+combination of two hydrogen atoms  or the attainment of maturity by an
+organism  maxwell s principle puts a limitation on the form of physical
+laws which precisely eliminates the laws that would be appropriate for
+organisms  but there is no reason why a broader physics should not try
+to frame this new type of law that would be applicable to the history
+and development of individual systems  and it is probable that if this
+could be done the reversible laws of newton  maxwell  and einstein
+would appear as approximations which were valid when nothing of special
+interest was happening  i e  when only spatial movements were involved
+without synthesis  disintegration or the emission of light 
+
+laws of the newtonian type which maxwell had in mind assume that
+one can adequately describe the present state of a system without
+specifying its past history  but we cannot say anything very precise
+about the inside of a living organism  and it is found far more
+efficient to describe what is known of its past history  we do not try
+to say where atoms are in an organism  instead we mention its species 
+age  etc  organisms might be defined as systems whose future behaviour
+is more easily estimated from their past history than from what can be
+known about their immediate internal structure  the most convenient
+formulation of organic laws will therefore be expressed in terms of
+the age of the organism and take account of how its life has been
+spent  these laws are necessarily irreversible  since the assimilation
+of oxygen or food is always going on in a manner which can never be
+reversed  life is like a function which must always alter in one
+direction  when this development ceases life has disappeared 
+
+the contrast of living and dead now appears less important than the
+following classification of natural processes 
+
+    processes which are reversible and whose laws can be expressed
+ independently of the age of the system  e g  gravitational and
+ mechanical motions which do not involve light or heat 
+
+    processes which are irreversible  the laws being best expressed in
+ terms of the total time which has passed since some initial state 
+ e g  chemical combination  growth  evolution  radioactivity  and all
+ changes involving light or heat 
+
+physics has always asserted that processes of the first type were
+fundamental in nature  and astronomy provided the ideal example in
+planetary motion  it was this assertion that gave rise to the essential
+issue behind the conflict of mechanism and vitalism  but if born is
+right  and the fundamental atomic processes are irreversible  then
+the situation is completely altered  there is no longer a question
+of life being an arbitrary irruption in a world of mechanical law 
+since the laws of gravitation and mechanics must then be looked on as
+the limiting case  when the irreversibility is vanishingly small  of
+a whole series of irreversible processes which constitute the most
+important examples of the fundamental order in nature  this series
+would include the atomic processes connected with heat  light  and
+electricity  chemical combination  colloidal effects  organic growth
+and evolution  and the highly co ordinated electrical processes which
+form the physiological basis of consciousness 
+
+if this view is correct the atomic processes of radiation and chemical
+combination should be just what the biologist needs to build up
+organisms  instead of a chaos of little particles obeying inverse
+square laws  the modern physicist offers to the biologist a new kind of
+atom with electrical and magnetic properties which cause it to build
+up stable compounds 
+
+the biologist may reply   yes  but organisms have four chief
+characteristics  their behaviour is irreversible  and displays
+growth  memory  and purposiveness  if you tell me that your atoms
+obey irreversible laws  so much the better  because my organisms
+certainly do  but your crystals grow very differently from my cells and
+organisms  and you can t explain away the apparent purposiveness of all
+life  
+
+to which the physicist may answer   suppose that two hydrogen atoms are
+some distance apart with the total energy necessary to make a molecule 
+if they begin to move towards one another under some attractive
+influence which they exert we display no surprise  but they are moving
+towards a final end  which is an end  even though they are of course
+unconscious of it  and provided that nothing interferes they will reach
+one another  form a molecule  and the process will be consummated 
+the atoms move under an irresistible law of attraction towards a final
+condition which is unavoidable unless outside influences prevent
+it  the system of the two atoms develops necessarily towards a
+consummation  and the process has in this sense a teleological quality 
+though this need not mean that any god or man had consciously planned
+the end for these particular hydrogen atoms 
+
+ this quality was not present in newton s law of gravitation precisely
+because it failed to say what happens at the end of any process  for
+instance when a meteorite hits the earth  newtonian laws avoid the
+responsibility of dealing with all the exciting events  like the
+wedding of the atoms or the death of the meteorite  on the other hand
+it appears probable that all irreversible laws can be interpreted as
+leading either from or to some critical end condition  thus all heat
+processes tend towards an approximate uniformity of temperature  and
+chemical reactions also move towards a final condition 
+
+ such systems as these display the rudiments of unconscious purpose 
+one must imagine these systems made much more complex so that it takes
+a long time and considerable nourishment before their unconscious
+purpose is fulfilled  whether this be the instinctive reproduction of
+their kind or any other biological function  
+
+ maybe  i like the unconscious purpose which you have revealed in
+irreversible physics  because i am troubled by colleagues who see
+conscious mind everywhere 
+
+ but if i grant that your view of the atom  and hence of molecules
+and colloids  allows me two of the four features i find in life  i e 
+irreversibility and unconscious purpose  you have still to deal with
+growth and organic memory  
+
+ yes  growth and memory are things that physics has as yet little
+to say about  but we have at any rate reduced the problem of life
+to smaller proportions  it is no longer the question what is
+life  but  how do colloidal processes build themselves up into
+continuously active  developing systems which can react to their
+surroundings so that some distant condition can ultimately be attained 
+this is a much less difficult question  moreover  since the problem of
+radiation underlies all the chemical processes which are associated
+with the maintenance of life  we may expect considerable assistance
+when physics has cleared up this crucial problem  
+
+
+
+
+chapter v
+
+ physics and mind 
+
+
+if a psychologist who was not a behaviourist had been listening to this
+conversation he might break in 
+
+ does the physicist seriously propose that we should try to leave mind
+out of our picture of the human organism  even if we can eventually
+explain the unconscious purposes of the lower organisms as ends towards
+which they are driven by physical laws  yet man has the supreme
+distinction of a conscious mind  he can select his aim  and if he likes
+renounce it again for something else  you must therefore allow in your
+picture for the emergence of mind at some point during the course of
+evolution  
+
+ wait a moment   replies the physicist   your whole outlook towards
+consciousness betrays not only an anthropomorphic standpoint  but one
+limited to a single stage in man s development  there is no single
+condition adequately described by the word  conscious   there are in
+fact a great many different states of awareness which may grade into
+one another  or may form a series of distinct conditions  we do not
+know much about them yet  but their variety is most striking  there
+is the dim sentience as we awake from chloroform  the awareness of
+the dreaming state  the passive experiencing that accompanies any
+intensely rhythmic activity such as running  again  quite different
+states are known in day dreaming  intellectual concentration and the
+delicately balanced semi consciousness of creative thought 
+
+ consider especially the states of awareness associated with love  or
+with the supreme creative activities of the mind  free will  or the
+deliberate choice of a purpose  is completely lost in a whole natured
+falling in love  as it is also in the artist s need to follow some
+dimly conscious intuition of a task he must attempt  at these important
+occasions free will disappears before a sense of inner organic
+necessity 
+
+ these examples seem to me to make it clear that  conscious purpose  is
+not in any sense the ultimate or highest criterion of human behaviour 
+and that free will need not be taken necessarily to mean the power
+to over ride any laws of nature  in my view  free will  is simply
+the apparent characteristic of organic behaviour when no complete
+integration of the personality has been achieved and the mind seems
+to be able to oscillate from one purpose to another  we really have
+to deal in human beings with a whole series of forms of behaviour
+of increasing complexity and integration  reflex and instinctive
+actions  deliberate activity  and finally the intuitive whole natured
+creative functioning which leads to ends which could not have been
+intellectually foreseen  to each of these must correspond a certain
+type of awareness  and in my view  a brain process of a definite degree
+of complexity  by analogy with our own experience of different modes
+of consciousness  we may be able to infer from the structure of the
+central nervous system of an organism what sort of awareness it can
+experience 
+
+ eventually we must expect to be able to give a complete scheme of all
+organic behaviour in terms of the organic processes and their laws  but
+none the less it will remain a great deal more convenient in some cases
+to refer to what happens to human beings by using words that suggest
+their conscious experience  the behaviourist denies the scientific
+significance of all but the very barest elements of conscious
+experience  but of course he has to start from the human perception
+of light and colour  science cannot get on without ideas which obtain
+their whole meaning from the qualities of conscious experience  and
+hence the extreme behaviourist position merely arises from a prejudice
+which prevents clear thinking  but as a campaign to put more stress on
+the direct observation of what really happens to living beings in terms
+of physical movements  behaviourism can only do good by bringing more
+unbiassed knowledge about life 
+
+ my own interpretation of the question may be put in this way  the
+thing that is given in nature is a process in time  according to
+its complexity and degree of co ordination an organic process has
+different degrees of awareness  there is no one condition called human
+consciousness  because the human organism can function with different
+degrees of co ordination  and if we ask if an atom in absorbing light
+is conscious  the question has no definite meaning  but in a few years
+those who are studying the physiology of the central nervous system
+will be able to indicate how many steps of synthesis and integration
+occur between the simplest cell and the creative thinker  and to each
+of these stages will be ascribed a mode of awareness  but below a
+certain degree of organic complexity this  awareness   will cease to
+be anything that can be consciously imagined by man  e g  below the
+dimmest sentience one might allow an undifferentiated knowledge of mere
+continuance  based in turn on the rhythmic pulsation of the elementary
+cells  
+
+ your scheme is of course still rather vague  but in its main outlines
+it appears satisfactory   replies the psychologist   but tell me
+outright  can mind influence matter  if i understand you rightly  you
+suggest that matter certainly influences mind  
+
+ on the contrary  i do not  you are back at the meaningless questions
+on which philosophers have wasted much time  to ask if mind can
+influence matter does not mean anything until you know what you mean
+by mind and matter  and to a scientist that means knowing the laws
+they obey  now  on the one hand  relativity and modern quantum theory
+indicate that there is no matter in the old sense of particles made of
+some unchanging stuff  and physical science recognizes atomic and other
+ processes  as fundamental in the place of  matter   on the other hand 
+you really mean by  mind  one particular form of conscious activity 
+the deliberate selection of a purpose  therefore to give your question
+real meaning i have to ask instead  does the conscious selection of a
+purpose alter the physical processes going on in the human organism  
+
+ but that is an absurd question  it is like asking  does a dint in the
+outside of a hat  cause  an alteration in the shape of the inside of
+the hat  to which the only reply is that the dint on the outside is
+merely another way of describing the dint on the inside  there is no
+ causing  of the one by the other any more than if you fold a bit of
+paper you can say that the crease on one side causes the crease on the
+other side  they are identical and the double method of description
+used in the question creates a meaningless problem 
+
+  conscious selection of a purpose  is one way of describing a
+particular process  and after this process has occurred the brain
+will be different from before  the old theories of the correlation or
+interaction of mind and matter presupposed that they were separate
+things in themselves  the important questions become quite different
+when one realizes that mind and matter do not exist independently 
+but that they are both somewhat inadequate ways of describing certain
+ aspects  of one organic process  the spatial aspect of organic
+process is called the physical organism  the temporal aspect of organic
+process corresponds to the content of its consciousness  the physical
+body is a group of spatial characteristics  consciousness is a system
+of temporal elements  memory  anticipation  deliberate repetition 
+creative longing  hope and fear are all things set in time 
+
+ professor alexander has said  time is the mind of space   he attempts
+to explain space and time by an anthropomorphic analogy  it is a very
+suggestive idea  though for the searcher whose goal is the nature of
+consciousness itself it is more valuable to put it the other way round 
+mind is the temporal aspect of process  body the spatial aspect  but
+it is very important indeed to notice that we have not yet found the
+adequate terms for describing these two aspects of process  matter is
+unsatisfactory for the spatial aspect  because there are no unchanging
+particles  but nor is mind sufficient for the temporal aspect  because
+there is a temporal aspect to the combination of hydrogen atoms and to
+chemical and colloidal processes  and yet we must not speak of these
+as having mind  when the new words for these two aspects are invented
+they will form the foundation of the scientific synthesis which i am
+expecting  
+
+to which the psychologist may answer   well  at heart i have always
+been a thorough going determinist like you  at least in dealing with
+my patients  moreover i find it works  because i have always included
+in my picture of the patient a life impulse of some sort  which can be
+influenced by my personality  thus if the behaviour of my patient is
+absolutely determined  the conditions which determine what happens to
+him include some inner life tendency  and also the effects produced on
+him by all the people he meets 
+
+ but if one attempts to formulate such an absolute determinism  or
+to apply it to oneself  one gets into deep waters  and i haven t the
+courage to try it  it seems you must be right at bottom  but that only
+a god could believe it without its upsetting his mental balance or his
+sense of moral responsibility  
+
+ there i agree   replies the physicist   as long as one does not
+simultaneously revise one s whole view of life in terms of this new
+organic knowledge  that is a very big task  but i should like one
+day to attempt it  two things especially would attract me to such a
+revision of human values  one is that people who ought to know better
+still go about making moral judgments about their acquaintances  now
+that we know how profound is the influence on a child of the treatment
+it receives during its first five years of life  moral judgments become
+rather old fashioned and only show that the person making them has
+himself not yet learnt to find emotional fulfilment in healthier ways 
+an analysis of human behaviour along the lines of organic determinism
+might do something to show that moral condemnations  whether of
+bolshevism or of the sins of one s children  are never effective unless
+immediately accompanied by positive example or creative suggestion 
+
+ but there is another more attractive reason why i should like to
+attempt this transvaluation of values  if organic determinism is valid 
+then the artist s aspiration to create is a natural consequence of
+some organic law  creative aspiration may then be looked on as the
+natural destiny of certain human beings  though they no more know
+where they are going than did the two hydrogen atoms  but organic
+determinism allows us to understand why it is of no importance that the
+artist doesn t know what he is going to create before he does it  it
+seems that in some matters our organic body is wiser than ourselves 
+or rather wiser than our very immature consciousness  when we have
+developed our consciousness by the discovery of the organic laws of our
+own natures we may be able to make human life more beautiful  
+
+
+
+
+chapter vi
+
+ the future of the sciences 
+
+
+the preceding pages have very broadly indicated the way in which
+current physical researches may influence the scientific outlook on
+the problems of matter  life  and mind  the view has been put forward
+that we are on the eve of a profound scientific synthesis of which the
+main outlines are already determined  these general suggestions will
+now be made more precise in order to offer to anyone who is interested
+the opportunity of testing for himself some definite prophecies
+regarding the future of scientific thought  the forecast made here does
+not involve any supernatural reading of the future  but is based on
+tendencies already inherent in the different departments of science 
+for convenience it is expressed in the form of separate assertions
+concerning the future of physics  biology  and psychology 
+
+   before      a very remarkable simplification will be made in atomic
+theory  which will indicate that in quantum processes physics has
+ touched bottom  and that  for the time being  we may consider that
+nature is not infinitely complex within the heart of the atom  the
+proof of this apparent if not absolute limit to the micro structure
+of nature will take the form of the discovery of simple relationships
+between the fundamental constants of atomic structure  e  m  m  c  and
+h   the electronic charge and mass  the mass of the hydrogen nucleus 
+the velocity of light  and planck s constant   such relations are
+already known but are considered to be of no significance since they
+are ruled out by the accepted theory of electrical dimensions 
+
+yet this dimensional system is not based on direct observation 
+and the importance of these relationships will soon be recognized
+in consequence of experiments aimed at a direct determination of
+an  electron velocity   in a curved track   electron velocity  as
+calculated from deflection experiments will be found not to be the same
+as the directly measurable cms  per sec   and in the case of straight
+electron tracks  the measured velocity may be found to be always that
+of light  though this does not mean much since the velocity of light in
+one direction has never been measured 
+
+as the result of the study of individual radiation tracks  for instance
+in the reflection of electrons by crystals  and particularly of
+any  time  measurements that can be made  a new system of physical
+conceptions will be built up appropriate to irreversible processes 
+which will be substituted for the newtonian reversible system  the
+new scheme will probably be based on the conception of the atom 
+with its radiating electron tracks  as a natural clock which not
+only can be used to measure out equal time intervals  but also to
+yield an objective criterion of past and future  in order to make
+this idea  or at least one part of it  capable of empirical test the
+following hypothesis is put forward  the time interval between any two
+point events on any electron track is a simple function of the length
+and curvature of the part of the track between the two points  this
+hypothesis contradicts the current interpretation of electron theory on
+a point which has never yet been subjected to experimental test 
+
+the conceptions which will be built up on electron velocity experiments
+will very quickly bring within one simple theory the facts of chemical
+combination and colloidal processes  for these depend upon irreversible
+effects connected with radiation and electrons  and will therefore be
+amenable to treatment by the new conceptions for the very reason which
+necessarily puts them beyond the scope of newtonian laws 
+
+   as the result of the alteration in physical conceptions biology
+will soon cease to draw a definite line between inanimate and
+living systems  the normal characters of life will be recognized
+as appearing in steps as one passes up the series atom  molecule 
+colloid  protoplasm  cell  and through further stages to mammal and
+man  in each class of organism a central controlling process will be
+discovered and its laws formulated with some precision  in terms of
+irreversible electrochemical processes  the process which in each
+organism represents the co ordinating factor and is the life of the
+organism considered as a unit may for instance be described in terms
+of a quantity which we shall call  f    f  would be such that so long
+as  f  keeps on increasing the organism is alive  while if  f  stands
+still the organism dies  the rate of increase of  f  indicates the
+tempo or intensity of the organism s life  in a simple case  f  might
+be directly related to the intake of oxygen or food  and just as
+respiration and assimilation are irreversible  so is the change in  f  
+ f  must go on increasing  or else cease to represent any quantity
+in nature  as soon as it ceases to increase the process to which it
+corresponds cannot be identified any longer 
+
+the most important factors which influence the life function  f   i e 
+which affect the central controlling process in any organism  will be
+known before about       with the result that local rebellions such as
+cancer will not only be controllable  but easily prevented  harmless
+methods for increasing the rate of change of  f   i e  for increasing
+the   lan vital  of the organism  will be discovered  so that  for
+instance  the duration of child birth will be reduced to a natural
+minimum  if child birth sometimes takes very long nowadays  this is
+presumably because the woman s body is tired  exhausted  or partially
+poisoned by her mode of living  and by raising her vitality at the
+critical moment we may expect to be able to let the process go on at
+its natural speed  there must be some minimum time necessary for the
+act  since a vast number of complex organic processes have to complete
+themselves in a certain order  but probably this time is considerably
+shorter than that during which many women in this country have to
+suffer 
+
+it is already known that the mendelian  genes  which determine heredity
+are related to the rates of development of special processes in the
+organism  and a control over the life tempo  or rate of increase of
+ f  in any organism or group of cells within an organism  will provide
+a new method of tackling the practical problem of heredity  it is
+possible that hereditary tendencies to specific weakness or disease
+will be overcome by accelerating or retarding the rate of development
+of the human system at some special moment between conception and
+maturity 
+
+rejuvenation will soon be safe and efficient  but not as a means for
+attempting immortality  it will be socially recognized as healthy and
+legitimate only when undertaken to compensate for premature ageing due
+to specific repressions  illness  or anxiety 
+
+the elimination of known diseases by a genuine science of life does not
+mean that other diseases will spring up perhaps worse than before  a
+theoretical science of life will know the meaning of all disease  and
+will not prevent one in such a way as to give rise to another  instead
+of making campaigns against influenza or any other one disease  it will
+determine the conditions in which no disease can survive  and thus
+gradually eliminate all the organic diseases which attack the body 
+
+but this does not mean the attainment of a hygienic utopia in which
+human life necessarily fulfils itself  a balance will be made to
+the disappearance of cancer and syphilis  not by the arising of
+other diseases but as a result of the consequent increase in the
+sensitiveness of the human brain 
+
+the supremely difficult task of the next hundred years will be to keep
+the mind of the race healthy and stable through a period of critical
+sensitiveness  we are in a transition stage of violent instability  of
+intense cruelty coupled with compassion  america   of blended love of
+liberty and need of discipline  of emotional religions and of wars  but
+we must hope that it will lead to some mode of life with greater
+inherent stability 
+
+   psychology is now occupied with the discovery that the human
+response to perceptions is not additive  i e  that the effect made by a
+group of sounds or colours depends on the pattern in space and time in
+which they are arranged    gestalt theorie    for instance  the effect
+made on a man by the individual notes of  god save the king  when
+played in the wrong order is negligible  and bears no relation to his
+response when he hears the tune played in a cinema  and it reminds him
+of  patriotism  and the war  so far no scientific method has been found
+of describing when a group of elements is to be treated as a  whole 
+for the purposes of psychology  and this is where the greatest advances
+may be expected 
+
+most scientific conceptions have been based on the method of spatial
+analysis  i e  the reduction  where possible  of a thing to its
+smallest spatial elements  physics  biology  and psychology have all
+lacked the equipment to describe what makes the atom  organism  or the
+pattern function as a unit  and how we are to know if some group is
+a unit or not  the analytical method is fully developed  but we lack
+even the basis for a synthetic treatment  this leads some hard headed
+scientists of the materialistic school who will  stand no nonsense 
+to assert that there is no such thing as  synthesis   that this is a
+mystical idea left over from primitive anthropomorphism  yet to any
+mind that is guided not by prejudice but by a simple search for truth 
+the fact of synthesis is obvious  though not yet properly formulated 
+
+here modern physics can supply a clue  analysis is the method required
+in a search for instantaneous spatial structure  the synthetic method
+which we need must deal with the temporal history and behaviour of
+systems  the fact that the human being reacts in the ways he does to a
+tune as a whole is evidence of something in his history  that he has
+heard the tune often under certain emotional surroundings  the unity
+of any synthesis  whole  or organism is not an instantaneous fact
+explicable in terms of structure  for we can recognize this unity only
+from a continued observation over a period of time 
+
+physics can invent one law to describe the approach of the two
+hydrogen atoms to form a molecule  and in doing so treats the two
+together as a unit  this suggests that the fact of organic unity is to
+be defined and formulated in terms of an irreversible law which governs
+the system as a whole  thus a group of atoms  cells  or any other
+elements is to be called a unit when  and only when  one irreversible
+law can be found which expresses the behaviour of the different
+elements as contributing towards some common end  like the formation of
+the molecule in the case of the hydrogen atoms 
+
+we can now draw a practical conclusion for the future of psychology 
+which is in great need of a moral principle to guide its treatment of
+disintegrated human personality  on the analogy of the two atoms  a
+human being is to be considered as a unity when his whole behaviour
+displays continuous co ordination towards some end  but there is an
+important difference in the two cases  the atoms move towards an end
+which we know because it has already happened in history  whereas
+man s development is creative  that is it proceeds towards an end we
+cannot know exactly before it comes into being  thus the parent or
+psychologist need not trouble if he cannot understand what his child or
+subject is aiming towards  so long as some consistency and harmony of
+functioning is apparent  the  end  can be left to nature to look after 
+because such harmony  means  that the organism is tending towards some
+ultimate condition 
+
+the psychologists of the future will therefore have to follow some
+principle such as this  their only legitimate aim is the maintenance
+and restoration of harmonious co ordination of all the human functions 
+and no concern need be paid to ultimate intellectual or spiritual
+ideals  of course if the person considered is apparently tending
+towards some degenerate condition  that is known to the onlooker
+because it is  not  new but a repetition of what many human beings
+have done before  then this tendency can be altered  at least  it can
+be altered if the onlooker can use his intuition to discover signs
+of repressed conflict which show that the immediate tendency is not
+whole natured  but based on the repression of some more profound
+aspiration or desire  then by bringing this repressed aspiration back
+into consciousness the degenerate tendency may be arrested  but this
+control over the lives of others can only be effectively exercised
+by the intuitive discovery that their present tendencies are not
+whole natured 
+
+                                        
+
+prophecy can never be scientific  and forecasting in the realm of
+science is perhaps the most dangerous form of intellectual acrobatics 
+science must be thorough  and all vague speculation is its enemy 
+but there are moments when a profound revision is necessary  and
+amidst the responsibilities and rich appeal of daily life no one will
+undertake this task who does not believe that it offers an adequate
+reward to science and to man  to day prophecy can call attention to
+unjustified limitations inherent in current scientific thought  and
+encourage the students of matter and of life to get together and try to
+discover the single system of natural law which we must believe covers
+both realms  it may even help them to find crucial experiments by which
+to guide their search 
+
+the reward is certainly great  the indifference to the destruction of
+life which has marked recent years is no cause either for surprise or
+for despair after an epoch of orthodox and insincere religion coupled
+with an abstract science of matter  one thing only can guide humanity
+to a saner and richer life  the recognition and valuation of life 
+this can be assisted by science and art both revealing life in all its
+significant forms  but the roots of art have been destroyed by the
+domination of a science which had not recognized the significance of
+life within the realm of natural law  for great art can only arise from
+a profound reverence for life  whereas to the scientific mood of this
+period life appeared as an arbitrary impulse in continual conflict with
+the laws of matter 
+
+physics is now studying light  the radiant influence of light nourishes
+life and within human body forms the fabric of consciousness  we are
+alive and conscious  but our consciousness is immature for we do not
+yet know the laws that govern our own lives and thoughts  yet it is
+certain that light  life  and consciousness are bound together by some
+undiscovered law  this secret of nature s alchemy is still hidden from
+us within our own bodies  by revealing it physics will create a new
+hope for man 
+
+
+
+
+notes
+
+
+    whitehead   science and the modern world   eddington comes near
+to the same idea in an essay in  science  religion  and reality  
+      see also weyl   was ist materie         p      it has also been
+expressed by others quite independently  though i do not know of other
+published references 
+
+    e g  the irreversible motion of an electron in the field of a bar
+magnet is rendered formally reversible by the assumption that the
+magnetic field is due to moving electrons  yet this assumption is
+highly artificial since it postulates electronic movements that have
+never been observed  in other cases irreversibility is eliminated by
+the choice of special co ordinate systems  some physicists now hold the
+view that irreversibility may be inherent in atomic as it is in organic
+processes 
+
+     internal constitution of the stars         p      compare note on
+p     
+
+it may be convenient here to summarize the processes that give at any
+rate superficial evidence of their irreversibility  processes involving
+heat changes  or the radiation of light  or mass  the production of
+energy in a star  the motions of electrons in magnetic fields  certain
+types of atom ion collision in mixed gases  processes dependent on
+retarded potentials  radioactivity  organic growth and evolution 
+and consciousness itself  eddington deals only with the case of the
+emission and absorption of light  but suggests that the direction
+of time can only be deduced from statistical processes  this is the
+orthodox view  though it is very doubtful if it is valid now that the
+quantum processes are receiving formulation  in this connection  see
+note   
+
+    einstein  berlin akad    sitzungsberichte         p       but
+einstein s view must be revised in view of recent experimental results
+ e g  harnwell   phys  rev    vol            pp      and       if these
+have been correctly interpreted  see born   zeitschr f r physik   vol 
+    pp         and jordan   naturw         p      
+
+    the idea that time may be an active factor in causation has the
+mathematical significance that  t   for the system in question  must
+appear explicitly in the formulation of the law  and not merely as the
+square of a time differential found convenient for the correlation of
+a standard clock with a reversible process which is being observed 
+a law whose mathematical formulation involves  t  measured from some
+moment in the history of the system  gives an entirely new meaning
+to  t   though one consistent with the properties of the reversible
+newtonian differential  dt   such a law may claim to express the fact
+of historic  irreversible  duration  a feature in nature which is
+neglected by laws involving only  dt  squared 
+
+    einstein   annalen der physik   vol      pp              
+
+
+
+
+
+ sixty volumes are now published 
+
+to day and to morrow
+
+ each  pott  vo  boards      net 
+
+
+this series of books  by some of the most distinguished english
+thinkers  scientists  philosophers  doctors  critics  and artists  was
+at once recognized as a noteworthy event  written from various points
+of view  one book frequently opposing the argument of another  they
+provide the reader with a stimulating survey of the most modern thought
+in many departments of life  several volumes are devoted to the future
+trend of civilization  conceived as a whole  while others deal with
+particular provinces  it is interesting to see in these neat little
+volumes  issued at a low price  the revival of a form of literature 
+the pamphlet  which has been in disuse for many years 
+
+
+   published by 
+  kegan paul  trench  trubner   co   ltd 
+  broadway house        carter lane  london  e c  
+
+
+ from the reviews 
+
+  times literary supplement    an entertaining series of vivacious and
+    stimulating studies of modern tendencies  
+
+  spectator    scintillating monographs     that very lively and
+    courageous series  
+
+  observer    there seems no reason why the brilliant to day and
+    to morrow series should come to an end for a century of to morrows 
+    at first it seemed impossible for the publishers to keep up the
+    sport through a dozen volumes  but the series already runs to more
+    than two score  a remarkable series     
+
+  daily telegraph    this admirable series of essays  provocative and
+    brilliant  
+
+  nation    we are able to peer into the future by means of that
+    brilliant series  which  will constitute a precious document upon
+    the present time     t  s  eliot  
+
+  manchester dispatch    the more one reads of these pamphlets  the
+    more avid becomes the appetite  we hope the list is endless  
+
+  irish statesman    full of lively controversy  
+
+  daily herald    this series has given us many monographs of
+    brilliance and discernment     the stylistic excellencies of this
+    provocative series  
+
+  field    we have long desired to express the deep admiration felt by
+    every thinking scholar and worker at the present day for this
+    series  we must pay tribute to the high standard of thought and
+    expression they maintain  as small gift books  austerely yet
+    prettily produced  they remain unequalled of their kind  we can give
+    but the briefest suggestions of their value to the student  the
+    politician  and the voter     
+
+  new york world    holds the palm in the speculative and
+    interpretative thought of the age  
+
+
+volumes ready
+
+  daedalus   or science and the future  by j  b  s  haldane  reader in
+    biochemistry  university of cambridge   seventh impression  
+
+     a fascinating and daring little book     westminster gazette  
+     the essay is brilliant  sparkling with wit and bristling with
+    challenges     british medical journal  
+
+     predicts the most startling changes     morning post  
+
+  callinicus   a defence of chemical warfare  by j  b  s  haldane 
+     second impression  
+
+     mr haldane s brilliant study     times leading article    a book
+    to be read by every intelligent adult     spectator    this
+    brilliant little monograph     daily news  
+
+  icarus   or the future of science  by bertrand russell  f r s 
+     fourth impression  
+
+     utter pessimism     observer    mr russell refuses to believe that
+    the progress of science must be a boon to mankind     morning post  
+     a stimulating book  that leaves one not at all
+    discouraged     daily herald  
+
+  what i believe   by bertrand russell  f r s   third impression  
+
+     one of the most brilliant and thought stimulating little books i
+    have read  a better book even than  icarus      nation    simply and
+    brilliantly written     nature    in stabbing sentences he punctures
+    the bubble of cruelty  envy  narrowness  and ill will which those in
+    authority call their morals     new leader  
+
+  tantalus   or the future of man  by f  c  s  schiller  d sc   fellow
+    of corpus christi college  oxford   second impression  
+
+     they are all   daedalus    icarus   and  tantalus   brilliantly
+    clever  and they supplement or correct one another     dean inge  
+    in  morning post    immensely valuable and infinitely
+    readable     daily news    the book of the week     spectator  
+
+  cassandra   or the future of the british empire  by f  c  s 
+    schiller  d sc 
+
+     we commend it to the complacent of all parties     saturday
+    review    the book is small  but very  very weighty  brilliantly
+    written  it ought to be read by all shades of politicians and
+    students of politics     yorkshire post    yet another addition to
+    that bright constellation of pamphlets     spectator  
+
+  quo vadimus   glimpses of the future  by e  e  fournier d albe  d sc 
+     second impression  
+
+     a wonderful vision of the future  a book that will be talked
+    about     daily graphic    a remarkable contribution to a
+    remarkable series     manchester dispatch    interesting and
+    singularly plausible     daily telegraph  
+
+  thrasymachus   the future of morals  by c  e  m  joad  author of  the
+    babbitt warren   etc   second impression  
+
+     his provocative book     graphic    written in a style of
+    deliberate brilliance     times literary supplement    as outspoken
+    and unequivocal a contribution as could well be imagined  even those
+    readers who dissent will be forced to recognize the admirable
+    clarity with which he states his case  a book that will
+    startle     daily chronicle  
+
+  lysistrata   or woman s future and future woman  by anthony m 
+    ludovici  author of  a defence of aristocracy   etc   second
+    impression  
+
+     a stimulating book  volumes would be needed to deal  in the
+    fullness his work provokes  with all the problems raised     sunday
+    times    pro feminine but anti feministic     scotsman    full of
+    brilliant common sense     observer  
+
+  hypatia   or woman and knowledge  by mrs bertrand russel  with a
+    frontispiece   third impression  
+
+    an answer to  lysistrata    a passionate vindication of the rights
+    of woman     manchester guardian    says a number of things that
+    sensible women have been wanting publicly said for a long
+    time     daily herald  
+
+  hephaestus   the soul of the machine  by e  e  fournier d albe  d sc 
+
+     a worthy contribution to this interesting series  a delightful
+    and thought provoking essay     birmingham post    there is a
+    special pleasure in meeting with a book like  hephaestus   the
+    author has the merit of really understanding what he is talking
+    about     engineering    an exceedingly clever defence of
+    machinery     architects  journal  
+
+  the passing of the phantoms   a study of evolutionary psychology and
+    morals  by c  j  patten  professor of anatomy  sheffield university 
+    with   plates 
+
+     readers of  daedalus    icarus  and  tantalus   will be grateful
+    for an excellent presentation of yet another point of
+    view     yorkshire post    this bright and bracing little
+    book     literary guide    interesting and original     medical
+    times  
+
+  the mongol in our midst   a study of man and his three faces  by
+    f  g  crookshank  m d   f r c p  with    plates   second edition 
+    revised  
+
+     a brilliant piece of speculative induction     saturday review  
+     an extremely interesting and suggestive book  which will reward
+    careful reading     sunday times    the pictures carry fearful
+    conviction     daily herald  
+
+  the conquest of cancer   by h  w  s  wright  m s   f r c s 
+    introduction by f  g  crookshank  m d 
+
+     eminently suitable for general reading  the problem is fairly and
+    lucidly presented  one merit of mr wright s plan is that he tells
+    people what  in his judgment  they can best do   here and
+    now     from the  introduction  
+
+  pygmalion   or the doctor of the future  by r  mcnair wilson  m b 
+
+     dr wilson has added a brilliant essay to this series     times
+    literary supplement    this is a very little book  but there is much
+    wisdom in it     evening standard    no doctor worth his salt would
+    venture to say that dr wilson was wrong     daily herald  
+
+  prometheus   or biology and the advancement of man  by h  s 
+    jennings  professor of zoology  johns hopkins university   second
+    impression  
+
+     this volume is one of the most remarkable that has yet appeared in
+    this series  certainly the information it contains will be new to
+    most educated laymen  it is essentially a discussion of     heredity
+    and environment  and it clearly establishes the fact that the
+    current use of these terms has no scientific justification     times
+    literary supplement    an exceedingly brilliant book     new
+    leader  
+
+  narcissus   an anatomy of clothes  by gerald heard  with   
+    illustrations 
+
+     a most suggestive book     nation    irresistible  reading it
+    is like a switchback journey  starting from prehistoric times we
+    rocket down the ages     daily news    interesting  provocative  and
+    entertaining     queen  
+
+  thamyris   or is there a future for poetry  by r  c  trevelyan 
+
+     learned  sensible  and very well written     affable hawk   in  new
+    statesman    very suggestive     j  c  squire   in  observer    a
+    very charming piece of work  i agree with all  or at any rate 
+    almost all its conclusions     j  st loe strachey   in  spectator  
+
+  proteus   or the future of intelligence  by vernon lee  author of
+     satan the waster   etc 
+
+     we should like to follow the author s suggestions as to the
+    effect of intelligence on the future of ethics  aesthetics 
+    and manners  her book is profoundly stimulating and should be
+    read by everyone     outlook    a concise  suggestive piece of
+    work     saturday review  
+
+  timotheus   the future of the theatre  by bonamy dobr e  author of
+     restoration drama   etc 
+
+     a witty  mischievous little book  to be read with
+    delight     times literary supplement    this is a delightfully
+    witty book     scotsman    in a subtly satirical vein he visualizes
+    various kinds of theatres in     years  time  his gay little book
+    makes delightful reading     nation  
+
+  paris   or the future of war  by captain b  h  liddell hart 
+
+     a companion volume to  callinicus   a gem of close thinking and
+    deduction     observer    a noteworthy contribution to a problem of
+    concern to every citizen in this country     daily
+    chronicle    there is some lively thinking about the future of war
+    in  paris   just added to this set of live wire pamphlets on big
+    subjects     manchester guardian  
+
+  wireless possibilities   by professor a  m  low  with   diagrams 
+
+     as might be expected from an inventor who is always so fresh  he
+    has many interesting things to say     evening standard    the
+    mantle of blake has fallen upon the physicists  to them we look for
+    visions  and we find them in this book     new statesman  
+
+  perseus   of dragons  by h  f  scott stokes  with   illustrations 
+
+     a diverting little book  chock full of ideas  mr stokes 
+    dragon lore is both quaint and various     morning post    very
+    amusingly written  and a mine of curious knowledge for which the
+    discerning reader will find many uses     glasgow herald  
+
+  lycurgus   or the future of law  by e  s  p  haynes  author of
+     concerning solicitors   etc 
+
+     an interesting and concisely written book     yorkshire post    he
+    roundly declares that english criminal law is a blend of barbaric
+    violence  medieval prejudices and modern fallacies     a humane
+    and conscientious investigation     t p  s weekly    a thoughtful
+    book  deserves careful reading     law times  
+
+  euterpe   or the future of art  by lionel r  mccolvin  author of  the
+    theory of book selection  
+
+     discusses briefly  but very suggestively  the problem of the future
+    of art in relation to the public     saturday review    another
+    indictment of machinery as a soul destroyer     mr mccolvin has the
+    courage to suggest solutions     westminster gazette    this is
+    altogether a much needed book     new leader  
+
+  pegasus   or problems of transport  by colonel j  f  c  fuller 
+    author of  the reformation of war   etc  with   plates 
+
+     the foremost military prophet of the day propounds a solution for
+    industrial and unemployment problems  it is a bold essay     and
+    calls for the attention of all concerned with imperial
+    problems     daily telegraph    practical  timely  very interesting
+    and very important     j  st loe strachey   in  spectator  
+
+  atlantis   or america and the future  by colonel j  f  c  fuller 
+
+     candid and caustic     observer    many hard things have been
+    said about america  but few quite so bitter and caustic as
+    these     daily sketch    he can conjure up possibilities of a new
+    atlantis     clarion  
+
+  midas   or the united states and the future  by c  h  bretherton 
+    author of  the real ireland   etc 
+
+    a companion volume to  atlantis    full of astute observations and
+    acute reflections     this wise and witty pamphlet  a provocation to
+    the thought that is creative     morning post    a punch in every
+    paragraph  one could hardly ask for more  meat      spectator  
+
+  nuntius   or advertising and its future  by gilbert russell 
+
+     expresses the philosophy of advertising concisely and
+    well     observer    it is doubtful if a more straightforward
+    exposition of the part advertising plays in our public and private
+    life has been written     manchester guardian  
+
+  birth control and the state   a plea and a forecast  by c  p 
+    blacker   m c    m a   m r c s   l r c p 
+
+     a very careful summary     times literary supplement    a
+    temperate and scholarly survey of the arguments for and against the
+    encouragement of the practice of birth control     lancet    he
+    writes lucidly  moderately  and from wide knowledge  his book
+    undoubtedly gives a better understanding of the subject than any
+    other brief account we know  it also suggests a policy     saturday
+    review  
+
+  ouroboros   or the mechanical extension of mankind  by garet garrett 
+
+     this brilliant and provoking little book     observer    a
+    significant and thoughtful essay  calculated in parts to make our
+    flesh creep     spectator    a brilliant writer  mr garrett is a
+    remarkable man  he explains something of the enormous change the
+    machine has made in life     daily express  
+
+  artifex   or the future of craftsmanship  by john gloag  author of
+     time  taste  and furniture  
+
+     an able and interesting summary of the history of craftsmanship
+    in the past  a direct criticism of the present  and at the end his
+    hopes for the future  mr gloag s real contribution to the future of
+    craftsmanship is his discussion of the uses of machinery     times
+    literary supplement  
+
+  plato s american republic   by j  douglas woodruff   fourth
+    impression  
+
+     uses the form of the socratic dialogue with devastating success  a
+    gently malicious wit sparkles in every page     sunday times  
+     having deliberately set himself an almost impossible task  has
+    succeeded beyond belief     saturday review    quite the liveliest
+    even of this spirited series     observer  
+
+  orpheus   or the music of the future  by w  j  turner  author of
+     music and life    second impression  
+
+     a book on music that we can read not merely once  but twice or
+    thrice  mr turner has given us some of the finest thinking upon
+    beethoven that i have ever met with     ernest newman  in  sunday
+    times    a brilliant essay in contemporary philosophy     outlook  
+     the fruit of real knowledge and understanding     new statesman  
+
+  terpander   or music and the future  by e  j  dent  author of
+     mozart s operas  
+
+     in  orpheus  mr turner made a brilliant voyage in search of first
+    principles  mr dent s book is a skilful review of the development of
+    music  it is the most succinct and stimulating essay on music i have
+    found        musical news    remarkably able and
+    stimulating     times literary supplement    there is hardly another
+    critic alive who could sum up contemporary tendencies so
+    neatly     spectator  
+
+  sibylla   or the revival of prophecy  by c  a  mace  university of
+    st  andrew s 
+
+    an entertaining and instructive pamphlet     morning post    places
+    a nightmare before us very ably and wittily     spectator  
+     passages in it are excellent satire  but on the whole mr mace s
+    speculations may be taken as a trustworthy guide     to modern
+    scientific thought     birmingham post  
+
+  lucullus   or the food of the future  by olga hartley and mrs c  f 
+    leyel  authors of  the gentle art of cookery  
+
+     this is a clever and witty little volume in an entertaining series 
+    and it makes enchanting reading     times literary supplement  
+     opens with a brilliant picture of modern man  living in a
+    vacuum cleaned  steam heated  credit furnished suburban mansion
+     with a wolf in the basement   the wolf of hunger  this banquet of
+    epigrams     spectator  
+
+  procrustes   or the future of english education  by m  alderton pink 
+
+     undoubtedly he makes out a very good case     daily herald    this
+    interesting addition to the series     times educational
+    supplement    intends to be challenging and succeeds in being so 
+    all fit readers will find it stimulating     northern echo  
+
+  the future of futurism   by john rodker 
+
+     mr rodker is up to the minute  and he has accomplished a
+    considerable feat in writing on such a vague subject     extremely
+    interesting pages     t  s  eliot   in  nation    there are a good
+    many things in this book which are of interest     times literary
+    supplement  
+
+  pomona   or the future of english  by basil de s lincourt  author of
+     the english secret   etc 
+
+     the future of english is discussed fully and with fascinating
+    interest     morning post    full of wise thoughts and happy
+    words     times literary supplement    his later pages must stir
+    the blood of any man who loves his country and her poetry     j  c 
+    squire   in  observer    his finely conceived essay     manchester
+    guardian  
+
+  balbus   or the future of architecture  by christian barman 
+
+     a really brilliant addition to this already distinguished series 
+    the reading of  balbus  will give much data for intelligent
+    prophecy  and incidentally  an hour or so of excellent
+    entertainment     spectator    most readable and reasonable  we can
+    recommend it warmly     new statesman    this intriguing little
+    book     connoisseur  
+
+  apella   or the future of the jews  by a quarterly reviewer 
+
+     cogent  because of brevity and a magnificent prose style  this book
+    wins our quiet praise  it is a fine pamphlet  adding to the value
+    of the series  and should not be missed     spectator    a notable
+    addition to this excellent series  his arguments are a provocation
+    to fruitful thinking     morning post  
+
+  the dance of  iva   or life s unity and rhythm  by collum 
+
+     it has substance and thought in it  the author is very much alive
+    and responsive to the movements of to day     spectator    a very
+    interesting account of the work of sir jagadis bose     oxford
+    magazine    has caught the spirit of the eastern conception of world
+    movements     calcutta statesman  
+
+  lars porsena   or the future of swearing and improper language  by
+    robert graves   third impression  
+
+     goes uncommonly well  and deserves to     observer    not for
+    squeamish readers     spectator    no more amusingly unexpected
+    contribution has been made to this series  a deliciously ironical
+    affair     bystander    his highly entertaining essay is as full
+    as the current standard of printers and police will allow     new
+    statesman    humour and style are beyond criticism     irish
+    statesman  
+
+  socrates   or the emancipation of mankind  by h  f  carlill 
+
+     devotes a specially lively section to the herd instinct     times  
+     clearly  and with a balance that is almost aristotelian  he
+    reveals what modern psychology is going to accomplish     new
+    statesman    one of the most brilliant and important of a remarkable
+    series     westminster gazette  
+
+  delphos   or the future of international language  by e  sylvia
+    pankhurst 
+
+     equal to anything yet produced in this brilliant series  miss
+    pankhurst states very clearly what all thinking people must soon
+    come to believe  that an international language would be one of the
+    greatest assets of civilization     spectator    a most readable
+    book  full of enthusiasm  an important contribution to this
+    subject     international language  
+
+  gallio   or the tyranny of science  by j  w  n  sullivan  author of
+     a history of mathematics  
+
+     so packed with ideas that it is not possible to give any adequate
+     r sum   of its contents     times literary supplement    his
+    remarkable monograph  his devastating summary of materialism  this
+    pocket  novum organum      spectator    possesses a real distinction
+    of thought and manner  it must be read     new statesman  
+
+  apollonius   or the future of psychical research  by e  n  bennett 
+    author of  problems of village life   etc 
+
+     a sane  temperate and suggestive survey of a field of inquiry
+    which is slowly but surely pushing to the front     times literary
+    supplement    his exposition of the case for psychic research is
+    lucid and interesting     scotsman    displays the right temper 
+    admirably conceived  skilfully executed     liverpool post  
+
+  aeolus   or the future of the flying machine  by oliver stewart 
+
+     both his wit and his expertness save him from the
+    nonsensical fantastic  there is nothing vague or sloppy in these
+    imaginative forecasts     daily news    he is to be congratulated 
+    his book is small  but it is so delightfully funny that it is well
+    worth the price  and there really are sensible ideas behind the
+    jesting     aeroplane  
+
+  stentor   or the press of to day and to morrow  by david ockham 
+
+     a valuable and exceedingly interesting commentary on a vital phase
+    of modern development     daily herald    vigorous and well written 
+    eminently readable     yorkshire post    he has said what one
+    expects any sensible person to say about the  trustification  of the
+    press     spectator  
+
+  rusticus   or the future of the countryside  by martin s  briggs 
+    f r i b a 
+
+     few of the    volumes  provocative and brilliant as most of them
+    have been  capture our imagination as does this one     daily
+    telegraph    the historical part is as brilliant a piece of packed
+    writing as could be desired     daily herald    serves a national
+    end  the book is in essence a pamphlet  though it has the form and
+    charm of a book     spectator  
+
+  janus   or the conquest of war  by william mcdougall  m b   f r s 
+
+     among all the booklets of this brilliant series  none  i think is
+    so weighty and impressive as this  it contains thrice as much matter
+    as the other volumes and is profoundly serious    dean inge  in
+     evening standard    a deeply interesting and fair minded study of
+    the causes of war and the possibilities of their prevention  every
+    word is sound     spectator  
+
+  vulcan   or the future of labour  by cecil chisholm 
+
+     of absorbing interest     daily herald    no one  perhaps  has ever
+    condensed so many hard facts into the appearance of agreeable
+    fiction  nor held the balance so nicely between technicalities and
+    flights of fancy  as the author of this excellent book in a
+    brilliant series   vulcan  is a little book  but between its covers
+    knowledge and vision are pressed down and brimming
+    over     spectator  
+
+  hymen   or the future of marriage  by norman haire 
+
+    this candid and unprejudiced survey inquires why the majority
+    of marriages to day seem to be so unsatisfactory  and finds the
+    answer in the sexual ethic of our civilization which is ill adapted
+    to our social and economic needs  the problems of sex morality 
+    sex education  prostitution  in breeding  birth control 
+    trial marriage  and polygamy are all touched upon 
+
+  the next chapter   the war against the moon  by andr  maurois  author
+    of  ariel   etc 
+
+    this imaginary chapter of world history           from the pen of
+    one of the most brilliant living french authors mixes satire and
+    fancy in just proportions  it tells how the press of the world is
+    controlled by five men  how world interest is focussed on an attack
+    on the moon  how thus the threat of world war is averted  but when
+    the moon retaliates    
+
+  galatea   or the future of darwinism  by w  russell brain 
+
+    this non technical but closely reasoned book is a challenge to the
+    orthodox teaching on evolution known as neo darwinism  the author
+    claims that  although neo darwinian theories can possibly account
+    for the evolution of forms  they are quite inadequate to explain the
+    evolution of functions 
+
+  scheherazade   or the future of the english novel  by john carruthers 
+
+    a survey of contemporary fiction in england and america lends to the
+    conclusion that the literary and scientific influences of the last
+    fifty years have combined to make the novel of to day predominantly
+    analytic  it has thus gained in psychological subtlety  but lost its
+    form  how this may be regained is put forward in the conclusion 
+
+  caledonia   or the future of the scots  by g  m  thomson 
+
+    exit the scot  under this heading the scottish people are revealed
+    as a leaderless mob in whom national pride has been strangled  they
+    regard  unmoved  the spectacle of their monstrous slum evil  the
+    decay of their industries  the devastation of their countryside 
+    this is the most compact and mordant indictment of scottish policy
+    that has yet been written 
+
+  albyn   or scotland and the future  by c  m  grieve  author of
+     contemporary scottish studies   etc 
+
+    a vigorous answer  explicit and implicit  to  caledonia   tracing
+    the movements of a real scottish revival  in music  art  literature 
+    and politics  and coming to the conclusion that there is a chance
+    even now for the regeneration of the scottish people 
+
+  lares et penates   or the future of the home  by h  j  birnstingl 
+
+    all the many forces at work to day are influencing the planning 
+    appearance  and equipment of the home  this is the main thesis of
+    this stimulating volume  which considers also the labour saving
+    movement  the  ideal  house  the influence of women  the servant
+    problem  and the relegation of aesthetic considerations to the
+    background  disconcerting prognostications follow 
+
+
+ nearly ready 
+
+  archon   or the future of government  by hamilton fyfe 
+
+    a survey of the methods of government in the past leads the author
+    to a consideration of conditions in the world of to day  he then
+    indicates the lines along which progress may develop 
+
+  hermes   or the future of chemistry  by t  w  jones  b sc   f c s 
+
+    chemistry as the means of human emancipation is the subject of this
+    book  to day chemistry is one of the master factors of our
+    existence  to morrow it will dominate every phase of life  winning
+    for man the goal of all his endeavour  economic freedom  it may also
+    effect a startling change in man himself 
+
+  the future of physics   by l  l  whyte 
+
+    the last few years have been a critical period in the development
+    of physics  we stand on the eve of a new epoch  physics  biology 
+    and psychology are converging towards a scientific synthesis of
+    unprecedented importance whose influence on thought and social
+    custom will be so profound as to mark a stage in human evolution 
+    this book interprets these events and should be read in connexion
+    with  gallio   by j  w  n  sullivan  in this series 
+
+  ikonoclastes   or the future of shakespeare  by hubert griffiths 
+
+    taking as text the recent productions of classical plays in modern
+    dress  the author  a distinguished dramatic critic  suggests that
+    this is the proper way of reviving shakespeare and other great
+    dramatists of the past  and that their successful revival in modern
+    dress may perhaps be taken as an indication of their value 
+
+
+ in preparation 
+
+  bacchus   or the future of wine  by p  morton shand 
+
+  mercurius   or the world on wings  by c  thompson walker 
+
+  the future of sport   by g  s  sandilands 
+
+  the future of india   by t  earle welby 
+
+  the future of films   by ernest betts 
+
+                                        
+
+
+
+
+transcriber s note
+
+
+minor punctuation errors have been changed without notice 
+
+other spelling has been retained as originally published except
+for the changes below 
+
+  page      be effectively exercized       be effectively exercised 
+  page       mr colvin has the             mr mccolvin has the 
+  page       their montrous slum evil      their monstrous slum evil 
+
+
+
+
+
+    end of the project gutenberg ebook archimedes  or  the future of physics    
+
+
+    
+
+updated editions will replace the previous one the old editions will
+be renamed 
+
+creating the works from print editions not protected by u s  copyright
+law means that no one owns a united states copyright in these works 
+so the foundation  and you   can copy and distribute it in the united
+states without permission and without paying copyright
+royalties  special rules  set forth in the general terms of use part
+of this license  apply to copying and distributing project
+gutenberg  electronic works to protect the project gutenberg 
+concept and trademark  project gutenberg is a registered trademark 
+and may not be used if you charge for an ebook  except by following
+the terms of the trademark license  including paying royalties for use
+of the project gutenberg trademark  if you do not charge anything for
+copies of this ebook  complying with the trademark license is very
+easy  you may use this ebook for nearly any purpose such as creation
+of derivative works  reports  performances and research  project
+gutenberg ebooks may be modified and printed and given away you may
+do practically anything in the united states with ebooks not protected
+by u s  copyright law  redistribution is subject to the trademark
+license  especially commercial redistribution 
+
+
+start  full license
+
+the full project gutenberg license
+
+please read this before you distribute or use this work
+
+to protect the project gutenberg  mission of promoting the free
+distribution of electronic works  by using or distributing this work
+ or any other work associated in any way with the phrase  project
+gutenberg    you agree to comply with all the terms of the full
+project gutenberg  license available with this file or online at
+www gutenberg org license 
+
+section    general terms of use and redistributing project gutenberg 
+electronic works
+
+  a  by reading or using any part of this project gutenberg 
+electronic work  you indicate that you have read  understand  agree to
+and accept all the terms of this license and intellectual property
+ trademark copyright  agreement  if you do not agree to abide by all
+the terms of this agreement  you must cease using and return or
+destroy all copies of project gutenberg  electronic works in your
+possession  if you paid a fee for obtaining a copy of or access to a
+project gutenberg  electronic work and you do not agree to be bound
+by the terms of this agreement  you may obtain a refund from the person
+or entity to whom you paid the fee as set forth in paragraph   e   
+
+  b   project gutenberg  is a registered trademark  it may only be
+used on or associated in any way with an electronic work by people who
+agree to be bound by the terms of this agreement  there are a few
+things that you can do with most project gutenberg  electronic works
+even without complying with the full terms of this agreement  see
+paragraph   c below  there are a lot of things you can do with project
+gutenberg  electronic works if you follow the terms of this
+agreement and help preserve free future access to project gutenberg 
+electronic works  see paragraph   e below 
+
+  c  the project gutenberg literary archive foundation   the
+foundation  or pglaf   owns a compilation copyright in the collection
+of project gutenberg  electronic works  nearly all the individual
+works in the collection are in the public domain in the united
+states  if an individual work is unprotected by copyright law in the
+united states and you are located in the united states  we do not
+claim a right to prevent you from copying  distributing  performing 
+displaying or creating derivative works based on the work as long as
+all references to project gutenberg are removed  of course  we hope
+that you will support the project gutenberg  mission of promoting
+free access to electronic works by freely sharing project gutenberg 
+works in compliance with the terms of this agreement for keeping the
+project gutenberg  name associated with the work  you can easily
+comply with the terms of this agreement by keeping this work in the
+same format with its attached full project gutenberg  license when
+you share it without charge with others 
+
+  d  the copyright laws of the place where you are located also govern
+what you can do with this work  copyright laws in most countries are
+in a constant state of change  if you are outside the united states 
+check the laws of your country in addition to the terms of this
+agreement before downloading  copying  displaying  performing 
+distributing or creating derivative works based on this work or any
+other project gutenberg  work  the foundation makes no
+representations concerning the copyright status of any work in any
+country other than the united states 
+
+  e  unless you have removed all references to project gutenberg 
+
+  e    the following sentence  with active links to  or other
+immediate access to  the full project gutenberg  license must appear
+prominently whenever any copy of a project gutenberg  work  any work
+on which the phrase  project gutenberg  appears  or with which the
+phrase  project gutenberg  is associated  is accessed  displayed 
+performed  viewed  copied or distributed 
+
+    this ebook is for the use of anyone anywhere in the united states and most
+    other parts of the world at no cost and with almost no restrictions
+    whatsoever  you may copy it  give it away or re use it under the terms
+    of the project gutenberg license included with this ebook or online
+    at www gutenberg org  if you
+    are not located in the united states  you will have to check the laws
+    of the country where you are located before using this ebook 
+  
+  e    if an individual project gutenberg  electronic work is
+derived from texts not protected by u s  copyright law  does not
+contain a notice indicating that it is posted with permission of the
+copyright holder   the work can be copied and distributed to anyone in
+the united states without paying any fees or charges  if you are
+redistributing or providing access to a work with the phrase  project
+gutenberg  associated with or appearing on the work  you must comply
+either with the requirements of paragraphs   e   through   e   or
+obtain permission for the use of the work and the project gutenberg 
+trademark as set forth in paragraphs   e   or   e   
+
+  e    if an individual project gutenberg  electronic work is posted
+with the permission of the copyright holder  your use and distribution
+must comply with both paragraphs   e   through   e   and any
+additional terms imposed by the copyright holder  additional terms
+will be linked to the project gutenberg  license for all works
+posted with the permission of the copyright holder found at the
+beginning of this work 
+
+  e    do not unlink or detach or remove the full project gutenberg 
+license terms from this work  or any files containing a part of this
+work or any other work associated with project gutenberg  
+
+  e    do not copy  display  perform  distribute or redistribute this
+electronic work  or any part of this electronic work  without
+prominently displaying the sentence set forth in paragraph   e   with
+active links or immediate access to the full terms of the project
+gutenberg  license 
+
+  e    you may convert to and distribute this work in any binary 
+compressed  marked up  nonproprietary or proprietary form  including
+any word processing or hypertext form  however  if you provide access
+to or distribute copies of a project gutenberg  work in a format
+other than  plain vanilla ascii  or other format used in the official
+version posted on the official project gutenberg  website
+ www gutenberg org   you must  at no additional cost  fee or expense
+to the user  provide a copy  a means of exporting a copy  or a means
+of obtaining a copy upon request  of the work in its original  plain
+vanilla ascii  or other form  any alternate format must include the
+full project gutenberg  license as specified in paragraph   e   
+
+  e    do not charge a fee for access to  viewing  displaying 
+performing  copying or distributing any project gutenberg  works
+unless you comply with paragraph   e   or   e   
+
+  e    you may charge a reasonable fee for copies of or providing
+access to or distributing project gutenberg  electronic works
+provided that 
+
+      you pay a royalty fee of     of the gross profits you derive from
+        the use of project gutenberg  works calculated using the method
+        you already use to calculate your applicable taxes  the fee is owed
+        to the owner of the project gutenberg  trademark  but he has
+        agreed to donate royalties under this paragraph to the project
+        gutenberg literary archive foundation  royalty payments must be paid
+        within    days following each date on which you prepare  or are
+        legally required to prepare  your periodic tax returns  royalty
+        payments should be clearly marked as such and sent to the project
+        gutenberg literary archive foundation at the address specified in
+        section     information about donations to the project gutenberg
+        literary archive foundation  
+    
+      you provide a full refund of any money paid by a user who notifies
+        you in writing  or by e mail  within    days of receipt that s he
+        does not agree to the terms of the full project gutenberg 
+        license  you must require such a user to return or destroy all
+        copies of the works possessed in a physical medium and discontinue
+        all use of and all access to other copies of project gutenberg 
+        works 
+    
+      you provide  in accordance with paragraph   f    a full refund of
+        any money paid for a work or a replacement copy  if a defect in the
+        electronic work is discovered and reported to you within    days of
+        receipt of the work 
+    
+      you comply with all other terms of this agreement for free
+        distribution of project gutenberg  works 
+    
+
+  e    if you wish to charge a fee or distribute a project
+gutenberg  electronic work or group of works on different terms than
+are set forth in this agreement  you must obtain permission in writing
+from the project gutenberg literary archive foundation  the manager of
+the project gutenberg  trademark  contact the foundation as set
+forth in section   below 
+
+  f 
+
+  f    project gutenberg volunteers and employees expend considerable
+effort to identify  do copyright research on  transcribe and proofread
+works not protected by u s  copyright law in creating the project
+gutenberg  collection  despite these efforts  project gutenberg 
+electronic works  and the medium on which they may be stored  may
+contain  defects   such as  but not limited to  incomplete  inaccurate
+or corrupt data  transcription errors  a copyright or other
+intellectual property infringement  a defective or damaged disk or
+other medium  a computer virus  or computer codes that damage or
+cannot be read by your equipment 
+
+  f    limited warranty  disclaimer of damages   except for the  right
+of replacement or refund  described in paragraph   f    the project
+gutenberg literary archive foundation  the owner of the project
+gutenberg  trademark  and any other party distributing a project
+gutenberg  electronic work under this agreement  disclaim all
+liability to you for damages  costs and expenses  including legal
+fees  you agree that you have no remedies for negligence  strict
+liability  breach of warranty or breach of contract except those
+provided in paragraph   f    you agree that the foundation  the
+trademark owner  and any distributor under this agreement will not be
+liable to you for actual  direct  indirect  consequential  punitive or
+incidental damages even if you give notice of the possibility of such
+damage 
+
+  f    limited right of replacement or refund   if you discover a
+defect in this electronic work within    days of receiving it  you can
+receive a refund of the money  if any  you paid for it by sending a
+written explanation to the person you received the work from  if you
+received the work on a physical medium  you must return the medium
+with your written explanation  the person or entity that provided you
+with the defective work may elect to provide a replacement copy in
+lieu of a refund  if you received the work electronically  the person
+or entity providing it to you may choose to give you a second
+opportunity to receive the work electronically in lieu of a refund  if
+the second copy is also defective  you may demand a refund in writing
+without further opportunities to fix the problem 
+
+  f    except for the limited right of replacement or refund set forth
+in paragraph   f    this work is provided to you  as is   with no
+other warranties of any kind  express or implied  including but not
+limited to warranties of merchantability or fitness for any purpose 
+
+  f    some states do not allow disclaimers of certain implied
+warranties or the exclusion or limitation of certain types of
+damages  if any disclaimer or limitation set forth in this agreement
+violates the law of the state applicable to this agreement  the
+agreement shall be interpreted to make the maximum disclaimer or
+limitation permitted by the applicable state law  the invalidity or
+unenforceability of any provision of this agreement shall not void the
+remaining provisions 
+
+  f    indemnity   you agree to indemnify and hold the foundation  the
+trademark owner  any agent or employee of the foundation  anyone
+providing copies of project gutenberg  electronic works in
+accordance with this agreement  and any volunteers associated with the
+production  promotion and distribution of project gutenberg 
+electronic works  harmless from all liability  costs and expenses 
+including legal fees  that arise directly or indirectly from any of
+the following which you do or cause to occur   a  distribution of this
+or any project gutenberg  work   b  alteration  modification  or
+additions or deletions to any project gutenberg  work  and  c  any
+defect you cause 
+
+section    information about the mission of project gutenberg 
+
+project gutenberg  is synonymous with the free distribution of
+electronic works in formats readable by the widest variety of
+computers including obsolete  old  middle aged and new computers  it
+exists because of the efforts of hundreds of volunteers and donations
+from people in all walks of life 
+
+volunteers and financial support to provide volunteers with the
+assistance they need are critical to reaching project gutenberg  s
+goals and ensuring that the project gutenberg  collection will
+remain freely available for generations to come  in       the project
+gutenberg literary archive foundation was created to provide a secure
+and permanent future for project gutenberg  and future
+generations  to learn more about the project gutenberg literary
+archive foundation and how your efforts and donations can help  see
+sections   and   and the foundation information page at www gutenberg org 
+
+section    information about the project gutenberg literary archive foundation
+
+the project gutenberg literary archive foundation is a non profit
+    c     educational corporation organized under the laws of the
+state of mississippi and granted tax exempt status by the internal
+revenue service  the foundation s ein or federal tax identification
+number is             contributions to the project gutenberg literary
+archive foundation are tax deductible to the full extent permitted by
+u s  federal laws and your state s laws 
+
+the foundation s business office is located at     north      west 
+salt lake city  ut                        email contact links and up
+to date contact information can be found at the foundation s website
+and official page at www gutenberg org contact
+
+section    information about donations to the project gutenberg
+literary archive foundation
+
+project gutenberg  depends upon and cannot survive without widespread
+public support and donations to carry out its mission of
+increasing the number of public domain and licensed works that can be
+freely distributed in machine readable form accessible by the widest
+array of equipment including outdated equipment  many small donations
+    to         are particularly important to maintaining tax exempt
+status with the irs 
+
+the foundation is committed to complying with the laws regulating
+charities and charitable donations in all    states of the united
+states  compliance requirements are not uniform and it takes a
+considerable effort  much paperwork and many fees to meet and keep up
+with these requirements  we do not solicit donations in locations
+where we have not received written confirmation of compliance  to send
+donations or determine the status of compliance for any particular state
+visit www gutenberg org donate 
+
+while we cannot and do not solicit contributions from states where we
+have not met the solicitation requirements  we know of no prohibition
+against accepting unsolicited donations from donors in such states who
+approach us with offers to donate 
+
+international donations are gratefully accepted  but we cannot make
+any statements concerning tax treatment of donations received from
+outside the united states  u s  laws alone swamp our small staff 
+
+please check the project gutenberg web pages for current donation
+methods and addresses  donations are accepted in a number of other
+ways including checks  online payments and credit card donations  to
+donate  please visit  www gutenberg org donate 
+
+section    general information about project gutenberg  electronic works
+
+professor michael s  hart was the originator of the project
+gutenberg  concept of a library of electronic works that could be
+freely shared with anyone  for forty years  he produced and
+distributed project gutenberg  ebooks with only a loose network of
+volunteer support 
+
+project gutenberg  ebooks are often created from several printed
+editions  all of which are confirmed as not protected by copyright in
+the u s  unless a copyright notice is included  thus  we do not
+necessarily keep ebooks in compliance with any particular paper
+edition 
+
+most people start at our website which has the main pg search
+facility  www gutenberg org 
+
+this website includes information about project gutenberg  
+including how to make donations to the project gutenberg literary
+archive foundation  how to help produce our new ebooks  and how to
+subscribe to our email newsletter to hear about new ebooks 
+
+
