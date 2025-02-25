@@ -1,11 +1,16 @@
 import os
-import re
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Download NLTK tokenizer data
+nltk.download('punkt')
 
 def tokenize_text(text):
     """
-    Tokenizes text into words by splitting on whitespace and removing non-alphabetic characters.
+    Tokenizes text into words using NLTK's word_tokenize function.
     """
-    tokens = re.findall(r'\b[a-z]+\b', text.lower())  # Extract words only
+    tokens = word_tokenize(text.lower())  # Convert to lowercase and tokenize
+    tokens = [word for word in tokens if word.isalpha()]  # Keep only alphabetic words
     return tokens
 
 def process_downloaded_books(directory):
