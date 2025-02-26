@@ -14,11 +14,11 @@ def clean_text(text):
     text = re.sub(r'[^a-z\s]', ' ', text)  # Keep only letters and spaces
     return text
 
-def tokenize_text(text):
+def tokenize_text(cleaned_text):
     """
-    Tokenizes text into words using NLTK's word_tokenize function.
+    Tokenizes cleaned text into words using NLTK's word_tokenize function.
     """
-    tokens = word_tokenize(text.lower())  # Convert to lowercase and tokenize
+    tokens = word_tokenize(cleaned_text)  # Tokenize without redundant lowercase conversion
     tokens = [word for word in tokens if word.isalpha()]  # Keep only alphabetic words
     return tokens
 
