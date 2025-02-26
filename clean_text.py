@@ -7,12 +7,9 @@ from nltk.tokenize import word_tokenize
 nltk.download('punkt')
 
 def clean_text(text):
-    """
-    Clean and tokenize text:
-    - Convert to lowercase
-    - Replace numbers and special characters with a space
-    - Tokenize words
-    """
+    
+    # Clean and tokenize text:
+
     text = text.lower()  # Convert to lowercase
     text = re.sub(r'[^a-z\s]', ' ', text)  # Keep only letters and spaces
     tokens = word_tokenize(text)  # Tokenize text
@@ -43,3 +40,4 @@ if __name__ == "__main__":
         print("🎉 All books have been cleaned and tokenized!")
     else:
         print(f"⚠️ Directory '{download_dir}' does not exist.")
+        
