@@ -1,90 +1,90 @@
+import os
+import re
+import nltk
+from nltk.tokenize import word_tokenize
+
+# Download NLTK tokenizer data
+nltk.download('punkt')
+
 class SuffixTreeNode:
     def __init__(self):
         self.children = {}
-        self.start = None
-        self.end = None
-        self.suffix_link = None
+        self.indexes = []  # Store (book, offset) pairs
 
 class SuffixTree:
-    def __init__(self, text):
-        self.text = text + "$"  # Append unique end character to ensure suffix uniqueness
+    def __init__(self):
         self.root = SuffixTreeNode()
-        self.build_suffix_tree()
-
-    def build_suffix_tree(self):
-        for i in range(len(self.text)):
-            self._add_suffix(i)
-
-    def _add_suffix(self, suffix_start):
+    
+    def add_token(self, token, book_name, offset):
         node = self.root
-        i = suffix_start
-
-        while i < len(self.text):
-            if self.text[i] not in node.children:
-                new_node = SuffixTreeNode()
-                new_node.start = i
-                new_node.end = len(self.text)
-                node.children[self.text[i]] = new_node
-                return
-            else:
-                child = node.children[self.text[i]]
-                j = child.start
-
-                while j < child.end and i < len(self.text) and self.text[i] == self.text[j]:
-                    i += 1
-                    j += 1
-                
-                if j == child.end:
-                    node = child  # Continue down the tree
-                else:
-                    split_node = SuffixTreeNode()
-                    split_node.start = child.start
-                    split_node.end = j
-                    node.children[self.text[split_node.start]] = split_node
-                    child.start = j
-                    split_node.children[self.text[j]] = child
-                    
-                    new_leaf = SuffixTreeNode()
-                    new_leaf.start = i
-                    new_leaf.end = len(self.text)
-                    split_node.children[self.text[i]] = new_leaf
-                    return
-
+        for char in token:
+            if char not in node.children:
+                node.children[char] = SuffixTreeNode()
+            node = node.children[char]
+        node.indexes.append((book_name, offset))
+    
     def search(self, pattern):
         node = self.root
-        i = 0
-        while i < len(pattern):
-            if pattern[i] in node.children:
-                child = node.children[pattern[i]]
-                j = child.start
-                while j < child.end and i < len(pattern) and self.text[j] == pattern[i]:
-                    i += 1
-                    j += 1
-                if i == len(pattern):
-                    return True  # Pattern found
-                elif j == child.end:
-                    node = child
-                else:
-                    return False  # Mismatch within the edge
+        for char in pattern:
+            if char in node.children:
+                node = node.children[char]
             else:
-                return False  # Character not found
-        return True
+                return []  # Pattern not found
+        return node.indexes  # Return list of (book, offset) tuples
 
-    def print_tree(self, node=None, indent=""):
-        if node is None:
-            node = self.root
-        for char, child in node.children.items():
-            print(indent + self.text[child.start:child.end])
-            self.print_tree(child, indent + "    ")
+def clean_text(text):
+    """Convert text to lowercase and replace numbers & special symbols with spaces."""
+    text = text.lower()
+    text = re.sub(r'[^a-z\s]', ' ', text)
+    return text
+
+def tokenize_text_with_offsets(text):
+    """Tokenizes text and records offsets starting from 0."""
+    tokens_with_offsets = []
+    words = text.split()
+    offset = 0
+    for word in words:
+        tokens_with_offsets.append((word, offset))
+        offset += 1  # Increment offset based on token index
+    return tokens_with_offsets
+
+def process_books(directory, suffix_tree):
+    """Process books and add tokens to the suffix tree with offsets starting from 0."""
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        if os.path.isfile(file_path) and filename.endswith(".txt"):
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    text = f.read()
+                
+                cleaned_text = clean_text(text)
+                tokens_with_offsets = tokenize_text_with_offsets(cleaned_text)
+                
+                for token, offset in tokens_with_offsets:
+                    suffix_tree.add_token(token, filename, offset)
+                
+                print(f"Processed: {filename}")
+            except Exception as e:
+                print(f"Error processing file {filename}: {e}")
 
 if __name__ == "__main__":
-    sample_text = input("Enter the text to build the suffix tree: ")
-    suffix_tree = SuffixTree(sample_text)
-    suffix_tree.print_tree()
+    download_dir = "Gutenberg_Top_100"
+    suffix_tree = SuffixTree()
     
-    while True:
-        query = input("Enter a word to search (or type 'exit' to quit): ")
-        if query.lower() == 'exit':
-            break
-        print(f"'{query}' found: {suffix_tree.search(query)}")
+    if os.path.exists(download_dir):
+        process_books(download_dir, suffix_tree)
+        print("Suffix tree built successfully!")
         
+        while True:
+            query = input("Enter a word to search (or type 'exit' to quit): ")
+            if query.lower() == 'exit':
+                break
+            results = suffix_tree.search(query)
+            if results:
+                print(f"'{query}' found in:")
+                for book, offset in results:
+                    print(f" - {book} at token index {offset}")
+            else:
+                print(f"'{query}' not found in any book.")
+    else:
+        print(f"Directory '{download_dir}' does not exist.")

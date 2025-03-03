@@ -14,17 +14,21 @@ def clean_text(text):
     text = re.sub(r'[^a-z\s]', ' ', text)  # Keep only letters and spaces
     return text
 
-def tokenize_text(cleaned_text):
+def tokenize_text_with_offsets(cleaned_text, original_text):
     """
-    Tokenizes cleaned text into words using NLTK's word_tokenize function.
+    Tokenizes cleaned text into words while recording character offsets from the original text.
     """
-    tokens = word_tokenize(cleaned_text)  # Tokenize without redundant lowercase conversion
-    tokens = [word for word in tokens if word.isalpha()]  # Keep only alphabetic words
-    return tokens
+    tokens_with_offsets = []
+    for match in re.finditer(r'\b[a-z]+\b', original_text, re.IGNORECASE):
+        token = match.group()
+        offset = match.start()
+        tokens_with_offsets.append((token, offset))
+    return tokens_with_offsets
 
 def process_downloaded_books(directory):
     """
-    Process all text files in the given directory, clean and tokenize the text, and overwrite the files.
+    Process all text files in the given directory, clean and tokenize the text,
+    recording offsets for each token.
     """
     all_tokens = {}
     for filename in os.listdir(directory):
@@ -32,15 +36,15 @@ def process_downloaded_books(directory):
         if os.path.isfile(file_path) and filename.endswith(".txt"):
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
-                    text = f.read()
+                    original_text = f.read()
                 
-                cleaned_text = clean_text(text)
-                tokens = tokenize_text(cleaned_text)
+                cleaned_text = clean_text(original_text)
+                tokens_with_offsets = tokenize_text_with_offsets(cleaned_text, original_text)
                 
                 with open(file_path, "w", encoding="utf-8") as f:
-                    f.write(" ".join(tokens))
+                    f.write(" ".join([token for token, _ in tokens_with_offsets]))
                 
-                all_tokens[filename] = tokens
+                all_tokens[filename] = tokens_with_offsets
                 print(f"Processed and cleaned & tokenized: {filename}")
             except Exception as e:
                 print(f"Error processing file {filename}: {e}")
@@ -51,6 +55,6 @@ if __name__ == "__main__":
     if os.path.exists(download_dir):
         tokens_dict = process_downloaded_books(download_dir)
         for book, tokens in tokens_dict.items():
-            print(f"{book}: {tokens[:10]}...")  # Print first 10 tokens for preview
+            print(f"{book}: {tokens[:10]}...")  # Print first 10 tokens with offsets for preview
     else:
         print(f"Directory '{download_dir}' does not exist.")
