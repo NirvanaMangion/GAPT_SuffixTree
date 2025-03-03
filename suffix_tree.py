@@ -1,10 +1,5 @@
 import os
-import re
-import nltk
-from nltk.tokenize import word_tokenize
-
-# Download NLTK tokenizer data
-nltk.download('punkt')
+from cleaned_tokenized import clean_text, tokenize_text_with_offsets  # Import from cleaned_tokenized.py
 
 class SuffixTreeNode:
     def __init__(self):
@@ -32,22 +27,6 @@ class SuffixTree:
                 return []  # Pattern not found
         return node.indexes  # Return list of (book, offset) tuples
 
-def clean_text(text):
-    """Convert text to lowercase and replace numbers & special symbols with spaces."""
-    text = text.lower()
-    text = re.sub(r'[^a-z\s]', ' ', text)
-    return text
-
-def tokenize_text_with_offsets(text):
-    """Tokenizes text and records offsets starting from 0."""
-    tokens_with_offsets = []
-    words = text.split()
-    offset = 0
-    for word in words:
-        tokens_with_offsets.append((word, offset))
-        offset += 1  # Increment offset based on token index
-    return tokens_with_offsets
-
 def process_books(directory, suffix_tree):
     """Process books and add tokens to the suffix tree with offsets starting from 0."""
     for filename in os.listdir(directory):
@@ -57,8 +36,8 @@ def process_books(directory, suffix_tree):
                 with open(file_path, "r", encoding="utf-8") as f:
                     text = f.read()
                 
-                cleaned_text = clean_text(text)
-                tokens_with_offsets = tokenize_text_with_offsets(cleaned_text)
+                cleaned_text = clean_text(text)  # Using clean_text from cleaned_tokenized.py
+                tokens_with_offsets = tokenize_text_with_offsets(cleaned_text)  # Using tokenize_text_with_offsets from cleaned_tokenized.py
                 
                 for token, offset in tokens_with_offsets:
                     suffix_tree.add_token(token, filename, offset)
