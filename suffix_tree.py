@@ -1,4 +1,5 @@
 from moby_words import load_moby_words
+import pickle
 
 class SuffixTreeNode:
     def __init__(self, start, end):
@@ -7,6 +8,10 @@ class SuffixTreeNode:
         self.start = start
         self.end = end  # For leaves, end is a reference (list) to the global end.
         self.index = -1  # For leaf nodes, this can store the starting index of the suffix.
+
+        # **Augmentation: Track word offsets and frequencies**
+        self.positions = []  # Stores word start positions (offsets)
+        self.word_frequencies = {}  # Stores word frequency counts
 
     def edge_length(self, current_position):
         if isinstance(self.end, list):
@@ -38,6 +43,9 @@ class SuffixTree:
             self.extend_suffix_tree(pos)
 
     def extend_suffix_tree(self, pos):
+        """
+        Extends the suffix tree by adding a new character at position `pos`.
+        """
         self.leaf_end[0] = pos
         self.remaining_suffix_count += 1
         self.last_new_node = None
@@ -47,14 +55,27 @@ class SuffixTree:
                 self.active_edge = pos
 
             current_char = self.text[self.active_edge]
+
             if current_char not in self.active_node.children:
-                self.active_node.children[current_char] = SuffixTreeNode(pos, self.leaf_end)
+                new_leaf = SuffixTreeNode(pos, self.leaf_end)
+
+                # **Store word offsets immediately**
+                new_leaf.positions.append(pos)
+
+                # **Extract word and update frequency count**
+                word = self.extract_word(pos)
+                if word:
+                    new_leaf.word_frequencies[word] = new_leaf.word_frequencies.get(word, 0) + 1
+
+                self.active_node.children[current_char] = new_leaf
+
                 if self.last_new_node is not None:
                     self.last_new_node.suffix_link = self.active_node
                     self.last_new_node = None
             else:
                 next_node = self.active_node.children[current_char]
                 edge_length = next_node.edge_length(pos)
+
                 if self.active_length >= edge_length:
                     self.active_edge += edge_length
                     self.active_length -= edge_length
@@ -72,7 +93,13 @@ class SuffixTree:
                 split_node = SuffixTreeNode(next_node.start, split_end)
                 self.active_node.children[current_char] = split_node
 
-                split_node.children[self.text[pos]] = SuffixTreeNode(pos, self.leaf_end)
+                new_leaf = SuffixTreeNode(pos, self.leaf_end)
+                new_leaf.positions.append(pos)
+                word = self.extract_word(pos)
+                if word:
+                    new_leaf.word_frequencies[word] = new_leaf.word_frequencies.get(word, 0) + 1
+
+                split_node.children[self.text[pos]] = new_leaf
                 next_node.start += self.active_length
                 split_node.children[self.text[next_node.start]] = next_node
 
@@ -82,6 +109,7 @@ class SuffixTree:
                 self.last_new_node = split_node
 
             self.remaining_suffix_count -= 1
+
             if self.active_node == self.root and self.active_length > 0:
                 self.active_length -= 1
                 self.active_edge = pos - self.remaining_suffix_count + 1
@@ -97,10 +125,19 @@ class SuffixTree:
         for child in node.children.values():
             self.set_suffix_index_by_dfs(child, label_height + child.edge_length(self.leaf_end[0]))
 
-    def search(self, pattern):
+    def extract_word(self, pos):
         """
-        Searches for the given pattern in the suffix tree.
-        Returns True if the pattern exists, False otherwise.
+        Extracts the word starting at position `pos` in the suffix tree.
+        Stops at the first delimiter ('#') to improve efficiency.
+        """
+        end_pos = pos
+        while end_pos < len(self.text) and self.text[end_pos] != "#":
+            end_pos += 1
+        return self.text[pos:end_pos] if end_pos > pos else None
+
+    def search_with_offsets(self, pattern):
+        """
+        Searches for a word and returns its positions (offsets) and frequency in the text.
         """
         current_node = self.root
         i = 0
@@ -112,14 +149,17 @@ class SuffixTree:
                 j = 0
                 while j < len(label) and i < len(pattern):
                     if pattern[i] != label[j]:
-                        return False
+                        return None
                     i += 1
                     j += 1
                 current_node = child
             else:
-                return False
-        return True
+                return None
 
+        return {
+            "positions": current_node.positions,
+            "frequency": current_node.word_frequencies.get(pattern, 0)
+        }
 
 if __name__ == '__main__':
     print("Loading Moby Words dataset into Suffix Tree...")
@@ -134,10 +174,20 @@ if __name__ == '__main__':
     suffix_tree = SuffixTree(corpus_text)
 
     print("Suffix Tree built successfully with Moby Words dataset.")
+    
+    # Interactive search
+    while True:
+        search_term = input("\nEnter a word to search (or type 'exit' to quit): ").strip().lower()
+        
+        if search_term == "exit":
+            print("Exiting search.")
+            break
 
-    # Test search functionality
-    search_terms = ["apple", "banana", "universe", "guitar", "programming", "xyz"]
-    print("\nSearch Results:")
-    for term in search_terms:
-        result = suffix_tree.search(term)
-        print(f"Does '{term}' exist in the dataset? {result}")
+        result = suffix_tree.search_with_offsets(search_term)
+
+        if result and result["frequency"] > 0:
+            print(f"Yes, '{search_term}' is found!")
+            print(f"   - Positions: {result['positions']}")
+            print(f"   - Frequency: {result['frequency']}")
+        else:
+            print(f"No, '{search_term}' is not found.")
