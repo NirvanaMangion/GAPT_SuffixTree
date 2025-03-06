@@ -138,34 +138,61 @@ class SuffixTree:
     def search_with_offsets(self, pattern):
         """
         Searches for a word and returns its positions (offsets) and frequency in the text.
+        Ensures only full words are matched.
         """
         current_node = self.root
         i = 0
+
+        # Step 1: Traverse the tree following the pattern
         while i < len(pattern):
-            if pattern[i] in current_node.children:
-                child = current_node.children[pattern[i]]
-                edge_length = child.edge_length(self.leaf_end[0])
-                label = self.text[child.start: child.start + edge_length]
-                j = 0
-                while j < len(label) and i < len(pattern):
-                    if pattern[i] != label[j]:
-                        return None
-                    i += 1
-                    j += 1
-                current_node = child
-            else:
-                return None
+            if pattern[i] not in current_node.children:
+                return None  # Pattern not found
+
+            child = current_node.children[pattern[i]]
+            edge_length = child.edge_length(self.leaf_end[0])
+            label = self.text[child.start: child.start + edge_length]
+
+            j = 0
+            while j < len(label) and i < len(pattern):
+                if pattern[i] != label[j]:
+                    return None  # Mismatch, word not in tree
+                i += 1
+                j += 1
+
+            current_node = child  # Move deeper in the tree
+
+        # Step 2: Collect all positions and frequencies from leaf nodes
+        positions = []
+        word_frequency = 0
+
+        def collect_positions(node):
+            nonlocal word_frequency
+            if node.index != -1:  # It's a leaf node
+                positions.extend(node.positions)
+                word_frequency += node.word_frequencies.get(pattern, 0)
+            for child in node.children.values():
+                collect_positions(child)
+
+        collect_positions(current_node)
+
+        # Step 3: Enforce boundary check, but only if it's a word search (not single letters)
+        if len(pattern) > 1:
+            for pos in positions:
+                if pos + len(pattern) < len(self.text) and self.text[pos + len(pattern)] not in ('#', '$'):
+                    return None  # Partial match, not a whole word
 
         return {
-            "positions": current_node.positions,
-            "frequency": current_node.word_frequencies.get(pattern, 0)
+            "positions": positions,
+            "frequency": word_frequency
         }
+
 
 if __name__ == '__main__':
     print("Loading Moby Words dataset into Suffix Tree...")
 
     # Load Moby Words dataset (downloads if not available)
     words = load_moby_words()
+    print(words[10:20])
 
     # Convert words into a single string with a delimiter
     corpus_text = "#".join(words) + "$"
@@ -174,11 +201,11 @@ if __name__ == '__main__':
     suffix_tree = SuffixTree(corpus_text)
 
     print("Suffix Tree built successfully with Moby Words dataset.")
-    
+
     # Interactive search
     while True:
         search_term = input("\nEnter a word to search (or type 'exit' to quit): ").strip().lower()
-        
+
         if search_term == "exit":
             print("Exiting search.")
             break
