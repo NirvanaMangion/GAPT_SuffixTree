@@ -93,15 +93,18 @@ class SuffixTree:
                 split_node = SuffixTreeNode(next_node.start, split_end)
                 self.active_node.children[current_char] = split_node
 
+                # Update the child: adjust next_node.start only once
+                next_node.start += self.active_length
+                split_node.children[self.text[next_node.start]] = next_node
+
+                # Create and add the new leaf node
                 new_leaf = SuffixTreeNode(pos, self.leaf_end)
                 new_leaf.positions.append(pos)
                 word = self.extract_word(pos)
                 if word:
                     new_leaf.word_frequencies[word] = new_leaf.word_frequencies.get(word, 0) + 1
-
                 split_node.children[self.text[pos]] = new_leaf
-                next_node.start += self.active_length
-                split_node.children[self.text[next_node.start]] = next_node
+
 
                 if self.last_new_node is not None:
                     self.last_new_node.suffix_link = split_node
@@ -176,26 +179,30 @@ class SuffixTree:
         collect_positions(current_node)
 
         # Step 3: Enforce boundary check, but only if it's a word search (not single letters)
-        if len(pattern) > 1:
-            for pos in positions:
-                if pos + len(pattern) < len(self.text) and self.text[pos + len(pattern)] not in ('#', '$'):
-                    return None  # Partial match, not a whole word
+        valid_positions = []
+        for pos in positions:
+         # Check if the match starts at a word boundary and ends with a delimiter.
+            if (pos == 0 or self.text[pos - 1] == '#') and \
+                (pos + len(pattern) == len(self.text) or self.text[pos + len(pattern)] in ('#', '$')):
+                valid_positions.append(pos)
+
+
+        if not valid_positions:
+            return None
 
         return {
-            "positions": positions,
-            "frequency": word_frequency
+            "positions": valid_positions,
+            "frequency": len(valid_positions)  # Or your aggregated frequency count
         }
-
 
 if __name__ == '__main__':
     print("Loading Moby Words dataset into Suffix Tree...")
 
     # Load Moby Words dataset (downloads if not available)
     words = load_moby_words()
-    print(words[10:20])
 
     # Convert words into a single string with a delimiter
-    corpus_text = "#".join(words) + "$"
+    corpus_text = "#".join(word.lower() for word in words) + "$"
 
     # Build the suffix tree
     suffix_tree = SuffixTree(corpus_text)
