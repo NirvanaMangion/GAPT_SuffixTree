@@ -3,49 +3,78 @@ import re
 import nltk
 from nltk.tokenize import word_tokenize
 
-# Download NLTK tokenizer data
+# Download required NLTK resources
 nltk.download('punkt')
 
 def clean_text(text):
-    """Convert text to lowercase and remove numbers & special characters except spaces."""
-    return re.sub(r'[^a-z\s]', ' ', text.lower())
-
-def tokenize_text_with_offsets(text):
-    """Tokenizes text and records offsets starting from 0."""
-    tokens_with_offsets = []
-    words = text.split()
-    offset = 0
-    for word in words:
-        tokens_with_offsets.append((word, offset))
-        offset += 1  # Increment offset based on token index
-    return tokens_with_offsets
-
-def process_downloaded_books(directory):
     """
-    Reads all text files in the directory, cleans, tokenizes, and records offsets for each token.
-    Returns a dictionary {filename: [(token, offset), ...]}
+    Cleans the input text:
+    - Converts to lowercase
+    - Removes numbers and special symbols (except spaces)
+    - Ensures only one space between words
     """
-    all_tokens = {}
-    for filename in os.listdir(directory):
+    text = text.lower()
+    text = re.sub(r'[^a-z\s]', ' ', text)  # Remove non-alphabetic characters
+    text = re.sub(r'\s+', ' ', text).strip()  # Replace multiple spaces with a single space
+    return text
+
+def extract_text_from_rtf(rtf_content):
+    """
+    Extracts plain text from RTF content by removing RTF formatting.
+    """
+    text = re.sub(r'\{\\.*?\}', '', rtf_content)  # Remove RTF metadata
+    text = re.sub(r'\\[a-zA-Z0-9]+', '', text)  # Remove RTF commands
+    text = text.replace('\n', ' ').replace('\r', ' ')  # Normalize whitespace
+    return text.strip()
+
+def process_and_save_book(file_path):
+    """
+    Reads, extracts text from RTF, cleans, tokenizes, and overwrites the book file with cleaned text.
+    Returns dictionary.
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            rtf_content = f.read()
+
+        extracted_text = extract_text_from_rtf(rtf_content)
+        cleaned_text = clean_text(extracted_text)
+
+        # Save the cleaned text back to the same file
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(cleaned_text)
+
+        print(f"Cleaned: {file_path}")
+
+        # Tokenizing after saving
+        words = cleaned_text.split()
+        tokens_with_offsets = [(word, idx) for idx, word in enumerate(words)]
+
+        return {"text": cleaned_text, "offsets": tokens_with_offsets}
+    
+    except Exception as e:
+        print(f"Error processing {file_path}: {e}")
+        return None
+
+def process_books(directory):
+    """
+    Processes all books in a directory.
+    Overwrites files with cleaned text.
+    Returns dictionary.
+    """
+    if not os.path.exists(directory):
+        print(f"Error: Directory '{directory}' does not exist.")
+        return {}
+
+    tokenized_books = {}
+    for filename in sorted(os.listdir(directory)):
         file_path = os.path.join(directory, filename)
-        if os.path.isfile(file_path) and filename.endswith(".txt"):
-            try:
-                with open(file_path, "r", encoding="utf-8") as f:
-                    original_text = f.read()
+        if os.path.isfile(file_path) and filename.endswith(".rtf"):
+            book_data = process_and_save_book(file_path)
+            if book_data:
+                tokenized_books[filename] = book_data
 
-                tokens_with_offsets = tokenize_text_with_offsets(original_text)
-                all_tokens[filename] = tokens_with_offsets
-                print(f"Processed: {filename}")
-
-            except Exception as e:
-                print(f"Error processing {filename}: {e}")
-    return all_tokens
+    return tokenized_books
 
 if __name__ == "__main__":
     download_dir = "Gutenberg_Top_100"
-    if os.path.exists(download_dir):
-        tokens_dict = process_downloaded_books(download_dir)
-        for book, tokens in tokens_dict.items():
-            print(f"{book}: {tokens[:10]}...")  # Preview first 10 tokens with offsets
-    else:
-        print(f"Directory '{download_dir}' does not exist.")
+    books = process_books(download_dir)
