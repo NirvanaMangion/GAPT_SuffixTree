@@ -17,7 +17,7 @@ def build_trie():
         if os.path.isfile(file_path) and filename.endswith(".txt"):
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
-                    words = f.read().split()  # Read words from cleaned text
+                    words = f.read().split()
                 
                 # Insert words into the trie, storing offsets
                 for index, word in enumerate(words):
@@ -25,10 +25,9 @@ def build_trie():
                         trie[word] = {"count": 0, "offsets": []}
                     
                     trie[word]["count"] += 1
-                    trie[word]["offsets"].append((filename, index))  # Store filename and position
-
+                    trie[word]["offsets"].append((filename, index))
+                
                 print(f"Processed {filename}.")
-
             except Exception as e:
                 print(f"Error processing {filename}: {e}")
 
@@ -39,7 +38,9 @@ def build_trie():
     print(f"Trie built and saved with {len(trie)} words.")
 
 def load_trie():
-
+    """
+    Loads the saved trie from a file.
+    """
     try:
         with open(TRIE_FILE, "rb") as f:
             return pickle.load(f)
@@ -48,11 +49,15 @@ def load_trie():
         return None
 
 def search_word(trie, word):
-
+    """
+    Searches for a word in the trie and returns its occurrences.
+    """
     return trie.get(word, {"count": 0, "offsets": []})
 
 def search_prefix(trie, prefix):
-    
+    """
+    Returns a list of words that start with the given prefix.
+    """
     return list(trie.keys(prefix))
 
 def get_context(filename, index, search_word, window=5):
@@ -70,12 +75,11 @@ def get_context(filename, index, search_word, window=5):
         start = max(0, index - window)
         end = min(len(words), index + window + 1)
         context_words = words[start:end]
-
-        # Highlight the searched word
-        context_words[window] = f"**{context_words[window]}**"
+        
+        if window < len(context_words):
+            context_words[window] = f"**{context_words[window]}**"
 
         return " ".join(context_words)
-
     except Exception as e:
         return f"Error reading {filename}: {e}"
 
@@ -86,7 +90,6 @@ if __name__ == "__main__":
 
     if choice == "1":
         build_trie()
-
     elif choice == "2":
         trie = load_trie()
         if trie:
@@ -128,8 +131,8 @@ if __name__ == "__main__":
                 elif choice == "3":
                     print("Exiting...")
                     break
-
                 else:
                     print("Invalid choice, try again.")
     else:
         print("Invalid selection. Exiting...")
+        
