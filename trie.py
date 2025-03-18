@@ -39,9 +39,7 @@ def build_trie():
     print(f"Trie built and saved with {len(trie)} words.")
 
 def load_trie():
-    """
-    Loads the saved trie from a file.
-    """
+
     try:
         with open(TRIE_FILE, "rb") as f:
             return pickle.load(f)
@@ -50,16 +48,11 @@ def load_trie():
         return None
 
 def search_word(trie, word):
-    """
-    Searches for a specific word in the trie.
-    Returns the word count and its offsets if found.
-    """
+
     return trie.get(word, {"count": 0, "offsets": []})
 
 def search_prefix(trie, prefix):
-    """
-    Returns a list of words that start with the given prefix.
-    """
+    
     return list(trie.keys(prefix))
 
 def get_context(filename, index, search_word, window=5):
