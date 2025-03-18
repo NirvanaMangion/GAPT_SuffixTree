@@ -1,5 +1,7 @@
 from moby_words import load_moby_words
 import pickle
+import os
+import sys
 
 class SuffixTreeNode:
     def __init__(self, start, end):
@@ -9,7 +11,7 @@ class SuffixTreeNode:
         self.end = end  # For leaves, end is a reference (list) to the global end.
         self.index = -1  # For leaf nodes, this can store the starting index of the suffix.
 
-        # **Augmentation: Track word offsets and frequencies**
+        # Augmentation: Track word offsets and frequencies
         self.positions = []  # Stores word start positions (offsets)
         self.word_frequencies = {}  # Stores word frequency counts
 
@@ -19,6 +21,18 @@ class SuffixTreeNode:
         else:
             return self.end - self.start + 1
 
+    def __getstate__(self):
+        """Prepare the object for pickling."""
+        state = self.__dict__.copy()
+        if isinstance(self.end, list):
+            state["end"] = self.end[0]  
+        return state
+
+    def __setstate__(self, state):
+        """Restore the object after unpickling."""
+        self.__dict__.update(state)
+        if isinstance(self.end, int):
+            self.end = [self.end]  
 
 class SuffixTree:
     def __init__(self, text):
@@ -32,21 +46,33 @@ class SuffixTree:
         self.active_length = 0
 
         self.remaining_suffix_count = 0
-        self.leaf_end = [-1]
+        self.leaf_end = -1  
         self.last_new_node = None
 
         self.build_tree()
         self.set_suffix_index_by_dfs(self.root, 0)
+
+    def save_to_file(self, filename):
+        """Pickle the suffix tree to a file."""
+        with open(filename, "wb") as f:
+            pickle.dump(self, f)
+
+    @staticmethod
+    def load_from_file(filename):
+        """Load a pickled suffix tree from a file."""
+        if not os.path.exists(filename):
+            return None
+        with open(filename, "rb") as f:
+            tree = pickle.load(f)
+        sys.setrecursionlimit(10**6)
+        return tree
 
     def build_tree(self):
         for pos in range(self.size):
             self.extend_suffix_tree(pos)
 
     def extend_suffix_tree(self, pos):
-        """
-        Extends the suffix tree by adding a new character at position `pos`.
-        """
-        self.leaf_end[0] = pos
+        self.leaf_end = pos
         self.remaining_suffix_count += 1
         self.last_new_node = None
 
@@ -58,15 +84,10 @@ class SuffixTree:
 
             if current_char not in self.active_node.children:
                 new_leaf = SuffixTreeNode(pos, self.leaf_end)
-
-                # **Store word offsets immediately**
                 new_leaf.positions.append(pos)
-
-                # **Extract word and update frequency count**
                 word = self.extract_word(pos)
                 if word:
                     new_leaf.word_frequencies[word] = new_leaf.word_frequencies.get(word, 0) + 1
-
                 self.active_node.children[current_char] = new_leaf
 
                 if self.last_new_node is not None:
@@ -93,18 +114,15 @@ class SuffixTree:
                 split_node = SuffixTreeNode(next_node.start, split_end)
                 self.active_node.children[current_char] = split_node
 
-                # Update the child: adjust next_node.start only once
                 next_node.start += self.active_length
                 split_node.children[self.text[next_node.start]] = next_node
 
-                # Create and add the new leaf node
                 new_leaf = SuffixTreeNode(pos, self.leaf_end)
                 new_leaf.positions.append(pos)
                 word = self.extract_word(pos)
                 if word:
                     new_leaf.word_frequencies[word] = new_leaf.word_frequencies.get(word, 0) + 1
                 split_node.children[self.text[pos]] = new_leaf
-
 
                 if self.last_new_node is not None:
                     self.last_new_node.suffix_link = split_node
@@ -126,51 +144,41 @@ class SuffixTree:
             node.index = self.size - label_height
             return
         for child in node.children.values():
-            self.set_suffix_index_by_dfs(child, label_height + child.edge_length(self.leaf_end[0]))
+            self.set_suffix_index_by_dfs(child, label_height + child.edge_length(self.leaf_end))
 
     def extract_word(self, pos):
-        """
-        Extracts the word starting at position `pos` in the suffix tree.
-        Stops at the first delimiter ('#') to improve efficiency.
-        """
         end_pos = pos
         while end_pos < len(self.text) and self.text[end_pos] != "#":
             end_pos += 1
         return self.text[pos:end_pos] if end_pos > pos else None
 
     def search_with_offsets(self, pattern):
-        """
-        Searches for a word and returns its positions (offsets) and frequency in the text.
-        Ensures only full words are matched.
-        """
         current_node = self.root
         i = 0
 
-        # Step 1: Traverse the tree following the pattern
         while i < len(pattern):
             if pattern[i] not in current_node.children:
-                return None  # Pattern not found
+                return None  
 
             child = current_node.children[pattern[i]]
-            edge_length = child.edge_length(self.leaf_end[0])
+            edge_length = child.edge_length(self.leaf_end)
             label = self.text[child.start: child.start + edge_length]
 
             j = 0
             while j < len(label) and i < len(pattern):
                 if pattern[i] != label[j]:
-                    return None  # Mismatch, word not in tree
+                    return None  
                 i += 1
                 j += 1
 
-            current_node = child  # Move deeper in the tree
+            current_node = child  
 
-        # Step 2: Collect all positions and frequencies from leaf nodes
         positions = []
         word_frequency = 0
 
         def collect_positions(node):
             nonlocal word_frequency
-            if node.index != -1:  # It's a leaf node
+            if node.index != -1:  
                 positions.extend(node.positions)
                 word_frequency += node.word_frequencies.get(pattern, 0)
             for child in node.children.values():
@@ -178,47 +186,37 @@ class SuffixTree:
 
         collect_positions(current_node)
 
-        # Step 3: Enforce boundary check, but only if it's a word search (not single letters)
         valid_positions = []
         for pos in positions:
-         # Check if the match starts at a word boundary and ends with a delimiter.
             if (pos == 0 or self.text[pos - 1] == '#') and \
                 (pos + len(pattern) == len(self.text) or self.text[pos + len(pattern)] in ('#', '$')):
                 valid_positions.append(pos)
-
 
         if not valid_positions:
             return None
 
         return {
             "positions": valid_positions,
-            "frequency": len(valid_positions)  # Or your aggregated frequency count
+            "frequency": len(valid_positions)
         }
 
 if __name__ == '__main__':
-    print("Loading Moby Words dataset into Suffix Tree...")
+    filename = "suffix_tree.pkl"
 
-    # Load Moby Words dataset (downloads if not available)
-    words = load_moby_words()
+    suffix_tree = SuffixTree.load_from_file(filename)
+    
+    if suffix_tree is None:
+        words = load_moby_words()
+        corpus_text = "#".join(word.lower() for word in words) + "$"
+        suffix_tree = SuffixTree(corpus_text)
+        suffix_tree.save_to_file(filename)
 
-    # Convert words into a single string with a delimiter
-    corpus_text = "#".join(word.lower() for word in words) + "$"
-
-    # Build the suffix tree
-    suffix_tree = SuffixTree(corpus_text)
-
-    print("Suffix Tree built successfully with Moby Words dataset.")
-
-    # Interactive search
     while True:
         search_term = input("\nEnter a word to search (or type 'exit' to quit): ").strip().lower()
-
         if search_term == "exit":
-            print("Exiting search.")
             break
 
         result = suffix_tree.search_with_offsets(search_term)
-
         if result and result["frequency"] > 0:
             print(f"Yes, '{search_term}' is found!")
             print(f"   - Positions: {result['positions']}")
