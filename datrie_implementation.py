@@ -4,8 +4,10 @@ import datrie
 import string
 import nltk
 from nltk.tokenize import word_tokenize
+from moby_words import load_moby_words  # Import the Moby word list loader
 
 PICKLE_FILE = "book_trie.pkl"
+BOOKS_DIR = "Gutenberg_Top_100"  # Directory containing downloaded books
 
 nltk.download('punkt')
 
@@ -33,12 +35,18 @@ def load_trie(filename):
             os.remove(filename)
     return None
 
-def process_books(books):
+def load_books(directory):
+    """Loads all books from the specified directory."""
+    books = {}
+    for filename in os.listdir(directory):
+        if filename.endswith(".txt"):
+            with open(os.path.join(directory, filename), "r", encoding="utf-8") as f:
+                books[filename] = f.read()
+    return books
+
+def process_books():
     """
-    Indexes words in the provided books using the Trie.
-    
-    Args:
-        books (dict): Dictionary where keys are book titles and values are book contents as strings.
+    Indexes words in all books from the Gutenberg_Top_100 folder.
     """
     trie = load_trie(PICKLE_FILE)
     if trie is not None:
@@ -46,22 +54,25 @@ def process_books(books):
         return trie
 
     trie = create_trie()
-    
+    books = load_books(BOOKS_DIR)
+    moby_words = set(load_moby_words())  # Load Moby words for validation
+
     print("Processing books and indexing words...")
 
-    position = 0
     for book_title, text in books.items():
         print(f"Indexing: {book_title}")
 
         text = text.lower()
         words = word_tokenize(text)
 
+        position = 0  # Track position of each word
         for word in words:
-            if word.isalpha():  # Store only alphabetic words
+            word = word.strip(string.punctuation)
+            if word in moby_words:  # Only index valid words
                 if word in trie:
-                    trie[word].append(position)
+                    trie[word].append(position)  # Append the offset to the list
                 else:
-                    trie[word] = [position]
+                    trie[word] = [position]  # Store first occurrence
             position += len(word) + 1  # Track offset in book
 
     save_trie(PICKLE_FILE, trie)
@@ -69,11 +80,11 @@ def process_books(books):
     return trie
 
 def search_word(trie, word):
-    """Searches for a word in the Trie and returns offsets with frequency."""
+    """Searches for a word in the Trie and returns its frequency and offsets."""
     word = word.lower()
     if word in trie:
-        offsets = trie[word]  # Already stored as a list
-        frequency = len(offsets)
+        offsets = trie[word]  # Retrieve list of positions
+        frequency = len(offsets)  # Count occurrences
 
         print("\n" + "="*40)
         print(f"WORD FOUND: '{word}'")
@@ -98,13 +109,7 @@ def search_word(trie, word):
     }
 
 if __name__ == "__main__":
-    # Example: Pass a dictionary of books directly
-    books = {
-        "Pride and Prejudice": open("book_downloads/book1.txt", encoding="utf-8").read(),
-        "Alice in Wonderland": open("book_downloads/book2.txt", encoding="utf-8").read()
-    }
-
-    trie = process_books(books)
+    trie = process_books()
 
     while True:
         query = input("\nEnter a word to search (or type 'exit' to quit): ").strip().lower()
