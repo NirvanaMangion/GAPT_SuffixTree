@@ -80,3 +80,4 @@ if __name__ == "__main__":
             search_in_books(suffix_trees, tokenized_books, query)
     else:
         print(f"Directory '{download_dir}' does not exist.")
+        
