@@ -4,6 +4,10 @@
 # Ignorning pickle files
 *.pkl
 
+# ignoring db and csv files
+*.db
+*.csv
+
 # ignoring downloaded books
 Gutenberg_Top_100/
 
