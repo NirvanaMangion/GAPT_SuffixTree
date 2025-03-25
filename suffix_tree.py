@@ -46,12 +46,8 @@ def save_tree(trie, mapping, filename="suffix_tree.pkl"):
     print(f"Suffix tree and mapping saved to {filename}")
 
 def load_tree(filename="suffix_tree.pkl"):
-    try:
-        """Load the trie and suffix→ID mapping from a pickle file."""
-        with open(filename, "rb") as f:
-            trie, mapping = pickle.load(f)
-        print(f"Suffix tree and mapping loaded from {filename}")
-        return trie, mapping
-    except FileNotFoundError:
-        print(f"{filename} not found. Building suffix tree")
-        return None, None
+    """Load the trie and suffix→ID mapping from a pickle file."""
+    with open(filename, "rb") as f:
+        trie, mapping = pickle.load(f)
+    print(f"Suffix tree and mapping loaded from {filename}")
+    return trie, mapping
