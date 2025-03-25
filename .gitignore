@@ -7,6 +7,10 @@
 # ignoring downloaded books
 Gutenberg_Top_100/
 
+# ignoring .db and .csv
+*.db
+*.csv
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
