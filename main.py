@@ -6,7 +6,7 @@ from collections import defaultdict
 from suffix_tree import build_suffix_tree, save_tree, load_tree
 from db_tree import create_database, store_occurrences, load_occurrences, open_database
 
-def load_word_list(filename="moby_words.txt"):
+def load_word_list(filename="words.txt"):
     """Loads a list of words from a file."""
     with open(filename, "r") as f:
         return [line.strip().lower() for line in f if line.strip()]
@@ -53,8 +53,8 @@ def main():
     store_occurrences(cursor, occurrences_map)
     conn.commit()
     
-    # Example search
-    search_term = "christmas"
+    # User input for search
+    search_term = input("Enter a word to search for: ").strip().lower()
     results = search_word(search_term, suffix_to_id, cursor)
     print(f"Occurrences of '{search_term}':", json.dumps(results, indent=4))
     
