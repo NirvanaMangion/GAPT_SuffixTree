@@ -53,6 +53,6 @@ def load_tree(filename="suffix_tree.pkl"):
         print(f"Suffix tree and mapping loaded from {filename}")
         return trie, mapping
     except FileNotFoundError:
-        print(f"Error: {filename} not found")
+        print(f"{filename} not found")
         return None, None
 

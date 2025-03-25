@@ -43,7 +43,7 @@ def search_word(word, suffix_to_id, cursor):
     from the 'leaves' table and print all offsets and the total count.
 
     Format:
-      Data base for id <leaf_id>:
+      Database for id <leaf_id>:
         <doc> of(<all offsets>), occurrences: <total_count>
     """
     word = word.strip().lower()
@@ -57,16 +57,17 @@ def search_word(word, suffix_to_id, cursor):
         print(f"No occurrences found for suffix '{word}' (leaf_id={leaf_id}).")
         return
 
-    print(f"Data base for id {leaf_id}:")
+    print(f"Database for id {leaf_id}:")
     for doc, offsets in doc_occurrences.items():
         # Join all offsets into a string
         offsets_str = ", ".join(str(o) for o in offsets)
         total_count = len(offsets)
-        print(f"  {doc} of({offsets_str}), occurrences: {total_count}")
+        print(f"  {doc} off({offsets_str}), occurrences: {total_count}")
 
 def main():
     trie,mapping = load_tree()
     if trie is None:
+        # meaning the tree is not saved and has to be built
         # 1) Load vocabulary (Moby Words)
         words = load_moby_words()
 
@@ -88,6 +89,7 @@ def main():
         store_occurrences(cursor, occurrences_map)
         conn.commit()
     else:
+        # loading the tree from memory
         suffix_to_id = mapping
         # Set up the connection and cursor
         conn, cursor = setup_database("leaves.db")
