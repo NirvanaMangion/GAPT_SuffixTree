@@ -9,7 +9,11 @@ from moby_words import load_moby_words
 
 def index_books(folder, suffix_to_id):
     """
-    For each .txt file in 'folder', tokenize the text and record offsets for each token.
+    For each .txt file in 'folder', tokenize the text and record offsets for each suffix.
+    For a token like "hello" appearing at token index x, it records:
+      "hello" at offset x,
+      "ello" at offset x+1,
+      "llo" at offset x+2, etc.
     Returns a mapping:
       { leaf_id: { "doc_name": [offset1, offset2, ...], ... }, ... }
     """
@@ -18,7 +22,7 @@ def index_books(folder, suffix_to_id):
     for filename in os.listdir(folder):
         if filename.endswith(".txt"):
             file_path = os.path.join(folder, filename)
-            doc_name = filename  # Use filename as document ID
+            doc_name = filename  # Using filename as document ID
             print(f"Indexing {doc_name} ...")
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
@@ -29,14 +33,18 @@ def index_books(folder, suffix_to_id):
 
             # Tokenize text (extract all word characters, converted to lowercase)
             tokens = re.findall(r"\w+", text.lower())
-            for offset, token in enumerate(tokens):
-                # Lookup the token in the suffix-to-ID mapping
-                leaf_id = suffix_to_id.get(token)
-                if leaf_id is not None:
-                    occurrences_map[leaf_id][doc_name].append(offset)
-
+            for token_index, token in enumerate(tokens):
+                # For each possible suffix of the token:
+                for char_offset in range(len(token)):
+                    suffix = token[char_offset:]
+                    leaf_id = suffix_to_id.get(suffix)
+                    if leaf_id is not None:
+                        # Record the occurrence with an adjusted offset:
+                        # if the full token ("hello") is at token_index x,
+                        # then the suffix "ello" (starting at position 1) is recorded at x+1, etc.
+                        occurrence_position = token_index + char_offset
+                        occurrences_map[leaf_id][doc_name].append(occurrence_position)
     return occurrences_map
-
 def search_word(word, suffix_to_id, cursor):
     """
     Search for a suffix in the in-memory mapping. If found, retrieve the JSON occurrence data
