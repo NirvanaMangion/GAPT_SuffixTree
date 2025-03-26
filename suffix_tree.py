@@ -1,11 +1,11 @@
-# suffix_tree.py
 import datrie
 import string
 import pickle
 
 def create_suffix_tree():
-    """Creates a trie that accepts only lowercase letters."""
-    return datrie.Trie(string.ascii_lowercase)
+    """Creates a trie that accepts lowercase letters plus '#' and '$'."""
+    allowed_chars = "#" + string.ascii_lowercase + "$"
+    return datrie.Trie(allowed_chars)
 
 def add_suffix(trie, suffix):
     """
@@ -20,6 +20,9 @@ def add_suffix(trie, suffix):
 def build_suffix_tree(word_list):
     """
     Build a trie containing every suffix of each word in word_list.
+    For each word, we add:
+      - The full word: "#word$"
+      - Every proper suffix: "ord$", "rd$", ... (i.e. word[i:] + "$" for i>=1)
     Returns (trie, suffix_to_id):
       trie: the built trie
       suffix_to_id: dict mapping suffix -> leaf_id
@@ -31,8 +34,15 @@ def build_suffix_tree(word_list):
     for word in word_list:
         word = word.strip().lower()
         if word:
-            for i in range(len(word)):
-                suffix = word[i:]
+            # Full word entry with '#' at the beginning
+            full_word = '#' + word + '$'
+            if full_word not in suffix_to_id:
+                if add_suffix(trie, full_word):
+                    suffix_to_id[full_word] = current_id
+                    current_id += 1
+            # Proper suffixes (without the '#')
+            for i in range(1, len(word) + 1):
+                suffix = word[i:] + '$'
                 if suffix not in suffix_to_id:
                     if add_suffix(trie, suffix):
                         suffix_to_id[suffix] = current_id
@@ -47,7 +57,6 @@ def save_tree(trie, mapping, filename="suffix_tree.pkl"):
 
 def load_tree(filename="suffix_tree.pkl"):
     try:
-        """Load the trie and suffix→ID mapping from a pickle file."""
         with open(filename, "rb") as f:
             trie, mapping = pickle.load(f)
         print(f"Suffix tree and mapping loaded from {filename}")

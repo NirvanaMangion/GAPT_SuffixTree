@@ -1,19 +1,17 @@
-# main.py
 import os
 import re
 from collections import defaultdict
 
-from suffix_tree import build_suffix_tree,save_tree,load_tree
+from suffix_tree import build_suffix_tree, save_tree, load_tree
 from db_tree import setup_database, store_occurrences, load_occurrences
 from moby_words import load_moby_words
 
 def index_books(folder, suffix_to_id):
     """
-    For each .txt file in 'folder', tokenize the text and record offsets for each suffix.
-    For a token like "hello" appearing at token index x, it records:
-      "hello" at offset x,
-      "ello" at offset x+1,
-      "llo" at offset x+2, etc.
+    For each .txt file in 'folder', tokenize the text and record offsets for each entry.
+    For a token like "hello" at token index x, record:
+      - Full word: "#hello$" at offset x
+      - Proper suffixes: "ello$" at offset x+1, "llo$" at offset x+2, ..., "$" at offset x+len(token)
     Returns a mapping:
       { leaf_id: { "doc_name": [offset1, offset2, ...], ... }, ... }
     """
@@ -22,7 +20,7 @@ def index_books(folder, suffix_to_id):
     for filename in os.listdir(folder):
         if filename.endswith(".txt"):
             file_path = os.path.join(folder, filename)
-            doc_name = filename  # Using filename as document ID
+            doc_name = filename  # Use filename as document ID
             print(f"Indexing {doc_name} ...")
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
@@ -34,43 +32,61 @@ def index_books(folder, suffix_to_id):
             # Tokenize text (extract all word characters, converted to lowercase)
             tokens = re.findall(r"\w+", text.lower())
             for token_index, token in enumerate(tokens):
-                # For each possible suffix of the token:
-                for char_offset in range(len(token)):
-                    suffix = token[char_offset:]
+                # Record full word entry with '#' in front.
+                full_word = '#' + token + '$'
+                leaf_id = suffix_to_id.get(full_word)
+                if leaf_id is not None:
+                    occurrences_map[leaf_id][doc_name].append(token_index)
+                # Record proper suffixes (without the '#' prefix)
+                for i in range(1, len(token) + 1):
+                    suffix = token[i:] + '$'
                     leaf_id = suffix_to_id.get(suffix)
                     if leaf_id is not None:
-                        # Record the occurrence with an adjusted offset:
-                        # if the full token ("hello") is at token_index x,
-                        # then the suffix "ello" (starting at position 1) is recorded at x+1, etc.
-                        occurrence_position = token_index + char_offset
-                        occurrences_map[leaf_id][doc_name].append(occurrence_position)
+                        occurrences_map[leaf_id][doc_name].append(token_index + i)
     return occurrences_map
+
 def search_word(word, suffix_to_id, cursor):
     """
-    Search for a suffix in the in-memory mapping. If found, retrieve the JSON occurrence data
-    from the 'leaves' table and print all offsets and the total count.
+    Search for a suffix in the in-memory mapping.
 
-    Format:
-      Database for id <leaf_id>:
-        <doc> of(<all offsets>), occurrences: <total_count>
+    If a user types a plain word (e.g. "at"), it might be stored both as a full word ("#at$")
+    and as a proper suffix ("at$"). This function retrieves both sets of occurrences and combines them.
     """
+    from collections import defaultdict
+
     word = word.strip().lower()
-    if word not in suffix_to_id:
+    full_key = '#' + word + '$'
+    suffix_key = word + '$'
+
+    # Check if the keys exist in the suffix tree mapping
+    keys_found = []
+    if full_key in suffix_to_id:
+        keys_found.append(full_key)
+    if suffix_key in suffix_to_id:
+        keys_found.append(suffix_key)
+
+    if not keys_found:
         print(f"Suffix '{word}' not found in the tree.")
         return
 
-    leaf_id = suffix_to_id[word]
-    doc_occurrences = load_occurrences(cursor, leaf_id)
-    if not doc_occurrences:
-        print(f"No occurrences found for suffix '{word}' (leaf_id={leaf_id}).")
-        return
+    # Combine occurrences from all found keys.
+    combined_occurrences = defaultdict(list)
+    for key in keys_found:
+        leaf_id = suffix_to_id[key]
+        doc_occurrences = load_occurrences(cursor, leaf_id)
+        for doc, offsets in doc_occurrences.items():
+            combined_occurrences[doc].extend(offsets)
 
-    print(f"Database for id {leaf_id}:")
-    for doc, offsets in doc_occurrences.items():
-        # Join all offsets into a string
+    # Optionally, sort offsets for clarity.
+    for doc in combined_occurrences:
+        combined_occurrences[doc].sort()
+
+    # Print combined occurrences
+    print(f"Combined search results for '{word}':")
+    for doc, offsets in combined_occurrences.items():
         offsets_str = ", ".join(str(o) for o in offsets)
         total_count = len(offsets)
-        print(f"  {doc} off({offsets_str}), occurrences: {total_count}")
+        print(f"  {doc}: off({offsets_str}), occurrences: {total_count}")
 
 def main():
     trie, suffix_to_id = load_tree()
@@ -97,11 +113,9 @@ def main():
         store_occurrences(cursor, occurrences_map)
         conn.commit()
     else:
-        # Set up the connection and cursor
         conn, cursor = setup_database("leaves.db")
 
-
-     # 7) Search loop: repeatedly prompt the user for a suffix to search
+    # 7) Search loop: repeatedly prompt the user for a suffix to search
     while True:
         query = input("Enter a suffix to search (or type 'exit' to quit): ").strip()
         if query.lower() in ["exit", "q"]:
