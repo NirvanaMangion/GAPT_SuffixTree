@@ -85,6 +85,7 @@ def main():
     # 1) Load or build the suffix tree.
     trie, suffix_to_id = load_tree()
     if trie is None:
+        # if tree does not exist, we need to build it and index the books and insert into the db.
         # a) Load vocabulary (Moby Words)
         words = load_moby_words()  # Replace with your vocabulary loader
         # b) Build the suffix tree and mapping.
@@ -92,18 +93,6 @@ def main():
         print(f"Built suffix tree with {len(suffix_to_id)} unique suffixes.")
         # c) Save the tree for future use.
         save_tree(trie, suffix_to_id)
-        # # d) Set up the JSON-based database.
-        # conn, cursor = setup_database("leaves.db")
-        # # e) Index the books from the folder (using numeric book IDs).
-        # folder = "Gutenberg_Top_100"  # Ensure this folder exists and contains .txt files.
-        # occurrences_map = index_books(folder, suffix_to_id, cursor)
-        # # f) Bulk insert occurrences into the mapping table.
-        # store_occurrences(cursor, occurrences_map)
-        # conn.commit()
-
-    db_name = "leaves.db"
-    # Check if the database already exists and if not creating the db.
-    if not os.path.exists(db_name):
         # d) Set up the JSON-based database.
         conn, cursor = setup_database("leaves.db")
         # e) Index the books from the folder (using numeric book IDs).
@@ -113,6 +102,21 @@ def main():
         # f) Bulk insert occurrences into the mapping table.
         store_occurrences(cursor, occurrences_map)
         conn.commit()
+
+    db_name = "leaves.db"
+    # Check if the database already exists and if not creating the db.
+    if not os.path.exists(db_name):
+        # d) Set up the JSON-based database.
+        conn, cursor = setup_database("leaves.db")
+        # e) Index the books from the folder (using numeric book IDs).
+        folder = "Gutenberg_Top_100"  # Ensure this folder exists and contains .txt files.
+        occurrences_map = index_books(folder, suffix_to_id, cursor)
+        print(f"\nIndexed {len(occurrences_map)} unique suffix occurrences.\nInserting into the database...")
+        # f) Bulk insert occurrences into the mapping table.
+        store_occurrences(cursor, occurrences_map)
+        conn.commit()
+    else:
+        conn, cursor = setup_database("leaves.db")
 
 
     # 2) Search loop: prompt the user for a suffix to search.
