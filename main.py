@@ -8,32 +8,31 @@ from db_tree import create_database, store_occurrences, load_occurrences, open_d
 
 def load_word_list(filename="words.txt"):
     """Loads a list of words from a file."""
-    with open(filename, "r") as f:
+    with open(filename, "r", encoding="utf-8") as f:
         return [line.strip().lower() for line in f if line.strip()]
 
 def index_books(folder, suffix_to_id):
-    """Indexes books, storing word positions mapped to suffix IDs."""
+    """Indexes books and maps word positions to suffix IDs."""
     occurrences_map = defaultdict(lambda: defaultdict(list))
-    
+    word_pattern = re.compile(r"\w+")
+
     for filename in os.listdir(folder):
         if filename.endswith(".txt"):
-            file_path = os.path.join(folder, filename)
-            with open(file_path, "r", encoding="utf-8") as f:
-                tokens = re.findall(r"\w+", f.read().lower())
-            
+            with open(os.path.join(folder, filename), "r", encoding="utf-8") as f:
+                tokens = word_pattern.findall(f.read().lower())
+
             for offset, token in enumerate(tokens):
                 leaf_id = suffix_to_id.get(token)
-                if leaf_id:
+                if leaf_id is not None:
                     occurrences_map[leaf_id][filename].append(offset)
-    
+
     return occurrences_map
 
 def search_word(word, suffix_to_id, cursor):
     """Searches for a word in the suffix tree and retrieves occurrences."""
     leaf_id = suffix_to_id.get(word.strip().lower())
     if leaf_id:
-        occurrences = load_occurrences(cursor, leaf_id)
-        return occurrences
+        return load_occurrences(cursor, leaf_id)
     return {}
 
 def main():
@@ -41,23 +40,23 @@ def main():
     db_name = "suffix_tree.db"
     create_database(db_name)
     conn, cursor = open_database(db_name)
-    
+
     # Load or build suffix tree
     word_list = load_word_list()
     suffix_tree, suffix_to_id = build_suffix_tree(word_list)
     save_tree(suffix_tree, suffix_to_id)
-    
+
     # Index books and store occurrences
     folder = "Gutenberg_Top_100"
     occurrences_map = index_books(folder, suffix_to_id)
     store_occurrences(cursor, occurrences_map)
     conn.commit()
-    
+
     # User input for search
     search_term = input("Enter a word to search for: ").strip().lower()
     results = search_word(search_term, suffix_to_id, cursor)
     print(f"Occurrences of '{search_term}':", json.dumps(results, indent=4))
-    
+
     # Close database connection
     conn.close()
 
