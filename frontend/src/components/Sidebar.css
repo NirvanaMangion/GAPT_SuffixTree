@@ -1,0 +1,30 @@
+.sidebar {
+  position: absolute;
+  top: 100px; /* Adjust this to position the sidebar directly below the burger icon */
+  right: 0px; /* Align the dropdown to the right of the header */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: none; /* Initially hidden */
+  flex-direction: column;
+  padding: 10px;
+  z-index: 1000; /* Ensure the sidebar is on top of other elements */
+}
+
+.sidebar.visible {
+  display: flex; /* Show the sidebar when visible */
+}
+
+.sidebar button {
+  margin: 5px 0;
+  padding: 10px;
+  background-color: #07485b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sidebar button:hover {
+  background-color: #0056b3;
+}

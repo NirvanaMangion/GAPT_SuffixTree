@@ -1,0 +1,26 @@
+.header {
+  background-color: #07485b;
+  color: white;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.menu-icon {
+  cursor: pointer;
+}
+.menu-icon div {
+  width: 20px;
+  height: 3px;
+  background-color: white;
+  margin: 3px 0;
+}
+/* Header.css */
+.header h1 {
+  cursor: pointer;  /* Change cursor to pointer when hovering over the text */
+  transition: color 0.3s ease;  /* Smooth color transition on hover */
+}
+
+.header h1:hover {
+  color: #7a7a7a;  /* Change text color on hover to give a visual cue */
+}
