@@ -79,7 +79,53 @@ def search_word(word, suffix_to_id, cursor):
     print(f"Combined search results for '{word}':")
     for book_id, offsets in combined_occurrences.items():
         offsets_str = ", ".join(map(str, offsets))
-        print(f"Book ID {book_id}: Offsets: ({offsets_str}), Occurrences: {len(offsets)}")
+        print(f"Book ID {book_id}: Offsets: ({offsets_str}), Occurrences: {len(offsets)}\n")
+
+def search_regex(pattern, suffix_to_id, cursor):
+    """
+    Search for words or suffixes in the suffix tree that match the given regex pattern.
+    Every key in the suffix_to_id is normalized by:
+      - Removing the trailing '$'
+      - Removing a leading '#' if it exists.
+    The regex is then applied to the normalized key.
+    Occurrences for all matching keys are combined and printed.
+    """
+    try:
+        regex = re.compile(pattern)
+    except re.error as e:
+        print(f"Invalid regex pattern: {e}")
+        return
+
+    matching_keys = []
+    for key in suffix_to_id:
+        if key.endswith('$'):
+            # Remove trailing '$'
+            if key.startswith('#'):
+                normalized = key[1:-1]  # Remove both '#' and '$'
+            else:
+                normalized = key[:-1]   # Remove only '$'
+            if regex.search(normalized):
+                matching_keys.append(key)
+
+    if not matching_keys:
+        print(f"No suffixes or words matching regex '{pattern}' found in the tree.")
+        return
+
+    combined_occurrences = {}
+    for key in matching_keys:
+        leaf_id = suffix_to_id[key]
+        data = load_occurrences(cursor, leaf_id)
+        for book_id, offsets in data.items():
+            combined_occurrences.setdefault(book_id, []).extend(offsets)
+
+    for book_id in combined_occurrences:
+        combined_occurrences[book_id].sort()
+
+    print(f"\nCombined search results for regex '{pattern}' (matching {len(matching_keys)} keys):")
+    for book_id, offsets in combined_occurrences.items():
+        offsets_str = ", ".join(map(str, offsets))
+        print(f"Book ID {book_id}: Offsets: ({offsets_str}), Occurrences: {len(offsets)}\n")
+
 
 def main():
     # 1) Load or build the suffix tree.
@@ -121,10 +167,14 @@ def main():
 
     # 2) Search loop: prompt the user for a suffix to search.
     while True:
-        query = input("Enter a suffix to search (or type 'exit' to quit): ").strip()
+        query = input("Enter a suffix or regex to search (prefix regex with 'r:'; 'exit' to quit): ").strip()
         if query.lower() in ["exit", "q"]:
             break
-        search_word(query, suffix_to_id, cursor)
+        if query.startswith("r:"):
+            regex_pattern = query[2:].strip()
+            search_regex(regex_pattern, suffix_to_id, cursor)
+        else:
+            search_word(query, suffix_to_id, cursor)
 
     # 3) Close the database connection.
     conn.close()
