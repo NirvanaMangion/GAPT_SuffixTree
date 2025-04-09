@@ -34,3 +34,33 @@ textarea {
   margin: 10px 0;
   border-radius: 10px;
 }
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  overflow: hidden;
+  background-color: white;
+  width: fit-content;
+}
+
+.search-input {
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  outline: none;
+  width: 250px;
+}
+
+.search-button {
+  background-color: #07485b;
+  color: white;
+  padding: 15px 15px;
+  border: none;
+  border-radius: 0 999px 999px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
