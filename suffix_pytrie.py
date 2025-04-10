@@ -3,24 +3,24 @@ import pickle
 from pytrie import StringTrie
 
 def clean_text(text):
-    """Removes punctuation, capitalization, and special characters."""
+    # Removes punctuation, capitalization, and special characters.
     return re.findall(r"\b[a-z]+\b", text.lower())
 
 def create_suffix_tree():
-    """Initializes an empty suffix trie."""
+    # new empty suffix trie.
     return StringTrie()
 
 def add_suffix(trie, suffix):
-    """Adds a suffix to the trie if it doesn't already exist."""
+    # Adds a suffix to the trie if it doesn't already exist.
     if suffix not in trie:
         trie[suffix] = True
         return True
     return False
 
 def build_suffix_tree(word_list):
-    """
-    Builds a suffix tree by adding all suffixes of each word.
-    """
+    
+    # Building the suffix tree
+
     trie = create_suffix_tree()
     suffix_to_id = {}
     current_id = 1
@@ -38,12 +38,13 @@ def build_suffix_tree(word_list):
 
 
 def save_tree(trie, mapping, filename="suffix_tree.pkl"):
-    """Saves the trie and mapping to a file."""
+    # Saves the trie and mapping to a file.
+
     with open(filename, "wb") as f:
         pickle.dump((trie, mapping), f)
 
 def load_tree(filename="suffix_tree.pkl"):
-    """Loads the trie and mapping from a file."""
+    # Loads the trie and mapping from a file.
     try:
         with open(filename, "rb") as f:
             return pickle.load(f)
