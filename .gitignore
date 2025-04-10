@@ -1,6 +1,16 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
+# Ignorning pickle files
+*.pkl
+
+# ignoring downloaded books
+Gutenberg_Top_100/
+
+# ignoring .db and .csv
+*.db
+*.csv
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
