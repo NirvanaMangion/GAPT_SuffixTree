@@ -3,18 +3,54 @@ import re
 from collections import defaultdict
 
 from suffix_tree import build_suffix_tree, save_tree, load_tree
-from db_tree import setup_database,get_or_create_book_id, store_occurrences, load_occurrences
+from db_tree import setup_database, get_or_create_book_id, store_occurrences, load_occurrences
 from moby_words import load_moby_words
+from sentence_search import search_sentences
+
+EMOJI_REGEX_SPELLS = {
+    # Word Search Spells
+    "🪄": {"description": "Ends with a suffix", "build": lambda arg: fr"{arg}$"},
+    "📜": {"description": "Starts with a prefix", "build": lambda arg: fr"^{arg}"},
+    "🧺": {"description": "Minimum word length", "build": lambda arg: fr"^.{{{arg},}}$"},
+    "🩶": {"description": "Maximum word length", "build": lambda arg: fr"^.{{1,{arg}}}$"},
+    "🯞": {"description": "Exact word length", "build": lambda arg: fr"^.{{{arg}}}$"},
+    "🔮": {"description": "Ends in any listed suffix", "build": lambda arg: fr"({arg})$"},
+    "🕯️": {"description": "Repeated characters", "build": lambda arg: fr"(.)\1{{{int(arg)-1},}}"},
+    "📖": {"description": "Exact word match", "build": lambda arg: fr"\b{arg}\b"},
+    "🔧": {"description": "Raw custom regex", "build": lambda arg: 'RAW_REGEX:' + arg},
+
+    # Sentence Search Spells
+    "📝": {"description": "Exact sentence phrase", "build": lambda arg: 'SENTENCE:' + arg},
+    "🔮S": {"description": "Sentence starts with", "build": lambda arg: 'SENTENCE_REGEX:^' + arg},
+    "🎽": {"description": "Sentence ends with", "build": lambda arg: 'SENTENCE_REGEX:' + arg + '$'},
+    "🔍": {"description": "Sentence contains word", "build": lambda arg: 'SENTENCE_REGEX:\\b' + arg + '\\b'},
+    "🎭": {"description": "Sentence contains any of listed words", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
+    "🧙": {"description": "Structured sentence pattern", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
+    "🔧S": {"description": "Raw sentence regex", "build": lambda arg: 'SENTENCE_REGEX:' + arg}
+}
+
+def parse_emoji_regex(query):
+    if ':' not in query:
+        return None
+    emoji, arg = query.split(':', 1)
+    arg = arg.strip().lower()
+    spell = EMOJI_REGEX_SPELLS.get(emoji)
+    if not spell:
+        return None
+    return spell["build"](arg)
+
+def build_sentence_map(folder):
+    sentence_map = {}
+    for filename in os.listdir(folder):
+        if filename.endswith(".txt"):
+            with open(os.path.join(folder, filename), "r", encoding="utf-8") as f:
+                text = f.read()
+            sentences = re.split(r'[.!?]', text)
+            sentence_map[filename] = [s.strip() for s in sentences if s.strip()]
+    return sentence_map
 
 def index_books(folder, suffix_to_id, cursor):
-    """
-    For each .txt file in 'folder', tokenize text and record offsets.
-    Instead of using file names, this function obtains a numeric book ID for each file.
-    Returns an occurrences_map of the form:
-      { leaf_id: { book_id: [offsets...], ... }, ... }
-    """
     occurrences_map = defaultdict(lambda: defaultdict(list))
-
     for filename in os.listdir(folder):
         if filename.endswith(".txt"):
             file_path = os.path.join(folder, filename)
@@ -25,17 +61,13 @@ def index_books(folder, suffix_to_id, cursor):
             except Exception as e:
                 print(f"Failed to read {filename}: {e}")
                 continue
-
-            # Get or create a numeric book ID for the current file.
             book_id = get_or_create_book_id(cursor, filename)
             tokens = re.findall(r"\w+", text.lower())
             for token_index, token in enumerate(tokens):
-                # Process the full word with '#' and '$'
                 full_word = '#' + token + '$'
                 leaf_id = suffix_to_id.get(full_word)
                 if leaf_id:
                     occurrences_map[leaf_id][book_id].append(token_index)
-                # Process proper suffixes
                 for i in range(1, len(token) + 1):
                     suffix = token[i:] + '$'
                     leaf_id = suffix_to_id.get(suffix)
@@ -44,11 +76,6 @@ def index_books(folder, suffix_to_id, cursor):
     return occurrences_map
 
 def search_word(word, suffix_to_id, cursor):
-    """
-    Search for a given suffix in the JSON-based mapping.
-    Uses load_occurrences_json() to load data from the DB, combines offsets,
-    and prints results using the numeric book IDs.
-    """
     word = word.strip().lower()
     full_key = '#' + word + '$'
     suffix_key = word + '$'
@@ -60,10 +87,9 @@ def search_word(word, suffix_to_id, cursor):
         keys_found.append(suffix_key)
 
     if not keys_found:
-        print(f"Suffix '{word}' not found in the tree.")
+        print(f"❌ Suffix '{word}' not found in the tree.")
         return
 
-    # Combine occurrences for each matching leaf key.
     combined_occurrences = {}
     for key in keys_found:
         leaf_id = suffix_to_id[key]
@@ -71,44 +97,29 @@ def search_word(word, suffix_to_id, cursor):
         for book_id, offsets in data.items():
             combined_occurrences.setdefault(book_id, []).extend(offsets)
 
-    # Sort the offsets for each book.
     for book_id in combined_occurrences:
         combined_occurrences[book_id].sort()
 
-    # Print the combined search results (displaying the numeric book IDs).
-    print(f"Combined search results for '{word}':")
+    print(f"📚 Results for '{word}':")
     for book_id, offsets in combined_occurrences.items():
-        offsets_str = ", ".join(map(str, offsets))
-        print(f"Book ID {book_id}: Offsets: ({offsets_str}), Occurrences: {len(offsets)}\n")
+        print(f"📘 Book ID {book_id} — Offsets: ({', '.join(map(str, offsets))}), Count: {len(offsets)}\n")
 
 def search_regex(pattern, suffix_to_id, cursor):
-    """
-    Search for words or suffixes in the suffix tree that match the given regex pattern.
-    Every key in the suffix_to_id is normalized by:
-      - Removing the trailing '$'
-      - Removing a leading '#' if it exists.
-    The regex is then applied to the normalized key.
-    Occurrences for all matching keys are combined and printed.
-    """
     try:
         regex = re.compile(pattern)
     except re.error as e:
-        print(f"Invalid regex pattern: {e}")
+        print(f"❌ Invalid regex pattern: {e}")
         return
 
     matching_keys = []
     for key in suffix_to_id:
         if key.endswith('$'):
-            # Remove trailing '$'
-            if key.startswith('#'):
-                normalized = key[1:-1]  # Remove both '#' and '$'
-            else:
-                normalized = key[:-1]   # Remove only '$'
+            normalized = key[1:-1] if key.startswith('#') else key[:-1]
             if regex.search(normalized):
                 matching_keys.append(key)
 
     if not matching_keys:
-        print(f"No suffixes or words matching regex '{pattern}' found in the tree.")
+        print(f"❌ No suffixes or words matching regex '{pattern}' found.")
         return
 
     combined_occurrences = {}
@@ -121,64 +132,93 @@ def search_regex(pattern, suffix_to_id, cursor):
     for book_id in combined_occurrences:
         combined_occurrences[book_id].sort()
 
-    print(f"\nCombined search results for regex '{pattern}' (matching {len(matching_keys)} keys):")
+    print(f"🔎 Regex Results for '{pattern}' — Matches: {len(matching_keys)} keys")
     for book_id, offsets in combined_occurrences.items():
-        offsets_str = ", ".join(map(str, offsets))
-        print(f"Book ID {book_id}: Offsets: ({offsets_str}), Occurrences: {len(offsets)}\n")
-
+        print(f"📘 Book ID {book_id} — Offsets: ({', '.join(map(str, offsets))}), Count: {len(offsets)}\n")
 
 def main():
-    # 1) Load or build the suffix tree.
     trie, suffix_to_id = load_tree()
     if trie is None:
-        # if tree does not exist, we need to build it and index the books and insert into the db.
-        # a) Load vocabulary (Moby Words)
-        words = load_moby_words()  # Replace with your vocabulary loader
-        # b) Build the suffix tree and mapping.
+        words = load_moby_words()
         trie, suffix_to_id = build_suffix_tree(words)
         print(f"Built suffix tree with {len(suffix_to_id)} unique suffixes.")
-        # c) Save the tree for future use.
         save_tree(trie, suffix_to_id)
-        # d) Set up the JSON-based database.
         conn, cursor = setup_database("leaves.db")
-        # e) Index the books from the folder (using numeric book IDs).
-        folder = "Gutenberg_Top_100"  # Ensure this folder exists and contains .txt files.
+        folder = "Gutenberg_Top_100"
         occurrences_map = index_books(folder, suffix_to_id, cursor)
-        print(f"Indexed {len(occurrences_map)} unique suffix occurrences.\n Inserting into the database...")
-        # f) Bulk insert occurrences into the mapping table.
-        store_occurrences(cursor, occurrences_map)
-        conn.commit()
-
-    db_name = "leaves.db"
-    # Check if the database already exists and if not creating the db.
-    if not os.path.exists(db_name):
-        # d) Set up the JSON-based database.
-        conn, cursor = setup_database("leaves.db")
-        # e) Index the books from the folder (using numeric book IDs).
-        folder = "Gutenberg_Top_100"  # Ensure this folder exists and contains .txt files.
-        occurrences_map = index_books(folder, suffix_to_id, cursor)
-        print(f"\nIndexed {len(occurrences_map)} unique suffix occurrences.\nInserting into the database...")
-        # f) Bulk insert occurrences into the mapping table.
+        print(f"Indexed {len(occurrences_map)} unique suffix occurrences.\nInserting into the database...")
         store_occurrences(cursor, occurrences_map)
         conn.commit()
     else:
         conn, cursor = setup_database("leaves.db")
 
+    folder = "Gutenberg_Top_100"
+    sentence_map = build_sentence_map(folder)
 
-    # 2) Search loop: prompt the user for a suffix to search.
     while True:
-        query = input("Enter a suffix or regex to search (prefix regex with 'r:'; 'exit' to quit): ").strip()
-        if query.lower() in ["exit", "q"]:
-            break
-        if query.startswith("r:"):
-            regex_pattern = query[2:].strip()
-            search_regex(regex_pattern, suffix_to_id, cursor)
-        else:
-            search_word(query, suffix_to_id, cursor)
+        print("\n🧭 Choose your search mode:")
+        print("1️⃣ Word Search")
+        print("2️⃣ Sentence Search")
+        mode = input("Select 1 or 2 (or 'exit'): ").strip().lower()
 
-    # 3) Close the database connection.
+        if mode in ["exit", "q"]:
+            print("🕯️ Scrolls returned to the archive. Session closed.")
+            break
+
+        if mode not in ["1", "2"]:
+            print("❌ Invalid input. Please type 1 or 2 to continue.")
+            continue
+
+        if mode == "1":
+            print("""
+📚 Word Search Spellbook
+
+🪄:<ending>        → Ends with a suffix (e.g. 🪄:ment)
+📜:<prefix>        → Starts with a prefix (e.g. 📜:un)
+🧺:<number>        → Words with at least this many letters (e.g. 🧺:5)
+🩶:<number>        → Words with at most this many letters (e.g. 🩶:3)
+🯞:<number>        → Words of exact length (e.g. 🯞:6)
+🔮:<a|b|c>         → Ends in any of the listed suffixes (e.g. 🔮:ed|ing)
+🕯️:<number>        → Repeated characters (e.g. 🕯️:2 matches book, cool)
+📖:<word>          → Exact word match (e.g. 📖:freedom)
+🔧:<regex>         → Raw custom regex (e.g. 🔧:^[bcd].*ing$)
+            """)
+        else:
+            print("""
+📝 Sentence Search Spellbook
+
+📝:<phrase>        → Exact sentence phrase match (e.g. 📝:it was the best of times)
+🔮S:<word>         → Sentence starts with word (e.g. 🔮S:freedom)
+🎽:<word>          → Sentence ends with word (e.g. 🎽:truth)
+🔍:<word>          → Sentence contains the exact word (e.g. 🔍:love)
+🎭:<a|b|c>         → Sentence contains any listed word (e.g. 🎭:life|death|hope)
+🧙:<pattern>       → Sentence with structure pattern (e.g. 🧙:[A-Z][^.!?]*war)
+🔧S:<regex>        → Raw custom sentence regex (e.g. 🔧S:^The.*end$)
+            """)
+
+        query = input("✨ Cast your spell: ").strip()
+        if query.lower() in ["exit", "q", "quit"]:
+            print("🕯️ Scrolls returned to the archive. Session closed.")
+            break
+
+        pattern = parse_emoji_regex(query)
+        if not pattern:
+            print("❌ Invalid spell. Please use one of the listed emojis and formats.")
+            continue
+
+        if pattern.startswith("SENTENCE_REGEX:"):
+            regex = pattern.split(":", 1)[1]
+            search_sentences(regex, sentence_map, use_regex=True)
+        elif pattern.startswith("SENTENCE:"):
+            phrase = pattern.split(":", 1)[1]
+            search_sentences(phrase, sentence_map, use_regex=False)
+        elif pattern.startswith("RAW_REGEX:"):
+            raw_pattern = pattern.split(":", 1)[1]
+            search_regex(raw_pattern, suffix_to_id, cursor)
+        else:
+            search_regex(pattern, suffix_to_id, cursor)
+
     conn.close()
-    print("Done indexing and searching.")
 
 if __name__ == "__main__":
     main()
