@@ -3,7 +3,9 @@ from datrie_implementation.suffix_tree import build_suffix_tree, load_tree, save
 from flask_cors import CORS
 import os
 import re
-import urllib.parse  # ✅ for decoding book names from URL
+import urllib.parse
+import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -11,6 +13,23 @@ CORS(app)
 DATA_FILE = "backend/moby_words.txt"
 TREE_FILE = "backend/suffix_tree.pkl"
 BOOK_FOLDER = "backend/books/"
+DB_FILE = "backend/searches.db"
+
+# Create DB and table if not exist
+def init_db():
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS recent_searches (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            query TEXT NOT NULL,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db()
 
 # Load or build suffix tree
 if os.path.exists(TREE_FILE):
@@ -29,16 +48,20 @@ def search():
     if not query:
         return jsonify({"error": "Query parameter 'q' is required."}), 400
 
-    matches = trie.keys(query)
-    print("MATCHES:", matches)
+    # ✅ Store the search in SQLite
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("INSERT INTO recent_searches (query) VALUES (?)", (query,))
+    conn.commit()
+    conn.close()
 
+    matches = trie.keys(query)
     cleaned_matches = [key.strip("#$") for key in matches]
 
     return jsonify({
         "query": query,
         "matches": cleaned_matches
     })
-
 
 @app.route("/api/word/<word>", methods=["GET"])
 def word_info(word):
@@ -66,8 +89,6 @@ def word_info(word):
     result = [{"title": title, "frequency": freq} for title, freq in book_data.items()]
     return jsonify({"word": word, "books": result})
 
-
-# ✅ Use <path:book_name> to allow slashes/encoded characters
 @app.route("/api/book/<path:book_name>", methods=["GET"])
 def book_word_matches(book_name):
     word = request.args.get("word", "").strip().lower()
@@ -92,6 +113,26 @@ def book_word_matches(book_name):
         "matches": matches
     })
 
+@app.route("/api/books", methods=["GET"])
+def get_books():
+    if not os.path.exists(BOOK_FOLDER):
+        return jsonify([])
+    files = [f for f in os.listdir(BOOK_FOLDER) if f.endswith(".txt")]
+    return jsonify(files)
+
+@app.route("/api/recent", methods=["GET"])
+def get_recent_searches():
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("""
+        SELECT DISTINCT query
+        FROM recent_searches
+        ORDER BY id DESC
+        LIMIT 10
+    """)
+    results = [row[0] for row in c.fetchall()]
+    conn.close()
+    return jsonify(list(reversed(results)))
 
 if __name__ == "__main__":
     app.run(debug=True)
