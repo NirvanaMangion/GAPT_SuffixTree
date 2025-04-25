@@ -3,7 +3,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #f8f8f8;
   min-height: calc(95vh - 60px);
 }
 .title {

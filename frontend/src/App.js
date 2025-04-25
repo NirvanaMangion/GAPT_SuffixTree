@@ -6,12 +6,14 @@ import SearchResults from './pages/SearchResults';
 import AllBooks from './pages/AllBooks';
 import RecentSearches from './pages/RecentSearches';
 import WordDetails from './pages/WordDetails';
-import BookDetails from './pages/BookDetails';  // ✅ Import BookDetails
+import BookDetails from './pages/BookDetails';
+import ThemeToggle from './components/ThemeToggle';
 import './App.css';
 
 function App() {
   return (
     <Router>
+      <ThemeToggle /> {/* ✅ Floating toggle */}
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -19,7 +21,7 @@ function App() {
         <Route path="/books" element={<AllBooks />} />
         <Route path="/recent" element={<RecentSearches />} />
         <Route path="/word/:word" element={<WordDetails />} />
-        <Route path="/book/*" element={<BookDetails />} />  {/* ✅ Added wildcard route */}
+        <Route path="/book/:title" element={<BookDetails />} />
       </Routes>
     </Router>
   );

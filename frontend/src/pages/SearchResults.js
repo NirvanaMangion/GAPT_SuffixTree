@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './AllBooks.css';
-import './SearchResults.css'; // ✅ Create this file for additional styles
+import './SearchResults.css';
 
-const highlightMatch = (word, query) => {
-  const index = word.toLowerCase().indexOf(query.toLowerCase());
-  if (index === -1) return word;
-  const before = word.substring(0, index);
-  const match = word.substring(index, index + query.length);
-  const after = word.substring(index + query.length);
+const highlightMatch = (text, query) => {
+  const index = text.toLowerCase().indexOf(query.toLowerCase());
+  if (index === -1) return text;
+  const before = text.substring(0, index);
+  const match = text.substring(index, index + query.length);
+  const after = text.substring(index + query.length);
   return (
     <>
       {before}
@@ -16,19 +16,6 @@ const highlightMatch = (word, query) => {
       {after}
     </>
   );
-};
-
-const categorizeResults = (results, query) => {
-  const lowerQuery = query.toLowerCase();
-
-  return {
-    exact: results.filter(w => w.toLowerCase() === lowerQuery),
-    startsWith: results.filter(w => w.toLowerCase().startsWith(lowerQuery) && w.toLowerCase() !== lowerQuery),
-    endsWith: results.filter(w => w.toLowerCase().endsWith(lowerQuery) && !w.toLowerCase().startsWith(lowerQuery)),
-    contains: results.filter(w => w.toLowerCase().includes(lowerQuery)
-      && !w.toLowerCase().startsWith(lowerQuery)
-      && !w.toLowerCase().endsWith(lowerQuery))
-  };
 };
 
 const SearchResults = () => {
@@ -45,8 +32,8 @@ const SearchResults = () => {
       fetch(`http://localhost:5000/api/search?q=${query}`)
         .then(res => res.json())
         .then(data => {
-          if (Array.isArray(data.matches)) {
-            setResults(data.matches);
+          if (data.results) {
+            setResults(data.results);
           } else {
             setResults([]);
             setError("Unexpected response format.");
@@ -61,49 +48,39 @@ const SearchResults = () => {
     }
   }, [query]);
 
-  const grouped = categorizeResults(results, query);
-
   return (
     <div className="all-books-container">
       <h1>Search Results for "{query}"</h1>
-
       {loading && <div className="spinner"></div>}
       {error && <p className="error-message">{error}</p>}
-
       {!loading && results.length === 0 && !error && (
         <p>No results found for "{query}".</p>
       )}
 
-      {!loading && (
-        <>
-          {Object.entries(grouped).map(([group, groupResults]) => (
-            groupResults.length > 0 && (
-              <div key={group}>
-                <h2 className="group-title">
-                  {group === "exact" && "Exact Matches"}
-                  {group === "startsWith" && "Starts With"}
-                  {group === "endsWith" && "Ends With"}
-                  {group === "contains" && "Contains"}
-                </h2>
-                <div className="books-list">
-                  {groupResults.map((result, index) => (
-                    <div key={index} className="book-card">
-                      <span className="book-icon">📚</span>
-                      <div className="book-details">
-                        <h3 className="book-title">
-                          <a href={`/word/${result}`} className="clickable-word">
-                            {highlightMatch(result, query)}
-                          </a>
-                        </h3>
-                        <p className="match-info">Match {index + 1}</p>
-                      </div>
-                    </div>
-                  ))}
+      {!loading && results.length > 0 && (
+        <div>
+          <h2 className="group-title">Found In Books</h2>
+          <div className="books-list">
+            {results.map((result, index) => (
+              <div key={index} className="book-card">
+                <span className="book-icon">📚</span>
+                <div className="book-details">
+                  <h3 className="book-title">
+                    <a href={`/book/${encodeURIComponent(result.book)}?word=${query}`}>
+                      {result.book}
+                    </a>
+                  </h3>
+                  <p className="book-author">Matches: {result.count}</p>
+                  <ul>
+                    {result.snippets.map((snippet, i) => (
+                      <li key={i}><em>...{highlightMatch(snippet, query)}...</em></li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-            )
-          ))}
-        </>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
