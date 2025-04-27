@@ -1,10 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import './PageStyles.css'; // Your global styles
+import './PageStyles.css';
 
 const Home = () => {
   const [query, setQuery] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [showOverwritePopup, setShowOverwritePopup] = useState(false);
+  const [pendingFile, setPendingFile] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -21,7 +24,7 @@ const Home = () => {
   };
 
   const handleUploadClick = () => {
-    fileInputRef.current.click(); // 👈 This opens the File Explorer
+    fileInputRef.current.click();
   };
 
   const handleFileChange = (e) => {
@@ -30,9 +33,31 @@ const Home = () => {
 
     if (!file.name.endsWith('.txt')) {
       toast.error('Only .txt files are allowed.');
+      e.target.value = null; // ✅ Reset file input
       return;
     }
 
+    // Check if the file already exists
+    fetch('http://localhost:5000/api/books')
+      .then(res => res.json())
+      .then(existingFiles => {
+        const normalized = existingFiles.map(f => f.trim().toLowerCase());
+        if (normalized.includes(file.name.trim().toLowerCase())) {
+          setPendingFile(file);  // Save the file temporarily
+          setShowOverwritePopup(true);  // Show overwrite popup
+        } else {
+          uploadFile(file);
+        }
+      })
+      .catch(() => {
+        toast.error('Error checking existing books.');
+      })
+      .finally(() => {
+        e.target.value = null; // ✅ Always reset after selecting
+      });
+  };
+
+  const uploadFile = (file) => {
     const formData = new FormData();
     formData.append('file', file);
 
@@ -43,7 +68,7 @@ const Home = () => {
       .then(res => res.json())
       .then(data => {
         if (data.message) {
-          toast.success(data.message);
+          setShowSuccessPopup(true);
         } else {
           toast.error('Upload failed.');
         }
@@ -53,10 +78,28 @@ const Home = () => {
       });
   };
 
+  const confirmOverwrite = () => {
+    if (pendingFile) {
+      uploadFile(pendingFile);
+    }
+    setPendingFile(null);
+    setShowOverwritePopup(false);
+  };
+
+  const cancelOverwrite = () => {
+    setPendingFile(null);
+    setShowOverwritePopup(false);
+    toast.info('Upload cancelled.');
+  };
+
+  const handleViewBooks = () => {
+    navigate('/books');
+  };
+
   return (
     <div className="home-page">
       <h1 className="title">Search the documents</h1>
-      
+
       <div className="search-wrapper">
         <input
           type="text"
@@ -71,7 +114,6 @@ const Home = () => {
         </button>
       </div>
 
-      {/* Hidden input for uploading */}
       <input
         type="file"
         accept=".txt"
@@ -85,6 +127,40 @@ const Home = () => {
           📤 Upload a New Book
         </button>
       </div>
+
+      {/* ✅ Upload success popup */}
+      {showSuccessPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2>✅ Book Uploaded Successfully!</h2>
+            <div className="popup-buttons"> {/* ✅ Group both buttons together */}
+              <button className="popup-button" onClick={() => setShowSuccessPopup(false)}>
+                Close
+              </button>
+              <button className="popup-button" onClick={handleViewBooks}>
+                📚 View All Books
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* ✅ Overwrite confirmation popup */}
+      {showOverwritePopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2>⚠️ A file with the same name already exists.</h2>
+            <p>Do you want to overwrite it?</p>
+            <button className="confirm-button" onClick={confirmOverwrite}>
+              Yes, Overwrite
+            </button>
+            <button className="cancel-button" onClick={cancelOverwrite}>
+              No, Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
