@@ -1,23 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom';
 import './Header.css';
 import Sidebar from './Sidebar';
+import ThemeToggle from './ThemeToggle'; // ✅ Import ThemeToggle
 
 const Header = () => {
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  const navigate = useNavigate();  // Initialize the navigate hook
+  const navigate = useNavigate();
 
-  // Toggle sidebar visibility
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
   };
 
-  // Navigate to the main page
   const navigateToHome = () => {
-    navigate('/');  // Redirect to the home page (main page)
+    navigate('/');
   };
 
-  // Navigate to other pages from the sidebar
   const navigateToPage = (page) => {
     if (page === 'allBooks') {
       navigate('/books');
@@ -29,11 +27,15 @@ const Header = () => {
   return (
     <header className="header">
       <div className="circle" />
-      <h1 onClick={navigateToHome} style={{ cursor: 'pointer' }}>SuffixSearch</h1>  {/* Make the text clickable */}
-      <div className="menu-icon" onClick={toggleSidebar}>
-        <div />
-        <div />
-        <div />
+      <h1 onClick={navigateToHome} style={{ cursor: 'pointer' }}>SuffixSearch</h1>
+      
+      <div className="header-right"> {/* ✅ New wrapper */}
+        <div className="menu-icon" onClick={toggleSidebar}>
+          <div />
+          <div />
+          <div />
+        </div>
+        <ThemeToggle /> {/* ✅ Moved ThemeToggle inside header-right */}
       </div>
 
       <Sidebar visible={sidebarVisible} navigateToPage={navigateToPage} />

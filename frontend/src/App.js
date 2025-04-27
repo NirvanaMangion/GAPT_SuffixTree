@@ -7,13 +7,11 @@ import AllBooks from './pages/AllBooks';
 import RecentSearches from './pages/RecentSearches';
 import WordDetails from './pages/WordDetails';
 import BookDetails from './pages/BookDetails';
-import ThemeToggle from './components/ThemeToggle';
 import './App.css';
 
 function App() {
   return (
     <Router>
-      <ThemeToggle /> {/* ✅ Floating toggle */}
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

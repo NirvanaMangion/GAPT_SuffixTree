@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './PageStyles.css';
+import Logo from '../assets/logo.png'; // ✅ Logo imported
 
 const Home = () => {
   const [query, setQuery] = useState('');
@@ -33,18 +34,17 @@ const Home = () => {
 
     if (!file.name.endsWith('.txt')) {
       toast.error('Only .txt files are allowed.');
-      e.target.value = null; // ✅ Reset file input
+      e.target.value = null;
       return;
     }
 
-    // Check if the file already exists
     fetch('http://localhost:5000/api/books')
       .then(res => res.json())
       .then(existingFiles => {
         const normalized = existingFiles.map(f => f.trim().toLowerCase());
         if (normalized.includes(file.name.trim().toLowerCase())) {
-          setPendingFile(file);  // Save the file temporarily
-          setShowOverwritePopup(true);  // Show overwrite popup
+          setPendingFile(file);
+          setShowOverwritePopup(true);
         } else {
           uploadFile(file);
         }
@@ -53,7 +53,7 @@ const Home = () => {
         toast.error('Error checking existing books.');
       })
       .finally(() => {
-        e.target.value = null; // ✅ Always reset after selecting
+        e.target.value = null;
       });
   };
 
@@ -98,6 +98,8 @@ const Home = () => {
 
   return (
     <div className="home-page">
+      {/* ✅ Logo added */}
+      <img src={Logo} alt="SuffixSearch Logo" className="logo-image" />
       <h1 className="title">Search the documents</h1>
 
       <div className="search-wrapper">
@@ -128,12 +130,11 @@ const Home = () => {
         </button>
       </div>
 
-      {/* ✅ Upload success popup */}
       {showSuccessPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
             <h2>✅ Book Uploaded Successfully!</h2>
-            <div className="popup-buttons"> {/* ✅ Group both buttons together */}
+            <div className="popup-buttons">
               <button className="popup-button" onClick={() => setShowSuccessPopup(false)}>
                 Close
               </button>
@@ -145,8 +146,6 @@ const Home = () => {
         </div>
       )}
 
-
-      {/* ✅ Overwrite confirmation popup */}
       {showOverwritePopup && (
         <div className="popup-overlay">
           <div className="popup-content">

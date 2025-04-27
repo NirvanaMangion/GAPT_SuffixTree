@@ -15,21 +15,7 @@ const ThemeToggle = () => {
   };
 
   return (
-    <button
-      onClick={toggleTheme}
-      style={{
-        position: 'fixed',
-        top: '1rem',
-        right: '1rem',
-        backgroundColor: 'var(--accent-color)',
-        color: 'white',
-        border: 'none',
-        borderRadius: '6px',
-        padding: '8px 12px',
-        cursor: 'pointer',
-        zIndex: 999,
-      }}
-    >
+    <button onClick={toggleTheme}>
       {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
     </button>
   );

@@ -3,34 +3,49 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(95vh - 60px);
+  text-align: center;
+  padding: 250px 20px;
+  box-sizing: border-box;
+  position: relative;
 }
+
 .title {
-  font-size: 28px;
+  font-size: 32px;
   margin-bottom: 20px;
+  color: white;
 }
+
 .upload-btn {
   background-color: #07485b;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin: 20px 0;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
+
+.upload-btn:hover {
+  background-color: #0a9396;
+}
+
 textarea {
-  width: 400px;
+  width: 100%;
+  max-width: 500px;
   height: 120px;
-  padding: 12px;
-  font-size: 14px;
+  padding: 14px;
+  font-size: 15px;
   border: 1px solid #ccc;
-  resize: none;
-  border-radius: 5px;
+  resize: vertical;
+  border-radius: 8px;
 }
+
 .result, .book, .search-item {
   background: #f1f1f1;
-  padding: 15px;
-  margin: 10px 0;
+  padding: 16px;
+  margin: 12px 0;
   border-radius: 10px;
 }
 
@@ -42,37 +57,42 @@ textarea {
   overflow: hidden;
   background-color: white;
   width: fit-content;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .search-input {
   border: none;
-  padding: 10px 15px;
+  padding: 12px 20px;
   font-size: 16px;
   outline: none;
-  width: 250px;
+  width: 280px;
 }
 
 .search-button {
   background-color: #07485b;
   color: white;
-  padding: 15px 15px;
+  padding: 12px 18px;
   border: none;
   border-radius: 0 999px 999px 0;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
 }
 
+.search-button:hover {
+  background-color: #0a9396;
+}
+
+/* Upload button */
 .upload-button {
   background-color: var(--accent-color);
   color: white;
   border: none;
-  padding: 10px 18px;
+  padding: 12px 22px;
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .upload-button:hover {
@@ -193,4 +213,58 @@ textarea {
   height: 48px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+
+body {
+  background: linear-gradient(270deg, #0a9396, #005f73, #94d2bd, #0a9396);
+  background-size: 800% 800%;
+  animation: gradientMove 20s ease infinite;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.logo-image {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+  animation: popInLogo 2.5s ease;
+  transition: transform 0.3s ease;
+  border-radius: 20px;
+}
+
+/* Optional animation when page loads */
+@keyframes popInLogo {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+html, body {
+  height: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(270deg, #0a9396, #005f73, #94d2bd, #0a9396);
+  background-size: 800% 800%;
+  animation: gradientMove 20s ease infinite;
+  overflow-x: hidden;
 }
