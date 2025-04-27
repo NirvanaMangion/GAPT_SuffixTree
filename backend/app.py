@@ -6,6 +6,7 @@ import re
 import urllib.parse
 import sqlite3
 from datetime import datetime
+from werkzeug.utils import secure_filename  # ✅ added for safe file saving
 
 app = Flask(__name__)
 CORS(app)
@@ -181,6 +182,25 @@ def clear_recent_searches():
     conn.commit()
     conn.close()
     return jsonify({"message": "Recent searches cleared."})
+
+# ✅ NEW: Upload endpoint
+@app.route("/api/upload", methods=["POST"])
+def upload_book():
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+
+    if not file.filename.endswith(".txt"):
+        return jsonify({"error": "Only .txt files allowed."}), 400
+
+    filename = secure_filename(file.filename)
+    save_path = os.path.join(BOOK_FOLDER, filename)
+    file.save(save_path)
+
+    return jsonify({"message": f"{filename} uploaded successfully."})
 
 if __name__ == "__main__":
     app.run(debug=True)
