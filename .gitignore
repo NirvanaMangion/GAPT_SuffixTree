@@ -5,7 +5,7 @@
 *.pkl
 
 # ignoring downloaded books
-Gutenberg_Top_100/
+Gutenberg_Books/
 
 # ignoring .db and .csv
 *.db
