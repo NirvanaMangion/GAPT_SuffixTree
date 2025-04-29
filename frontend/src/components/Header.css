@@ -1,26 +1,79 @@
 .header {
-  background-color: #07485b;
+  background-color: rgba(7, 72, 91, 0.95); /* ✅ Slight transparency */
   color: white;
-  padding: 10px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: sticky; /* ✅ Sticky at top */
+  top: 0;
+  min-height: 70px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  backdrop-filter: blur(8px); /* ✅ Blurry background effect */
+  transition: background-color 0.4s ease, backdrop-filter 0.4s ease;
 }
+
+/* Wrapper for hamburger + dark mode button */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Hamburger icon */
 .menu-icon {
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
+
+.menu-icon:hover {
+  transform: scale(1.1); /* ✅ Slight grow on hover */
+}
+
 .menu-icon div {
-  width: 20px;
+  width: 22px;
   height: 3px;
   background-color: white;
-  margin: 3px 0;
+  margin: 4px 0;
+  border-radius: 2px; /* ✅ Rounded edges */
 }
-/* Header.css */
+
+/* Header title */
 .header h1 {
-  cursor: pointer;  /* Change cursor to pointer when hovering over the text */
-  transition: color 0.3s ease;  /* Smooth color transition on hover */
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 .header h1:hover {
-  color: #7a7a7a;  /* Change text color on hover to give a visual cue */
+  color: #e0f7fa;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.8); /* ✅ Very soft subtle glow */
+}
+
+/* Dark Mode Button inside Header */
+.header-right button, .theme-toggle-button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  height: fit-content;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.header-right button:hover, .theme-toggle-button:hover {
+  background-color: #0a9396;
+  transform: scale(1.05); /* ✅ Slight bounce on hover */
 }

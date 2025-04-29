@@ -11,6 +11,10 @@ Gutenberg_Top_100/
 *.db
 *.csv
 
+backend/books/
+frontend/node_modules/
+
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

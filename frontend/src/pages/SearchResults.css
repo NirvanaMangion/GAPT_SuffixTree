@@ -1,0 +1,84 @@
+/* Spinner animation */
+.spinner {
+    margin: 20px auto;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .highlight {
+    background-color: yellow;
+    font-weight: bold;
+    padding: 0 2px;
+    border-radius: 4px;
+  }
+  
+  .group-title {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #444;
+  }
+  
+  .clickable-word:hover {
+    text-decoration: underline;
+  }
+  
+  .highlight {
+    background-color: yellow;
+    font-weight: bold;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .match-entry {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .matches-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .highlight {
+    background-color: yellow;
+    font-weight: bold;
+  }
+  
+  .back-button {
+    margin: 10px 0;
+    padding: 6px 12px;
+    border: none;
+    background-color: #005f73;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .back-button:hover {
+    background-color: #0a9396;
+  }
+  
+  .match-entry {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .matches-list {
+    list-style: none;
+    padding: 0;
+  }
+  

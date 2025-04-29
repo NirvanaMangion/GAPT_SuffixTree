@@ -1,34 +1,87 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './AllBooks.css';
+import './SearchResults.css';
+
+const highlightMatch = (text, query) => {
+  const index = text.toLowerCase().indexOf(query.toLowerCase());
+  if (index === -1) return text;
+  const before = text.substring(0, index);
+  const match = text.substring(index, index + query.length);
+  const after = text.substring(index + query.length);
+  return (
+    <>
+      {before}
+      <span className="highlight">{match}</span>
+      {after}
+    </>
+  );
+};
 
 const SearchResults = () => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get("q");
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (query) {
-      fetch(`http://localhost:5000/search?q=${query}`)
+      setLoading(true);
+      setError("");
+      fetch(`http://localhost:5000/api/search?q=${query}`)
         .then(res => res.json())
-        .then(data => setResults(data));
+        .then(data => {
+          if (data.results) {
+            setResults(data.results);
+          } else {
+            setResults([]);
+            setError("Unexpected response format.");
+          }
+        })
+        .catch(err => {
+          setError("Failed to fetch results.");
+          setResults([]);
+          console.error(err);
+        })
+        .finally(() => setLoading(false));
     }
   }, [query]);
 
   return (
     <div className="all-books-container">
       <h1>Search Results for "{query}"</h1>
-      <div className="books-list">
-        {results.map((result, index) => (
-          <div key={index} className="book-card">
-            <span className="book-icon">📚</span>
-            <div className="book-details">
-              <h3 className="book-title">{result.title}</h3>
-              <p className="book-author">Matches: {result.matches}</p>
-            </div>
+      {loading && <div className="spinner"></div>}
+      {error && <p className="error-message">{error}</p>}
+      {!loading && results.length === 0 && !error && (
+        <p>No results found for "{query}".</p>
+      )}
+
+      {!loading && results.length > 0 && (
+        <div>
+          <h2 className="group-title">Found In Books</h2>
+          <div className="books-list">
+            {results.map((result, index) => (
+              <div key={index} className="book-card">
+                <span className="book-icon">📚</span>
+                <div className="book-details">
+                  <h3 className="book-title">
+                    <a href={`/book/${encodeURIComponent(result.book)}?word=${query}`}>
+                      {result.book}
+                    </a>
+                  </h3>
+                  <p className="book-author">Matches: {result.count}</p>
+                  <ul>
+                    {result.snippets.map((snippet, i) => (
+                      <li key={i}><em>...{highlightMatch(snippet, query)}...</em></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
