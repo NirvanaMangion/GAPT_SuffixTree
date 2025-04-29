@@ -122,7 +122,7 @@ def main():
         print(f"Built suffix tree with {len(suffix_to_id)} unique suffixes.")
         save_tree(trie, suffix_to_id)
         conn, cursor = setup_database("leaves.db")
-        folder = "Gutenberg_Top_100"
+        folder = "Gutenberg_Books"
         occurrences_map = index_books(folder, suffix_to_id, cursor)
         print(f"Indexed {len(occurrences_map)} unique suffix occurrences.\nInserting into the database...")
         store_occurrences(cursor, occurrences_map)
@@ -130,7 +130,7 @@ def main():
     else:
         conn, cursor = setup_database("leaves.db")
 
-    folder = "Gutenberg_Top_100"
+    folder = "Gutenberg_Books"
     sentence_map = build_sentence_map(folder)
 
     while True:
