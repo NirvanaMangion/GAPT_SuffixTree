@@ -2,10 +2,15 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './PageStyles.css';
-import Logo from '../assets/logo.png'; // ✅ Logo imported
+import Logo from '../assets/logo.png';
+
+const emojiOptions = ["📄", "✏️", "📂", "📕", "📏", "🖌️", "📎", "📖", "🔧"];
 
 const Home = () => {
   const [query, setQuery] = useState('');
+  const [selectedEmoji, setSelectedEmoji] = useState("📄");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchType, setSearchType] = useState('word');
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showOverwritePopup, setShowOverwritePopup] = useState(false);
   const [pendingFile, setPendingFile] = useState(null);
@@ -14,7 +19,7 @@ const Home = () => {
 
   const handleSearch = () => {
     if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      navigate(`/search?q=${encodeURIComponent(query.trim())}&mode=${encodeURIComponent(selectedEmoji)}&type=${searchType}`);
     }
   };
 
@@ -26,6 +31,32 @@ const Home = () => {
 
   const handleUploadClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    setSelectedEmoji(emoji);
+    setShowDropdown(false);
+  };
+
+  const uploadFile = (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('http://localhost:5000/api/upload', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message) {
+          setShowSuccessPopup(true);
+        } else {
+          toast.error('Upload failed.');
+        }
+      })
+      .catch(() => {
+        toast.error('Failed to upload the book.');
+      });
   };
 
   const handleFileChange = (e) => {
@@ -57,27 +88,6 @@ const Home = () => {
       });
   };
 
-  const uploadFile = (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    fetch('http://localhost:5000/api/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.message) {
-          setShowSuccessPopup(true);
-        } else {
-          toast.error('Upload failed.');
-        }
-      })
-      .catch(() => {
-        toast.error('Failed to upload the book.');
-      });
-  };
-
   const confirmOverwrite = () => {
     if (pendingFile) {
       uploadFile(pendingFile);
@@ -98,11 +108,42 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      {/* ✅ Logo added */}
       <img src={Logo} alt="SuffixSearch Logo" className="logo-image" />
       <h1 className="title">Search the documents</h1>
 
+      <div className="search-toggle-wrapper">
+        <button
+          className={`toggle-button ${searchType === 'word' ? 'active' : ''}`}
+          onClick={() => setSearchType('word')}
+        >
+          search word
+        </button>
+        <button
+          className={`toggle-button ${searchType === 'sentence' ? 'active' : ''}`}
+          onClick={() => setSearchType('sentence')}
+        >
+          search sentence
+        </button>
+      </div>
+
       <div className="search-wrapper">
+        <div className="dropdown-icon" onClick={() => setShowDropdown(!showDropdown)}>
+          <span>{selectedEmoji}</span>
+          <span className="caret">▼</span>
+          {showDropdown && (
+            <div className="emoji-menu">
+              {emojiOptions.map((emoji) => (
+                <div
+                  key={emoji}
+                  className="emoji-option"
+                  onClick={() => handleEmojiSelect(emoji)}
+                >
+                  {emoji}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <input
           type="text"
           placeholder="Search for a word..."
