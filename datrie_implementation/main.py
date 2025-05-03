@@ -43,7 +43,7 @@ def build_sentence_map(folder):
     sentence_map = {}
     for filename in os.listdir(folder):
         if filename.endswith(".txt"):
-            with open(os.path.join(folder, filename), "r", encoding="utf-8") as f:
+            with open(os.path.join(folder, filename), "r", encoding="latin-1") as f:
                 text = f.read()
             sentences = re.split(r'[.!?]', text)
             sentence_map[filename] = [s.strip() for s in sentences if s.strip()]
