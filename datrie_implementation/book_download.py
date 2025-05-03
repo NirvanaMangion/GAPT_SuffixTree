@@ -1,112 +1,137 @@
-import requests
-from bs4 import BeautifulSoup
+#!/usr/bin/env python3
 import os
 import re
 import time
+import requests
 
+# ——— Configuration ———
+DOWNLOAD_DIR = "Gutenberg_Books"
+TARGET_COUNT = 130
+TOPICS = [
+    "Fiction",
+    "Historical Fiction",
+    "Children’s Fiction",
+    "Mystery & Detective Stories",
+    "Science Fiction",
+    "Fantasy",
+    "Romance",
+    "Essays",
+]
+API_URL = "https://gutendex.com/books"
+SLEEP_BETWEEN_DOWNLOADS = 0.2  # seconds
+
+# ——— Helpers ———
 def sanitize_filename(filename):
-    """Remove characters that are not safe for filenames."""
+    """Remove characters unsafe for filenames."""
     return re.sub(r'[\\/*?:"<>|]', "", filename).strip()
 
 def normalize_title(title):
-    """Normalize book titles for deduplication: lowercase, remove all non-alphanumeric characters."""
+    """Normalize for deduplication: lowercase, alphanumeric only."""
     return re.sub(r'[^0-9a-z]+', '', title.lower())
 
-def looks_like_prose(text, letter_ratio_thresh=0.7, common_words=None):
+def looks_like_prose(text, letter_ratio_thresh=0.7, min_length=500):
     """
-    Return True if `text` looks like English prose:
-      - at least `letter_ratio_thresh` fraction of characters are A–Z/a–z or space
-      - contains at least 2 of the common English words
+    Heuristic check for English prose:
+      1) text length ≥ min_length
+      2) ≥ letter_ratio_thresh fraction of chars are letters/spaces
+      3) contains ≥2 of the common English words
     """
-    if common_words is None:
-        common_words = [" the ", " and ", " to ", " of ", " in "]
-    snippet = text[:10000]  # only inspect first 10k chars
-    if len(snippet) < 500:   # too short to be a real book
+    snippet = text[:10000]
+    if len(snippet) < min_length:
         return False
-
-    # Letter/space ratio
     letter_count = sum(1 for c in snippet if c.isalpha() or c.isspace())
     if letter_count / len(snippet) < letter_ratio_thresh:
         return False
-
-    # Common word check
     low = snippet.lower()
+    common_words = [" the ", " and ", " to ", " of ", " in "]
     hits = sum(1 for w in common_words if w in low)
     return hits >= 2
 
-download_dir = "Gutenberg_Books"
-os.makedirs(download_dir, exist_ok=True)
+# ——— Prepare download folder & state ———
+os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+seen = set()  # normalized main titles + authors
+count = 0
 
-seen_titles = set()
-downloaded_count = 0
+# ——— Main loop: iterate topics and pages ———
+for topic in TOPICS:
+    page = 1
+    while count < TARGET_COUNT:
+        params = {
+            "languages": "en",
+            "topic": topic,
+            "page": page
+        }
+        try:
+            resp = requests.get(API_URL, params=params, timeout=10)
+            resp.raise_for_status()
+            data = resp.json()
+        except requests.RequestException:
+            break  # skip this topic if API call fails
 
-# Preload any already-downloaded titles
-for fname in os.listdir(download_dir):
-    if fname.lower().endswith('.txt'):
-        seen_titles.add(normalize_title(os.path.splitext(fname)[0]))
-
-book_id = 1
-while downloaded_count < 130:
-    details_url = f"https://www.gutenberg.org/ebooks/{book_id}"
-    try:
-        resp = requests.get(details_url, timeout=10)
-    except requests.RequestException:
-        book_id += 1
-        continue
-
-    if resp.status_code != 200:
-        book_id += 1
-        continue
-
-    soup = BeautifulSoup(resp.text, "html.parser")
-
-    title_el = soup.find("h1", {"itemprop": "name"})
-    if not title_el:
-        book_id += 1
-        continue
-    title = title_el.get_text(strip=True)
-    key = normalize_title(title)
-    if key in seen_titles:
-        book_id += 1
-        continue
-
-    lang_el = soup.find("th", string="Language")
-    language = lang_el.find_next_sibling("td").get_text(strip=True) if lang_el else ''
-    if "English" not in language:
-        book_id += 1
-        continue
-
-    # Find a .txt link
-    txt_link = None
-    for link in soup.select("a[type='text/plain'], a[href$='.txt']"):
-        href = link.get("href", "")
-        if href.endswith(".txt"):
-            txt_link = href if href.startswith("http") else f"https://www.gutenberg.org{href}"
+        results = data.get("results", [])
+        if not results:
             break
-    if not txt_link:
-        txt_link = f"https://www.gutenberg.org/cache/epub/{book_id}/pg{book_id}.txt"
 
-    try:
-        r = requests.get(txt_link, timeout=10)
-    except requests.RequestException:
-        book_id += 1
-        continue
+        for book in results:
+            if count >= TARGET_COUNT:
+                break
 
-    if r.status_code == 200:
-        # decode and filter
-        text = r.content.decode('utf-8', errors='ignore')
-        if looks_like_prose(text):
-            safe_title = sanitize_filename(title)[:200]
-            path = os.path.join(download_dir, f"{safe_title}.txt")
+            # 1) Extract and truncate at first ':' or ';'
+            raw_title = book.get("title", "untitled")
+            main_title = re.split(r'[:;]', raw_title)[0].strip()
+
+            # 2) Get author (first one if multiple)
+            authors = book.get("authors", [])
+            if authors:
+                author_name = authors[0].get("name", "").strip()
+            else:
+                author_name = "Unknown"
+
+            # 3) Combine for filename and dedupe key
+            combined = f"{main_title} - {author_name}"
+            key = normalize_title(combined)
+            if key in seen:
+                continue
+
+            # 4) Pick best plain‐text URL
+            fmts = book.get("formats", {})
+            txt_url = (
+                fmts.get("text/plain; charset=utf-8")
+                or fmts.get("text/plain")
+                or next((u for k, u in fmts.items() if k.startswith("text/plain")), None)
+            )
+            if not txt_url:
+                continue
+
+            # 5) Download the text
+            try:
+                r = requests.get(txt_url, timeout=10)
+                r.raise_for_status()
+            except requests.RequestException:
+                continue
+
+            text = r.content.decode("utf-8", errors="ignore")
+            if not looks_like_prose(text):
+                continue
+
+            # 6) Save file
+            safe_name = sanitize_filename(combined)[:200] or f"book_{book['id']}"
+            path = os.path.join(DOWNLOAD_DIR, f"{safe_name}.txt")
             with open(path, "wb") as f:
                 f.write(r.content)
-            seen_titles.add(key)
-            downloaded_count += 1
-            print(f"[{downloaded_count}] Saved: {title}")
-        else:
-            print(f"Skipped (not prose): {title}")
 
-    book_id += 1
-    time.sleep(0.5)  # be polite
+            seen.add(key)
+            count += 1
+            print(f"[{count}] Saved: {combined}")
 
-print(f"Done: downloaded {downloaded_count} English prose books into '{download_dir}'")
+            time.sleep(SLEEP_BETWEEN_DOWNLOADS)
+
+        # move to next page if available
+        if not data.get("next"):
+            break
+        page += 1
+
+    if count >= TARGET_COUNT:
+        break
+
+print(f"Done: downloaded {count} English novels/essays into “{DOWNLOAD_DIR}”")
