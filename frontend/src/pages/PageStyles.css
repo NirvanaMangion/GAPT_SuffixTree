@@ -322,3 +322,66 @@ html, body {
   background-color: rgba(7, 72, 91, 0.95);
   color: white;
 }
+
+/* 📘 Cheat Sheet Icon */
+.cheat-sheet-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.cheat-sheet-icon {
+  width: 60px;
+  height: 60px;
+}
+
+/* Modal */
+.cheat-sheet-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.cheat-sheet-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 600px;
+  max-height: 75vh;            /* Limit modal height */
+  overflow-y: auto;            /* Enable scroll if content exceeds */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  text-align: left;
+  scrollbar-width: thin;       /* Firefox */
+  scrollbar-color: #ccc transparent;
+}
+
+
+.cheat-sheet-content h2 {
+  margin-bottom: 20px;
+}
+
+.cheat-sheet-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.cheat-sheet-content li {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+.emoji {
+  margin-right: 10px;
+}

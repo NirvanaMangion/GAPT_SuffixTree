@@ -12,7 +12,7 @@ const Header = () => {
     setSidebarVisible(!sidebarVisible);
   };
 
-  const navigateToHome = () => {
+  const navigateToHome = () => {    
     navigate('/');
   };
 
@@ -27,7 +27,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="circle" />
-      <h1 onClick={navigateToHome} style={{ cursor: 'pointer' }}>VerseSearch</h1>
+      <h1 onClick={navigateToHome} style={{ cursor: 'pointer' }}>SuffixSearch</h1>
       
       <div className="header-right"> {/* ✅ New wrapper */}
         <div className="menu-icon" onClick={toggleSidebar}>

@@ -1,10 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import './PageStyles.css';
+import '../pages/PageStyles.css';
 import Logo from '../assets/logo.png';
+import CheatSheet from '../components/CheatSheet';
 
-const emojiOptions = ["📄", "✏️", "📂", "📕", "📏", "🖌️", "📎", "📖", "🔧"];
+const wordEmojis = ["📄", "✏️", "📂", "📕", "📏", "🖌️", "📎", "📖", "🔧"];
+const sentenceEmojis = ["📝", "🖌️", "📌", "🔍", "🖋️", "🖍️", "🔧"];
 
 const Home = () => {
   const [query, setQuery] = useState('');
@@ -16,6 +18,8 @@ const Home = () => {
   const [pendingFile, setPendingFile] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const getEmojiOptions = () => (searchType === 'word' ? wordEmojis : sentenceEmojis);
 
   const handleSearch = () => {
     if (query.trim()) {
@@ -114,13 +118,19 @@ const Home = () => {
       <div className="search-toggle-wrapper">
         <button
           className={`toggle-button ${searchType === 'word' ? 'active' : ''}`}
-          onClick={() => setSearchType('word')}
+          onClick={() => {
+            setSearchType('word');
+            setSelectedEmoji("📄");
+          }}
         >
           search word
         </button>
         <button
           className={`toggle-button ${searchType === 'sentence' ? 'active' : ''}`}
-          onClick={() => setSearchType('sentence')}
+          onClick={() => {
+            setSearchType('sentence');
+            setSelectedEmoji("📝");
+          }}
         >
           search sentence
         </button>
@@ -132,7 +142,7 @@ const Home = () => {
           <span className="caret">▼</span>
           {showDropdown && (
             <div className="emoji-menu">
-              {emojiOptions.map((emoji) => (
+              {getEmojiOptions().map((emoji) => (
                 <div
                   key={emoji}
                   className="emoji-option"
@@ -146,7 +156,7 @@ const Home = () => {
         </div>
         <input
           type="text"
-          placeholder="Search for a word..."
+          placeholder={searchType === 'word' ? 'Search for a word...' : 'Search for a sentence...'}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -201,6 +211,8 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      <CheatSheet />
     </div>
   );
 };
