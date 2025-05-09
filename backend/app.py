@@ -11,10 +11,10 @@ from werkzeug.utils import secure_filename  # ✅ added for safe file saving
 app = Flask(__name__)
 CORS(app)
 
-DATA_FILE = "backend/moby_words.txt"
-TREE_FILE = "backend/suffix_tree.pkl"
-BOOK_FOLDER = "backend/books/"
-DB_FILE = "backend/searches.db"
+DATA_FILE = os.path.join(os.path.dirname(__file__), "moby_words.txt")
+TREE_FILE = os.path.join(os.path.dirname(__file__), "suffix_tree.pkl")
+BOOK_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Gutenberg_Books"))
+DB_FILE = os.path.join(os.path.dirname(__file__), "searches.db")
 
 # Create DB and table if not exist
 def init_db():
