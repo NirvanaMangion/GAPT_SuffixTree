@@ -3,7 +3,7 @@ import json
 from suffix_tree import build_suffix_tree, save_tree, load_tree
 from db_tree import create_database, store_occurrences, load_occurrences, open_database, export_to_csv
 from main import load_word_list, index_books, search_word
-from book_download import main as download_books  # Import book downloader
+from book_download import main as download_books
 
 def menu():
     """Main interactive menu."""
