@@ -36,7 +36,7 @@ def index_books(folder, suffix_to_id, cursor, page_size=1500):
             continue
 
         path = os.path.join(folder, filename)
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, "r", encoding="latin-1") as f:
             text = f.read().lower()
 
         # build page boundaries

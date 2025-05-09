@@ -1,11 +1,11 @@
 import os
 import re
 
-from suffix_tree import build_suffix_tree, save_tree, load_tree
-from db_tree import setup_database, store_occurrences, load_occurrences
+from suffix_tree import build_suffix_tree, save_tree, load_tree, add_suffix
+from db_tree import setup_database, store_occurrences, load_occurrences, get_or_create_book_id
 from moby_words import load_moby_words
 from sentence_search import search_sentences
-from index_books import index_books
+from index_books import index_books, split_into_pages
 
 EMOJI_REGEX_LITERATURE = {
     # Word Search Literature
@@ -23,27 +23,30 @@ EMOJI_REGEX_LITERATURE = {
     "📝": {"description": "Exact sentence phrase", "build": lambda arg: 'SENTENCE:' + arg},
     "🖌️S": {"description": "Sentence starts with", "build": lambda arg: 'SENTENCE_REGEX:^' + arg},
     "📌": {"description": "Sentence ends with", "build": lambda arg: 'SENTENCE_REGEX:' + arg + '$'},
-    "🔍": {"description": "Sentence contains word", "build": lambda arg: 'SENTENCE_REGEX:\\b' + arg + '\\b'},
+    "🔍": {"description": "Sentence contains word", "build": lambda arg: 'SENTENCE_REGEX:\b' + arg + '\b'},
     "🖋️": {"description": "Sentence contains any of listed words", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
     "🖍️": {"description": "Structured sentence pattern", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
     "🔧S": {"description": "Raw sentence regex", "build": lambda arg: 'SENTENCE_REGEX:' + arg}
 }
 
 def parse_emoji_regex(query):
-    if ':' not in query:
-        return None
-    emoji, arg = query.split(':', 1)
-    arg = arg.strip().lower()
-    inp = EMOJI_REGEX_LITERATURE.get(emoji)
-    if not inp:
-        return None
-    return inp["build"](arg)
+    """
+    Look for the longest matching emoji key in EMOJI_REGEX_LITERATURE,
+    then split off the ':' and pass the rest as `arg`.
+    """
+    query = query.strip()
+    for emoji in sorted(EMOJI_REGEX_LITERATURE, key=len, reverse=True):
+        prefix = emoji + ":"
+        if query.startswith(prefix):
+            arg = query[len(prefix):].strip().lower()
+            return EMOJI_REGEX_LITERATURE[emoji]["build"](arg)
+    return None
 
 def build_sentence_map(folder):
     sentence_map = {}
     for filename in os.listdir(folder):
         if filename.endswith(".txt"):
-            with open(os.path.join(folder, filename), "r", encoding="utf-8") as f:
+            with open(os.path.join(folder, filename), "r", encoding="utf-8", errors="ignore") as f:
                 text = f.read()
             sentences = re.split(r'[.!?]', text)
             sentence_map[filename] = [s.strip() for s in sentences if s.strip()]
@@ -76,7 +79,6 @@ def search_word(word, suffix_to_id, cursor):
 
     print(f"📚 Results for '{word}':")
     for book_id, occurrences in combined_occurrences.items():
-        # format each tuple as "page X @ offset Y"
         output = ', '.join(f"page {p} @ offset {o}" for p,o in occurrences)
         print(f"📘 Book ID {book_id} — Occurrences: ({output}), Count: {len(occurrences)}\n")
 
@@ -105,12 +107,12 @@ def search_regex(pattern, suffix_to_id, cursor):
         for book_id, offsets in data.items():
             combined_occurrences.setdefault(book_id, []).extend(offsets)
 
-    for book_id in combined_occurrences:
-        combined_occurrences[book_id].sort()
-
     print(f"🔎 Regex Results for '{pattern}' — Matches: {len(matching_keys)} keys")
+    if not combined_occurrences:
+        print(f"❌ No occurrences of '{pattern}' found in any indexed book.")
+        return
+
     for book_id, occurrences in combined_occurrences.items():
-        # format each tuple as "page X @ offset Y"
         output = ', '.join(f"page {p} @ offset {o}" for p,o in occurrences)
         print(f"📘 Book ID {book_id} — Occurrences: ({output}), Count: {len(occurrences)}\n")
 
@@ -172,7 +174,7 @@ def main():
 🖋️:<a|b|c>         → Sentence contains any listed word (e.g. 🖋️:life|death|hope)
 🖍️:<pattern>       → Sentence with structure pattern (e.g. 🖍️:[A-Z][^.!?]*war)
 🔧S:<regex>        → Raw custom sentence regex (e.g. 🔧S:^The.*end$)
-            """)
+            """ )
 
         query = input("🔎 Search Your Story: ").strip()
         if query.lower() in ["exit", "q", "quit"]:
@@ -184,15 +186,50 @@ def main():
             print("❌ Invalid Story. Please use one of the listed emojis and formats.")
             continue
 
+        # sentence-search handlers
         if pattern.startswith("SENTENCE_REGEX:"):
             regex = pattern.split(":", 1)[1]
             search_sentences(regex, sentence_map, use_regex=True)
         elif pattern.startswith("SENTENCE:"):
             phrase = pattern.split(":", 1)[1]
             search_sentences(phrase, sentence_map, use_regex=False)
+        # raw-regex word searches
         elif pattern.startswith("RAW_REGEX:"):
             raw_pattern = pattern.split(":", 1)[1]
             search_regex(raw_pattern, suffix_to_id, cursor)
+        # exact-word fallback that dynamically adds missing full-word suffix
+        elif query.startswith("📖:"):
+            word = query.split(":", 1)[1].strip()
+            wl = word.lower()
+            full_key = f"#{wl}$"
+
+            # if missing, scan & add
+            if full_key not in suffix_to_id:
+                occurrences = {}
+                for fn in os.listdir(folder):
+                    if not fn.endswith(".txt"): continue
+                    path = os.path.join(folder, fn)
+                    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+                        text = f.read().lower()
+                    pages = split_into_pages(text)
+                    book_id = get_or_create_book_id(cursor, fn)
+                    for m in re.finditer(rf"\b{re.escape(wl)}\b", text):
+                        pos = m.start()
+                        page_idx = next(i for i,(s,e) in enumerate(pages) if pos < e)
+                        occurrences.setdefault(book_id, []).append((page_idx+1, pos))
+                if occurrences:
+                    add_suffix(trie, full_key)
+                    new_id = max(suffix_to_id.values()) + 1
+                    suffix_to_id[full_key] = new_id
+                    store_occurrences(cursor, { new_id: occurrences })
+                    conn.commit()
+                    print(f"➕ Added “{word}” to the tree and indexed {sum(len(v) for v in occurrences.values())} hits.")
+                else:
+                    print(f"❌ Word “{word}” truly not found in any book.")
+                    continue
+            # now perform normal exact-word lookup
+            search_word(word, suffix_to_id, cursor)
+        # all other emoji-based word searches
         else:
             search_regex(pattern, suffix_to_id, cursor)
 
