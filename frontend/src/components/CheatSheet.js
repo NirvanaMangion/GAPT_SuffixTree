@@ -12,6 +12,7 @@ const cheatSheetData = [
   { emoji: '📎', description: 'Repeated characters' },
   { emoji: '📖', description: 'Exact word match' },
   { emoji: '🔧', description: 'Raw custom regex' },
+  { emoji : '  ', description: <span style={{ fontWeight: 'bold', textDecoration: 'underline', fontSize: '22px' }}>Sentence Regex</span> },
   { emoji: '📝', description: 'Exact sentence phrase' },
   { emoji: '🖌️', description: 'Sentence starts with' },
   { emoji: '📌', description: 'Sentence ends with' },
