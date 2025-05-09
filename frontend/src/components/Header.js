@@ -12,7 +12,7 @@ const Header = () => {
     setSidebarVisible(!sidebarVisible);
   };
 
-  const navigateToHome = () => {
+  const navigateToHome = () => {    
     navigate('/');
   };
 

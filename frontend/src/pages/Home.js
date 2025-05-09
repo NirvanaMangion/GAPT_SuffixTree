@@ -1,20 +1,29 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import './PageStyles.css';
-import Logo from '../assets/logo.png'; // ✅ Logo imported
+import '../pages/PageStyles.css';
+import Logo from '../assets/logo.png';
+import CheatSheet from '../components/CheatSheet';
+
+const wordEmojis = ["📄", "✏️", "📂", "📕", "📏", "🖌️", "📎", "📖", "🔧"];
+const sentenceEmojis = ["📝", "🖌️", "📌", "🔍", "🖋️", "🖍️", "🔧"];
 
 const Home = () => {
   const [query, setQuery] = useState('');
+  const [selectedEmoji, setSelectedEmoji] = useState("📄");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchType, setSearchType] = useState('word');
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showOverwritePopup, setShowOverwritePopup] = useState(false);
   const [pendingFile, setPendingFile] = useState(null);
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
+  const getEmojiOptions = () => (searchType === 'word' ? wordEmojis : sentenceEmojis);
+
   const handleSearch = () => {
     if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      navigate(`/search?q=${encodeURIComponent(query.trim())}&mode=${encodeURIComponent(selectedEmoji)}&type=${searchType}`);
     }
   };
 
@@ -26,6 +35,32 @@ const Home = () => {
 
   const handleUploadClick = () => {
     fileInputRef.current.click();
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    setSelectedEmoji(emoji);
+    setShowDropdown(false);
+  };
+
+  const uploadFile = (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('http://localhost:5000/api/upload', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message) {
+          setShowSuccessPopup(true);
+        } else {
+          toast.error('Upload failed.');
+        }
+      })
+      .catch(() => {
+        toast.error('Failed to upload the book.');
+      });
   };
 
   const handleFileChange = (e) => {
@@ -57,27 +92,6 @@ const Home = () => {
       });
   };
 
-  const uploadFile = (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    fetch('http://localhost:5000/api/upload', {
-      method: 'POST',
-      body: formData,
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.message) {
-          setShowSuccessPopup(true);
-        } else {
-          toast.error('Upload failed.');
-        }
-      })
-      .catch(() => {
-        toast.error('Failed to upload the book.');
-      });
-  };
-
   const confirmOverwrite = () => {
     if (pendingFile) {
       uploadFile(pendingFile);
@@ -98,14 +112,51 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      {/* ✅ Logo added */}
       <img src={Logo} alt="SuffixSearch Logo" className="logo-image" />
       <h1 className="title">Search the documents</h1>
 
+      <div className="search-toggle-wrapper">
+        <button
+          className={`toggle-button ${searchType === 'word' ? 'active' : ''}`}
+          onClick={() => {
+            setSearchType('word');
+            setSelectedEmoji("📄");
+          }}
+        >
+          search word
+        </button>
+        <button
+          className={`toggle-button ${searchType === 'sentence' ? 'active' : ''}`}
+          onClick={() => {
+            setSearchType('sentence');
+            setSelectedEmoji("📝");
+          }}
+        >
+          search sentence
+        </button>
+      </div>
+
       <div className="search-wrapper">
+        <div className="dropdown-icon" onClick={() => setShowDropdown(!showDropdown)}>
+          <span>{selectedEmoji}</span>
+          <span className="caret">▼</span>
+          {showDropdown && (
+            <div className="emoji-menu">
+              {getEmojiOptions().map((emoji) => (
+                <div
+                  key={emoji}
+                  className="emoji-option"
+                  onClick={() => handleEmojiSelect(emoji)}
+                >
+                  {emoji}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <input
           type="text"
-          placeholder="Search for a word..."
+          placeholder={searchType === 'word' ? 'Search for a word...' : 'Search for a sentence...'}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyPress}
@@ -160,6 +211,8 @@ const Home = () => {
           </div>
         </div>
       )}
+
+      <CheatSheet />
     </div>
   );
 };

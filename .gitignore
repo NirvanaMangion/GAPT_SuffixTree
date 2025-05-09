@@ -344,3 +344,16 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/react,node
+
+# Ignore all node modules and virtual environments
+node_modules/
+frontend/node_modules/
+venv/
+.venv/
+__pycache__/
+db.sqlite3
+*.db
+*.db-journal
+frontend/build/
+.vscode/
+
