@@ -119,3 +119,54 @@ html, body {
   background-color: var(--bg-color); /* ✅ In case it's overriding */
   min-height: 100vh;
 }
+
+.controls {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sort-button {
+  padding: 6px 12px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.sort-button:hover {
+  background-color: #0a9396;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.pagination button:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.pagination button.active {
+  background-color: var(--accent-color);
+  color: white;
+  font-weight: bold;
+  border: none;
+}

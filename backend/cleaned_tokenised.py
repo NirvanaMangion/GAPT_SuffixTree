@@ -48,7 +48,7 @@ def process_downloaded_books(directory):
     return all_tokens
 
 if __name__ == "__main__":
-    download_dir = "backend/books"
+    download_dir = "Gutenberg_Books"
     if os.path.exists(download_dir):
         tokens_dict = process_downloaded_books(download_dir)
         for book, tokens in tokens_dict.items():

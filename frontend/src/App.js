@@ -7,6 +7,8 @@ import AllBooks from './pages/AllBooks';
 import RecentSearches from './pages/RecentSearches';
 import WordDetails from './pages/WordDetails';
 import BookDetails from './pages/BookDetails';
+import FullBook from './pages/FullBook';
+
 import './App.css';
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
         <Route path="/recent" element={<RecentSearches />} />
         <Route path="/word/:word" element={<WordDetails />} />
         <Route path="/book/:title" element={<BookDetails />} />
+        <Route path="/read/:title" element={<FullBook />} />
       </Routes>
     </Router>
   );

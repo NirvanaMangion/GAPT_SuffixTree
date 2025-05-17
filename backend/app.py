@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file, abort
 from datrie_implementation.suffix_tree import build_suffix_tree, load_tree, save_tree
 from flask_cors import CORS
 import os
@@ -6,17 +6,18 @@ import re
 import urllib.parse
 import sqlite3
 from datetime import datetime
-from werkzeug.utils import secure_filename  # ✅ added for safe file saving
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 CORS(app)
 
+# Paths
 DATA_FILE = os.path.join(os.path.dirname(__file__), "moby_words.txt")
 TREE_FILE = os.path.join(os.path.dirname(__file__), "suffix_tree.pkl")
 BOOK_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Gutenberg_Books"))
 DB_FILE = os.path.join(os.path.dirname(__file__), "searches.db")
 
-# Create DB and table if not exist
+# --- Initialize database ---
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
@@ -32,7 +33,7 @@ def init_db():
 
 init_db()
 
-# Load or build suffix tree
+# --- Load or build suffix tree ---
 if os.path.exists(TREE_FILE):
     trie, suffix_to_id = load_tree(TREE_FILE)
 else:
@@ -41,22 +42,20 @@ else:
     trie, suffix_to_id = build_suffix_tree(words)
     save_tree(trie, suffix_to_id, TREE_FILE)
 
+# --- Search word across all books ---
 @app.route("/api/search", methods=["GET"])
 def search():
     query = request.args.get("q", "").strip().lower()
-    print("QUERY:", query)
-
     if not query:
         return jsonify({"error": "Query parameter 'q' is required."}), 400
 
-    # Store the search in SQLite
+    # Store in DB
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute("INSERT INTO recent_searches (query) VALUES (?)", (query,))
     conn.commit()
     conn.close()
 
-    # Search across all books
     results = []
     for filename in os.listdir(BOOK_FOLDER):
         if filename.endswith(".txt"):
@@ -64,20 +63,17 @@ def search():
             try:
                 with open(path, "r", encoding="utf-8-sig", errors="ignore") as f:
                     text = f.read()
-
                 matches = []
                 for match in re.finditer(rf'\b{re.escape(query)}\b', text, re.IGNORECASE):
                     start = match.start()
                     context = text[max(0, start - 30): start + len(query) + 30]
                     matches.append(context.strip())
-
                 if matches:
                     results.append({
                         "book": filename,
                         "count": len(matches),
                         "snippets": matches[:3]
                     })
-
             except Exception as e:
                 print(f"Error reading {filename}: {e}")
                 continue
@@ -87,13 +83,11 @@ def search():
         "results": results
     })
 
+# --- Get word frequency in all books ---
 @app.route("/api/word/<word>", methods=["GET"])
 def word_info(word):
     word = word.strip().lower()
     book_data = {}
-
-    if not os.path.exists(BOOK_FOLDER):
-        return jsonify({"error": "Book folder not found."}), 500
 
     for filename in os.listdir(BOOK_FOLDER):
         if filename.endswith(".txt"):
@@ -111,12 +105,13 @@ def word_info(word):
     result = [{"title": title, "frequency": freq} for title, freq in book_data.items()]
     return jsonify({"word": word, "books": result})
 
+# --- Get word matches (with context) in a specific book ---
 @app.route("/api/book/<path:book_name>", methods=["GET"])
 def book_word_matches(book_name):
     word = request.args.get("word", "").strip().lower()
     book_name = urllib.parse.unquote(book_name.strip())
-
     book_path = os.path.join(BOOK_FOLDER, book_name)
+
     if not os.path.exists(book_path):
         return jsonify({"error": "Book not found"}), 404
 
@@ -135,9 +130,9 @@ def book_word_matches(book_name):
         "matches": matches
     })
 
+# --- ✅ Get full book text ---
 @app.route("/api/book/full/<path:book_name>", methods=["GET"])
 def get_full_book(book_name):
-    word = request.args.get("word", "").strip().lower()
     book_name = urllib.parse.unquote(book_name.strip())
     book_path = os.path.join(BOOK_FOLDER, book_name)
 
@@ -149,10 +144,10 @@ def get_full_book(book_name):
 
     return jsonify({
         "book": book_name,
-        "word": word,
         "text": text
     })
 
+# --- List all books ---
 @app.route("/api/books", methods=["GET"])
 def get_books():
     if not os.path.exists(BOOK_FOLDER):
@@ -160,6 +155,7 @@ def get_books():
     files = [f for f in os.listdir(BOOK_FOLDER) if f.endswith(".txt")]
     return jsonify(files)
 
+# --- Recent search history ---
 @app.route("/api/recent", methods=["GET"])
 def get_recent_searches():
     conn = sqlite3.connect(DB_FILE)
@@ -174,6 +170,7 @@ def get_recent_searches():
     conn.close()
     return jsonify(results)
 
+# --- Clear recent search history ---
 @app.route("/api/clear", methods=["POST"])
 def clear_recent_searches():
     conn = sqlite3.connect(DB_FILE)
@@ -183,7 +180,7 @@ def clear_recent_searches():
     conn.close()
     return jsonify({"message": "Recent searches cleared."})
 
-# ✅ NEW: Upload endpoint
+# --- Upload .txt book ---
 @app.route("/api/upload", methods=["POST"])
 def upload_book():
     if "file" not in request.files:
@@ -202,5 +199,6 @@ def upload_book():
 
     return jsonify({"message": f"{filename} uploaded successfully."})
 
+# --- Run app ---
 if __name__ == "__main__":
     app.run(debug=True)
