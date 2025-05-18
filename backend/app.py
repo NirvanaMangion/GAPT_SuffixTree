@@ -189,7 +189,6 @@ def clear_recent_searches():
 # --- Upload .txt book ---
 @app.route("/api/upload", methods=["POST"])
 def upload_book():
-    # 1) Validate incoming file
     if "file" not in request.files:
         return jsonify({"error": "No file part"}), 400
 
@@ -197,42 +196,14 @@ def upload_book():
     if file.filename == "":
         return jsonify({"error": "No selected file"}), 400
 
-    if not file.filename.lower().endswith(".txt"):
+    if not file.filename.endswith(".txt"):
         return jsonify({"error": "Only .txt files allowed."}), 400
 
-    # 2) Save to disk
     filename = secure_filename(file.filename)
     save_path = os.path.join(BOOK_FOLDER, filename)
     file.save(save_path)
 
-    # 3) Incrementally index & persist
-    try:
-        # Only index this one new book
-        occ_map, pages_map = index_books(
-            BOOK_FOLDER,
-            suffix_to_id,
-            cursor_tree,
-            page_size=1500,
-            filenames=[filename]
-        )
-
-        # Store its occurrences in the mapping table
-        # store_occurrences(cursor_tree, occ_map)
-        conn_tree.commit()
-
-        # Persist updated trie + suffix_to_id
-        save_tree(trie, suffix_to_id, TREE_FILE)
-
-    except Exception as e:
-        # On failure, remove the uploaded file and report error
-        if os.path.exists(save_path):
-            os.remove(save_path)
-        return jsonify({"error": f"Indexing failed: {e}"}), 500
-
-    # 4) Return success
-    return jsonify({
-        "message": f"{filename} uploaded and indexed successfully."
-    }), 200
+    return jsonify({"message": f"{filename} uploaded successfully."})
 
 
 # --- Run app ---
