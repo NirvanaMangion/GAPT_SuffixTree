@@ -31,7 +31,7 @@ def get_book_pages(text, page_size=1500):
     bounds = split_into_pages(text, page_size)
     return [ text[start:end] for start, end in bounds ]
 
-def index_books(folder, suffix_to_id, cursor, page_size=1500):
+def index_books(folder, suffix_to_id, cursor, page_size=1500, filenames=None):
     """
     Tokenizes each book, and for each token match,
     finds its page by advancing a page_idx pointer.
@@ -45,6 +45,8 @@ def index_books(folder, suffix_to_id, cursor, page_size=1500):
     pages_map       = {}
 
     for filename in os.listdir(folder):
+        if filenames and filename not in filenames:
+            continue
         if not filename.endswith(".txt"):
             continue
 
