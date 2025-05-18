@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 250px 20px;
+  padding: 150px 20px;
   box-sizing: border-box;
   position: relative;
 }
@@ -13,22 +13,6 @@
   font-size: 32px;
   margin-bottom: 20px;
   color: white;
-}
-
-.upload-btn {
-  background-color: #07485b;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  margin: 20px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
-}
-
-.upload-btn:hover {
-  background-color: #0a9396;
 }
 
 textarea {
@@ -103,7 +87,7 @@ textarea {
 }
 
 .emoji-option:hover {
-  background-color: #f0f0f0;
+  background-color: #0a9396;
 }
 
 .search-input {
@@ -118,10 +102,23 @@ textarea {
   background-color: #07485b;
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 0 16px;
+  font-size: 18px;
+  height: 44px;
   cursor: pointer;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-left: 1px solid #ccc;
+
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #0a9396;
 }
 
 .upload-button {
@@ -132,7 +129,7 @@ textarea {
   font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .upload-button:hover {
@@ -321,6 +318,10 @@ html, body {
 .toggle-button.active {
   background-color: rgba(7, 72, 91, 0.95);
   color: white;
+}
+
+.toggle-button:hover {
+  background-color: #0a9396;
 }
 
 /* 📘 Cheat Sheet Icon */
