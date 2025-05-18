@@ -1,3 +1,5 @@
+# index_books.py
+
 from collections import defaultdict
 import os
 import re
@@ -21,15 +23,26 @@ def split_into_pages(text, page_size=1500):
         start = end + 1
     return pages
 
+def get_book_pages(text, page_size=1500):
+    """
+    Cut `text` into ~page_size-char chunks, extending to the next space
+    so you never split words. Returns a list of page-strings.
+    """
+    bounds = split_into_pages(text, page_size)
+    return [ text[start:end] for start, end in bounds ]
 
 def index_books(folder, suffix_to_id, cursor, page_size=1500):
     """
     Tokenizes each book, and for each token match,
     finds its page by advancing a page_idx pointer.
     Records (page_no, char_offset) for each suffix occurrence.
+    Also builds a pages_map so the frontend can fetch the raw text.
+    Returns:
+      occurrences_map: { leaf_id: { book_id: [ (page_no, offset), … ] } }
+      pages_map:       { book_id: [ page1_text, page2_text, … ] }
     """
-
     occurrences_map = defaultdict(lambda: defaultdict(list))
+    pages_map       = {}
 
     for filename in os.listdir(folder):
         if not filename.endswith(".txt"):
@@ -39,22 +52,24 @@ def index_books(folder, suffix_to_id, cursor, page_size=1500):
         with open(path, "r", encoding="latin-1") as f:
             text = f.read().lower()
 
-        # build page boundaries
-        pages = split_into_pages(text, page_size)
+        # create page-text slices for frontend
+        book_pages = get_book_pages(text, page_size)
+        book_id    = get_or_create_book_id(cursor, filename)
+        pages_map[book_id] = book_pages
 
-        book_id = get_or_create_book_id(cursor, filename)
+        # now index tokens as before
         page_idx = 0
-
+        page_bounds = split_into_pages(text, page_size)
         for match in re.finditer(r"\w+", text):
             token    = match.group(0)
             char_pos = match.start()
 
-            # advance page_idx until char_pos falls inside pages[page_idx]
-            while page_idx < len(pages)-1 and char_pos >= pages[page_idx][1]:
+            # advance to the correct page
+            while page_idx < len(page_bounds)-1 and char_pos >= page_bounds[page_idx][1]:
                 page_idx += 1
-            page_no = page_idx + 1  # 1-based page number
+            page_no = page_idx + 1  # 1-based
 
-            # full word
+            # full word key
             full_key = f"#{token}$"
             if full_key in suffix_to_id:
                 leaf = suffix_to_id[full_key]
@@ -65,7 +80,6 @@ def index_books(folder, suffix_to_id, cursor, page_size=1500):
                 suffix = f"{token[i:]}$"
                 if suffix in suffix_to_id:
                     leaf = suffix_to_id[suffix]
-                    # offset of the start of that suffix is char_pos + i
                     occurrences_map[leaf][book_id].append((page_no, char_pos + i))
 
-    return occurrences_map
+    return occurrences_map, pages_map

@@ -1,5 +1,6 @@
 import os
 import re
+import json
 
 from suffix_tree import build_suffix_tree, save_tree, load_tree, add_suffix
 from db_tree import setup_database, store_occurrences, load_occurrences, get_or_create_book_id
@@ -125,9 +126,20 @@ def main():
         save_tree(trie, suffix_to_id)
         conn, cursor = setup_database("leaves.db")
         folder = "Gutenberg_Books"
-        occurrences_map = index_books(folder, suffix_to_id, cursor)
-        print(f"Indexed {len(occurrences_map)} unique suffix occurrences.\nInserting into the database...")
+
+        # index books AND split into pages
+        occurrences_map, pages_map = index_books(folder, suffix_to_id, cursor)
+        print(f"Indexed {len(occurrences_map)} unique suffix occurrences across {len(pages_map)} books.")
+
+        # insert into DB
+        print("Inserting occurrences into the database...")
         store_occurrences(cursor, occurrences_map)
+
+        # dump page‐text map for frontend
+        with open("pages_map.json", "w", encoding="utf-8") as jf:
+            json.dump({ str(b): pages_map[b] for b in pages_map }, jf, ensure_ascii=False)
+        print("Wrote per-book page splits to pages_map.json")
+
         conn.commit()
     else:
         conn, cursor = setup_database("leaves.db")
