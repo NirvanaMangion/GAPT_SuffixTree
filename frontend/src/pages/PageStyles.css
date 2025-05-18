@@ -386,3 +386,16 @@ html, body {
 .emoji {
   margin-right: 10px;
 }
+
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+  color: black;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .highlight {
+    color: black;
+  }
+}

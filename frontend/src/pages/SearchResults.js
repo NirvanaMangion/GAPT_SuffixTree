@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './AllBooks.css';
-import './SearchResults.css';
 
 const highlightMatch = (text, query) => {
   const index = text.toLowerCase().indexOf(query.toLowerCase());
@@ -24,8 +23,11 @@ const SearchResults = () => {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const resultsPerPage = 5;
 
   useEffect(() => {
+    setCurrentPage(1); // Reset page on new query
     if (query) {
       setLoading(true);
       setError("");
@@ -48,6 +50,10 @@ const SearchResults = () => {
     }
   }, [query]);
 
+  const totalPages = Math.ceil(results.length / resultsPerPage);
+  const startIndex = (currentPage - 1) * resultsPerPage;
+  const currentResults = results.slice(startIndex, startIndex + resultsPerPage);
+
   return (
     <div className="all-books-container">
       <h1>Search Results for "{query}"</h1>
@@ -61,7 +67,7 @@ const SearchResults = () => {
         <div>
           <h2 className="group-title">Found In Books</h2>
           <div className="books-list">
-            {results.map((result, index) => (
+            {currentResults.map((result, index) => (
               <div key={index} className="book-card">
                 <span className="book-icon">📚</span>
                 <div className="book-details">
@@ -79,6 +85,24 @@ const SearchResults = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="pagination">
+            <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+              &laquo; Prev
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i}
+                className={currentPage === i + 1 ? 'active' : ''}
+                onClick={() => setCurrentPage(i + 1)}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+              Next &raquo;
+            </button>
           </div>
         </div>
       )}
