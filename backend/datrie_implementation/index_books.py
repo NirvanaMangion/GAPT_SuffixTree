@@ -3,7 +3,7 @@
 from collections import defaultdict
 import os
 import re
-from db_tree import get_or_create_book_id
+from .db_tree import get_or_create_book_id
 
 def split_into_pages(text, page_size=1500):
     """

@@ -217,7 +217,7 @@ def upload_book():
         )
 
         # Store its occurrences in the mapping table
-        store_occurrences(cursor_tree, occ_map)
+        # store_occurrences(cursor_tree, occ_map)
         conn_tree.commit()
 
         # Persist updated trie + suffix_to_id
