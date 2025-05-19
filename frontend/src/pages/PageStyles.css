@@ -4,15 +4,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 50px 20px; /* Default for smaller screens/laptops */
+  padding: 50px 20px;
   box-sizing: border-box;
   position: relative;
-}
-
-@media (min-width: 1200px) {
-  .home-page {
-    padding: 100px 20px; /* For desktops and wider screens */
-  }
 }
 
 .title {
