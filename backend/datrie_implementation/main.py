@@ -138,16 +138,14 @@ def main():
         print(f"Built suffix tree with {len(suffix_to_id)} unique suffixes.")
         save_tree(trie, suffix_to_id)
         conn, cursor = setup_database("leaves.db")
-        folder = BOOK_FOLDER
-        occurrences_map,pages_map = index_books(folder, suffix_to_id, cursor)
+        occurrences_map,pages_map = index_books(BOOK_FOLDER, suffix_to_id, cursor)
         print(f"Indexed {len(occurrences_map)} unique suffix occurrences.\nInserting into the database...")
         store_occurrences(cursor, occurrences_map)
         conn.commit()
     else:
         conn, cursor = setup_database("leaves.db")
 
-    folder = BOOK_FOLDER
-    sentence_map = build_sentence_map(folder)
+    sentence_map = build_sentence_map(BOOK_FOLDER)
 
     while True:
         print("\n🧭 Choose your search mode:")
