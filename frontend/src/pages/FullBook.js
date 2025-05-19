@@ -12,7 +12,9 @@ const FullBook = () => {
   const [fontSize, setFontSize] = useState(16);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/book/full/${encodeURIComponent(title + '.txt')}`)
+  const cleanTitle = title.replace(/[\s-]+$/, '');
+  const filename   = `${cleanTitle}.txt`;
+  fetch(`http://localhost:5000/api/book/full/${encodeURIComponent(filename)}`)
       .then(res => res.json())
       .then(data => {
         if (data.text) {
@@ -32,7 +34,8 @@ const FullBook = () => {
     const blob = new Blob([content], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `${decodeURIComponent(title)}.txt`;
+    const cleanTitle = decodeURIComponent(title).replace(/[\s-]+$/, '');
+    link.download = `${cleanTitle}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

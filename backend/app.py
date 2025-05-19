@@ -140,6 +140,10 @@ def book_word_matches(book_name):
 @app.route("/api/book/full/<path:book_name>", methods=["GET"])
 def get_full_book(book_name):
     book_name = urllib.parse.unquote(book_name.strip())
+    # strip trailing spaces or hyphens before the extension
+    base, ext = os.path.splitext(book_name)
+    base = re.sub(r'[\s-]+$', '', base)
+    book_name = base + ext
     book_path = os.path.join(BOOK_FOLDER, book_name)
 
     if not os.path.exists(book_path):
