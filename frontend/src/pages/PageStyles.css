@@ -253,7 +253,7 @@ textarea {
 }
 
 body {
-  background: linear-gradient(270deg, #0a9396, #005f73, #94d2bd, #0a9396);
+  background: var(--animated-bg); /* ✅ Dynamic background */
   background-size: 800% 800%;
   animation: gradientMove 20s ease infinite;
   min-height: 100vh;

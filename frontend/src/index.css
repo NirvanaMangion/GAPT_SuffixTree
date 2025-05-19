@@ -4,19 +4,23 @@
   --text-color: #000000;
   --primary-color: #007bff;
   --secondary-color: #f0f0f0;
-  --accent-color: #005f73; /* add this */
+  --accent-color: #005f73;
+  --animated-bg: linear-gradient(270deg, #0a9396, #005f73, #94d2bd, #0a9396);
 }
 
-/* Dark theme override */
+/* Dark theme */
 [data-theme='dark'] {
   --bg-color: #121212;
   --text-color: #ffffff;
   --primary-color: #bb86fc;
   --secondary-color: #1e1e1e;
-  --accent-color: #005f73; /* add this - pick a light color for contrast */
+  --accent-color: #005f73;
+
+  /* ✅ NEW override for dark */
+  --animated-bg: linear-gradient(270deg, #013440, #002b3d, #064d4e, #013440);
 }
 
-/* Global reset and defaults */
+/* Global defaults */
 body {
   font-family: Arial, sans-serif;
   background-color: var(--bg-color);
