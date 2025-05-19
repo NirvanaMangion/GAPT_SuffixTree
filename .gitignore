@@ -200,5 +200,8 @@ myenv/
 .next/
 .cache/
 
+# Prevent large files from being tracked
+occurrences.csv
+suffix_tree.db
 
 # End of https://www.toptal.com/developers/gitignore/api/python
