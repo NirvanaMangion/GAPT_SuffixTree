@@ -1,6 +1,5 @@
 import os
 import re
-import json
 
 from .suffix_tree import build_suffix_tree, save_tree, load_tree, add_suffix
 from .db_tree import setup_database, store_occurrences, load_occurrences, get_or_create_book_id
@@ -29,6 +28,12 @@ EMOJI_REGEX_LITERATURE = {
     "🖍️": {"description": "Structured sentence pattern", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
     "🔧S": {"description": "Raw sentence regex", "build": lambda arg: 'SENTENCE_REGEX:' + arg}
 }
+BOOK_FOLDER = os.path.abspath(
+     os.path.join(os.path.dirname(__file__),
+                  os.pardir,
+                  os.pardir,
+                  "Gutenberg_Books")
+)
 
 def parse_emoji_regex(query):
     """
@@ -79,9 +84,15 @@ def search_word(word, suffix_to_id, cursor):
         combined_occurrences[book_id].sort()
 
     print(f"📚 Results for '{word}':")
-    for book_id, occurrences in combined_occurrences.items():
-        output = ', '.join(f"page {p} @ offset {o}" for p,o in occurrences)
-        print(f"📘 Book ID {book_id} — Occurrences: ({output}), Count: {len(occurrences)}\n")
+    for key in keys_found:
+        # normalize the key to the actual word (strip leading ‘#’ and trailing ‘$’)
+        matched = key.strip('$').lstrip('#')
+        leaf_id = suffix_to_id[key]
+        data = load_occurrences(cursor, leaf_id)
+        for book_id, offsets in data.items():
+            for page , pos in sorted(offsets):
+                print(f"📘 Book ID {book_id} — Page: {page} - Offset: {pos} — Matched: '{matched}'")
+    print()  # blank line at end
 
 def search_regex(pattern, suffix_to_id, cursor):
     try:
@@ -108,14 +119,16 @@ def search_regex(pattern, suffix_to_id, cursor):
         for book_id, offsets in data.items():
             combined_occurrences.setdefault(book_id, []).extend(offsets)
 
-    print(f"🔎 Regex Results for '{pattern}' — Matches: {len(matching_keys)} keys")
-    if not combined_occurrences:
-        print(f"❌ No occurrences of '{pattern}' found in any indexed book.")
-        return
-
-    for book_id, occurrences in combined_occurrences.items():
-        output = ', '.join(f"page {p} @ offset {o}" for p,o in occurrences)
-        print(f"📘 Book ID {book_id} — Occurrences: ({output}), Count: {len(occurrences)}\n")
+    print(f"🔎 Regex Results for '{pattern}' — {len(matching_keys)} matching suffix-keys:")
+    for key in matching_keys:
+        # strip the tree-markers to get the actual text that matched
+        matched = (key[1:-1] if key.startswith('#') else key[:-1])
+        leaf_id = suffix_to_id[key]
+        data = load_occurrences(cursor, leaf_id)
+        for book_id, offsets in data.items():
+            for page, pos in sorted(offsets):
+                print(f"📘 Book ID {book_id} — Page: {page} - Offset: {pos} — Matched: '{matched}'")
+    print()
 
 def main():
     trie, suffix_to_id = load_tree()
@@ -125,26 +138,15 @@ def main():
         print(f"Built suffix tree with {len(suffix_to_id)} unique suffixes.")
         save_tree(trie, suffix_to_id)
         conn, cursor = setup_database("leaves.db")
-        folder = "Gutenberg_Books"
-
-        # index books AND split into pages
-        occurrences_map, pages_map = index_books(folder, suffix_to_id, cursor)
-        print(f"Indexed {len(occurrences_map)} unique suffix occurrences across {len(pages_map)} books.")
-
-        # insert into DB
-        print("Inserting occurrences into the database...")
+        folder = BOOK_FOLDER
+        occurrences_map,pages_map = index_books(folder, suffix_to_id, cursor)
+        print(f"Indexed {len(occurrences_map)} unique suffix occurrences.\nInserting into the database...")
         store_occurrences(cursor, occurrences_map)
-
-        # dump page‐text map for frontend
-        with open("pages_map.json", "w", encoding="utf-8") as jf:
-            json.dump({ str(b): pages_map[b] for b in pages_map }, jf, ensure_ascii=False)
-        print("Wrote per-book page splits to pages_map.json")
-
         conn.commit()
     else:
         conn, cursor = setup_database("leaves.db")
 
-    folder = "Gutenberg_Books"
+    folder = BOOK_FOLDER
     sentence_map = build_sentence_map(folder)
 
     while True:
