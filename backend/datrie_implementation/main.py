@@ -2,11 +2,11 @@ import os
 import re
 import json
 
-from suffix_tree import build_suffix_tree, save_tree, load_tree, add_suffix
-from db_tree import setup_database, store_occurrences, load_occurrences, get_or_create_book_id
-from moby_words import load_moby_words
-from sentence_search import search_sentences
-from index_books import index_books, split_into_pages
+from .suffix_tree import build_suffix_tree, save_tree, load_tree, add_suffix
+from .db_tree import setup_database, store_occurrences, load_occurrences, get_or_create_book_id
+from .moby_words import load_moby_words
+from .sentence_search import search_sentences
+from .index_books import index_books, split_into_pages
 
 EMOJI_REGEX_LITERATURE = {
     # Word Search Literature
