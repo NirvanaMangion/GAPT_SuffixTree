@@ -8,6 +8,24 @@ import CheatSheet from '../components/CheatSheet';
 const wordEmojis = ["📄", "✏️", "📂", "📕", "📏", "🖌️", "📎", "📖", "🔧"];
 const sentenceEmojis = ["📝", "🖌️", "📌", "🔍", "🖋️", "🖍️", "🔧"];
 
+// ✅ Emoji descriptions for hover tooltips
+const emojiDescriptions = {
+  "📄": "Ends with a suffix",
+  "✏️": "Starts with a prefix",
+  "📂": "Minimum word length",
+  "📕": "Maximum word length",
+  "📏": "Exact word length",
+  "🖌️": "Ends in any listed suffix",
+  "📎": "Repeated characters",
+  "📖": "Exact word match",
+  "🔧": "Raw custom regex",
+  "📝": "Exact sentence phrase",
+  "📌": "Sentence ends with",
+  "🔍": "Sentence contains word",
+  "🖋️": "Sentence contains any listed words",
+  "🖍️": "Structured sentence pattern"
+};
+
 const Home = () => {
   const [query, setQuery] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState("📄");
@@ -146,6 +164,7 @@ const Home = () => {
                 <div
                   key={emoji}
                   className="emoji-option"
+                  title={emojiDescriptions[emoji] || "No description"}
                   onClick={() => handleEmojiSelect(emoji)}
                 >
                   {emoji}
