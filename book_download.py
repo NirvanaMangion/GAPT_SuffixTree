@@ -48,22 +48,6 @@ def download_book(book_id, book_title, existing_files):
     file_path = os.path.join(download_dir, f"{safe_title}.txt")
 
     try:
-        # Get book metadata page
-        details_url = f"https://www.gutenberg.org/ebooks/{book_id}"
-        details_response = requests.get(details_url, timeout=10)
-        details_soup = BeautifulSoup(details_response.text, "html.parser")
-
-        # Check language metadata
-        language_element = details_soup.find("th", string="Language")
-        if language_element:
-            language = language_element.find_next_sibling("td").get_text(strip=True)
-            if "English" not in language:
-                print(f"Skipping {book_title} — book is not in English.")
-                return False
-        else:
-            print(f"Skipping {book_title} — book language is unknown.")
-            return False
-
         # Construct raw text URL
         book_text_url = f"https://www.gutenberg.org/cache/epub/{book_id}/pg{book_id}.txt"
         r = requests.get(book_text_url, timeout=10)
