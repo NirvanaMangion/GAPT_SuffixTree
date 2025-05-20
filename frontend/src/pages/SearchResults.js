@@ -3,23 +3,28 @@ import { useLocation } from 'react-router-dom';
 import './AllBooks.css';
 
 const highlightMatch = (text, query) => {
-  const index = text.toLowerCase().indexOf(query.toLowerCase());
-  if (index === -1) return text;
-  const before = text.substring(0, index);
-  const match = text.substring(index, index + query.length);
-  const after = text.substring(index + query.length);
-  return (
-    <>
-      {before}
-      <span className="highlight">{match}</span>
-      {after}
-    </>
-  );
+  if (!query) return text;
+  try {
+    const pattern = query.split(":", 2)[1] || query;
+    const regex = new RegExp(`(${pattern})`, "gi");
+    return text.split(regex).map((part, i) =>
+      regex.test(part) ? <span key={i} className="highlight">{part}</span> : part
+    );
+  } catch (e) {
+    return text;
+  }
 };
 
 const SearchResults = () => {
   const location = useLocation();
-  const query = new URLSearchParams(location.search).get("q");
+  const params = new URLSearchParams(location.search);
+
+  const queryParam = params.get("q");
+  const mode = params.get("mode");
+  const type = params.get("type");
+
+  const query = mode && queryParam ? `${mode}:${queryParam}` : queryParam;
+
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -27,15 +32,20 @@ const SearchResults = () => {
   const resultsPerPage = 5;
 
   useEffect(() => {
-    setCurrentPage(1); // Reset page on new query
+    setCurrentPage(1);
     if (query) {
       setLoading(true);
       setError("");
-      fetch(`http://localhost:5000/api/search?q=${query}`)
+
+      fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
+          console.log("DEBUG API Response:", data);
           if (data.results) {
             setResults(data.results);
+          } else if (data.error) {
+            setResults([]);
+            setError(data.error);
           } else {
             setResults([]);
             setError("Unexpected response format.");
@@ -56,11 +66,11 @@ const SearchResults = () => {
 
   return (
     <div className="all-books-container">
-      <h1>Search Results for "{query}"</h1>
+      <h1>Search Results for "{queryParam}"</h1>
       {loading && <div className="spinner"></div>}
       {error && <p className="error-message">{error}</p>}
       {!loading && results.length === 0 && !error && (
-        <p>No results found for "{query}".</p>
+        <p>No results found for "{queryParam}".</p>
       )}
 
       {!loading && results.length > 0 && (
@@ -72,14 +82,14 @@ const SearchResults = () => {
                 <span className="book-icon">📚</span>
                 <div className="book-details">
                   <h3 className="book-title">
-                    <a href={`/book/${encodeURIComponent(result.book)}?word=${query}`}>
+                    <a href={`/book/${encodeURIComponent(result.book)}?word=${encodeURIComponent(query)}`}>
                       {result.book}
                     </a>
                   </h3>
                   <p className="book-author">Matches: {result.count}</p>
                   <ul>
                     {result.snippets.map((snippet, i) => (
-                      <li key={i}><em>...{highlightMatch(snippet, query)}...</em></li>
+                      <li key={i}><em>...{highlightMatch(snippet, queryParam)}...</em></li>
                     ))}
                   </ul>
                 </div>

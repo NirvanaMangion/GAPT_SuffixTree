@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AllBooks.css';
 
-
 const getQueryParam = (location, name) => {
   return new URLSearchParams(location.search).get(name);
 };
 
-const highlight = (text, query) => {
+// Extracts the term from emoji-prefixed query like "✏️:hel" → "hel"
+const extractSearchTerm = (query) => {
+  const parts = query.split(":", 2);
+  return parts.length === 2 ? parts[1] : query;
+};
+
+const highlight = (text, rawQuery) => {
   if (typeof text !== "string") return text;
-  const regex = new RegExp(`(${query})`, 'gi');
+  const term = extractSearchTerm(rawQuery);
+  const regex = new RegExp(`(${term})`, 'gi');
   return text.split(regex).map((part, i) =>
-    part.toLowerCase() === query.toLowerCase() ? (
+    regex.test(part) ? (
       <span key={i} className="highlight">{part}</span>
     ) : (
       <span key={i}>{part}</span>
@@ -24,9 +30,7 @@ const BookDetails = () => {
   const navigate = useNavigate();
   const word = getQueryParam(location, "word");
 
-  // Extract the book name from the full path after "/book/"
   const book = decodeURIComponent(location.pathname.replace("/book/", ""));
-
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -38,7 +42,7 @@ const BookDetails = () => {
       return;
     }
 
-    fetch(`http://localhost:5000/api/book/${encodeURIComponent(book)}?word=${word}`)
+    fetch(`http://localhost:5000/api/book/${encodeURIComponent(book)}?word=${encodeURIComponent(word)}`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data.matches)) {
