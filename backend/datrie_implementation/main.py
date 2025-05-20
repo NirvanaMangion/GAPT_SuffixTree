@@ -48,11 +48,11 @@ def parse_emoji_regex(query):
             return EMOJI_REGEX_LITERATURE[emoji]["build"](arg)
     return None
 
-def build_sentence_map(folder):
+def build_sentence_map(BOOK_FOLDER):
     sentence_map = {}
-    for filename in os.listdir(folder):
+    for filename in os.listdir(BOOK_FOLDER):
         if filename.endswith(".txt"):
-            with open(os.path.join(folder, filename), "r", encoding="utf-8", errors="ignore") as f:
+            with open(os.path.join(BOOK_FOLDER, filename), "r", encoding="utf-8", errors="ignore") as f:
                 text = f.read()
             sentences = re.split(r'[.!?]', text)
             sentence_map[filename] = [s.strip() for s in sentences if s.strip()]
@@ -218,9 +218,9 @@ def main():
             # if missing, scan & add
             if full_key not in suffix_to_id:
                 occurrences = {}
-                for fn in os.listdir(folder):
+                for fn in os.listdir(BOOK_FOLDER):
                     if not fn.endswith(".txt"): continue
-                    path = os.path.join(folder, fn)
+                    path = os.path.join(BOOK_FOLDER, fn)
                     with open(path, "r", encoding="utf-8", errors="ignore") as f:
                         text = f.read().lower()
                     pages = split_into_pages(text)
