@@ -7,37 +7,37 @@ export const highlightMatch = (text, pattern, emoji, queryArg = '') => {
     switch (emoji) {
       case '📄': // Ends with suffix
       case '🖌️':
-        regex = new RegExp(`${queryArg}(?!\w)`, 'gi');
+        regex = new RegExp(`${queryArg}(?!\\w)`, 'gi');
         break;
       case '✏️': // Starts with prefix
       case '🖌️S':
-        regex = new RegExp(`(?<!\w)${queryArg}`, 'gi');
+        regex = new RegExp(`(?<!\\w)${queryArg}`, 'gi');
         break;
       case '📂':
-        regex = new RegExp(`\b\w{${queryArg},}\b`, 'gi');
+        regex = new RegExp(`\\b\\w{${queryArg},}\\b`, 'gi');
         break;
       case '📕':
-        regex = new RegExp(`\b\w{1,${queryArg}}\b`, 'gi');
+        regex = new RegExp(`\\b\\w{1,${queryArg}}\\b`, 'gi');
         break;
       case '📏':
-        regex = new RegExp(`\b\w{${queryArg}}\b`, 'gi');
+        regex = new RegExp(`\\b\\w{${queryArg}}\\b`, 'gi');
         break;
       case '📎':
-        regex = new RegExp(`\\b\\w*?(.)\\1{${String(parseInt(queryArg) - 1)},}\\w*?\\b`, 'gi');
+        regex = new RegExp(`\\b\\w*?(.)\\1{${parseInt(queryArg) - 1},}\\w*?\\b`, 'gi');
         break;
       case '📖':
       case '🔍':
-        regex = new RegExp(`\b${queryArg}\b`, 'gi');
+        regex = new RegExp(`\\b${queryArg}\\b`, 'gi');
         break;
       case '🔧':
       case '🔧S':
         regex = new RegExp(queryArg, 'gi');
         break;
       case '📝':
-        regex = new RegExp(queryArg.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+        regex = new RegExp(queryArg.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'), 'gi');
         break;
       case '📌':
-        regex = new RegExp(`${queryArg}(?=\W*$)`, 'gi');
+        regex = new RegExp(`${queryArg}(?=\\W*$)`, 'gi');
         break;
       case '🖋️':
         regex = new RegExp(queryArg.split(',').map(w => `\\b${w.trim()}\\b`).join('|'), 'gi');
@@ -78,5 +78,3 @@ export const highlightMatch = (text, pattern, emoji, queryArg = '') => {
 
   return parts;
 };
-
-
