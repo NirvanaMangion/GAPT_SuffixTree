@@ -7,15 +7,15 @@ import requests
 # ——— Configuration ———
 DOWNLOAD_DIR = "Gutenberg_Books"
 TARGET_COUNT = 130
-TOPICS = [
-    "Fiction",
-    "Historical Fiction",
-    "Children’s Fiction",
-    "Mystery & Detective Stories",
+BOOKSHELVES = [
     "Science Fiction",
+    "Historical Fiction",
+    "Children",
+    "Mystery",
     "Fantasy",
     "Romance",
     "Essays",
+    "Adventure",
 ]
 API_URL = "https://gutendex.com/books"
 SLEEP_BETWEEN_DOWNLOADS = 0.2  # seconds
@@ -49,16 +49,16 @@ def looks_like_prose(text, letter_ratio_thresh=0.7, min_length=500):
 
 # ——— Prepare download folder & state ———
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
-seen = set()  # normalized main titles + authors
+seen = set()
 count = 0
 
-# ——— Main loop: iterate topics and pages ———
-for topic in TOPICS:
+# ——— Main loop: iterate bookshelves and pages ———
+for shelf in BOOKSHELVES:
     page = 1
     while count < TARGET_COUNT:
         params = {
             "languages": "en",
-            "topic": topic,
+            "bookshelves": shelf,
             "page": page
         }
         try:
@@ -66,7 +66,7 @@ for topic in TOPICS:
             resp.raise_for_status()
             data = resp.json()
         except requests.RequestException:
-            break  # skip this topic if API call fails
+            break  # skip this shelf if API call fails
 
         results = data.get("results", [])
         if not results:
@@ -76,24 +76,15 @@ for topic in TOPICS:
             if count >= TARGET_COUNT:
                 break
 
-            # 1) Extract and truncate at first ':' or ';'
             raw_title = book.get("title", "untitled")
             main_title = re.split(r'[:;]', raw_title)[0].strip()
-
-            # 2) Get author (first one if multiple)
             authors = book.get("authors", [])
-            if authors:
-                author_name = authors[0].get("name", "").strip()
-            else:
-                author_name = "Unknown"
-
-            # 3) Combine for filename and dedupe key
+            author_name = authors[0].get("name", "").strip() if authors else "Unknown"
             combined = f"{main_title} - {author_name}"
             key = normalize_title(combined)
             if key in seen:
                 continue
 
-            # 4) Pick best plain‐text URL
             fmts = book.get("formats", {})
             txt_url = (
                 fmts.get("text/plain; charset=utf-8")
@@ -103,7 +94,6 @@ for topic in TOPICS:
             if not txt_url:
                 continue
 
-            # 5) Download the text
             try:
                 r = requests.get(txt_url, timeout=10)
                 r.raise_for_status()
@@ -114,7 +104,6 @@ for topic in TOPICS:
             if not looks_like_prose(text):
                 continue
 
-            # 6) Save file
             safe_name = sanitize_filename(combined)[:200] or f"book_{book['id']}"
             path = os.path.join(DOWNLOAD_DIR, f"{safe_name}.txt")
             with open(path, "wb") as f:
@@ -126,7 +115,6 @@ for topic in TOPICS:
 
             time.sleep(SLEEP_BETWEEN_DOWNLOADS)
 
-        # move to next page if available
         if not data.get("next"):
             break
         page += 1

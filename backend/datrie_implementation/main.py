@@ -11,9 +11,9 @@ EMOJI_REGEX_LITERATURE = {
     # Word Search Literature
     "📄": {"description": "Ends with a suffix", "build": lambda arg: fr"{arg}$"},
     "✏️": {"description": "Starts with a prefix", "build": lambda arg: fr"^{arg}"},
-    "📂": {"description": "Minimum word length", "build": lambda arg: fr"^.{{{arg},}}$"},
-    "📕": {"description": "Maximum word length", "build": lambda arg: fr"^.{{1,{arg}}}$"},
-    "📏": {"description": "Exact word length", "build": lambda arg: fr"^.{{{arg}}}$"},
+    "📂": {"description": "Minimum word length", "build": lambda arg: fr"\b\w{{{arg},}}\b"},
+    "📕": {"description": "Maximum word length", "build": lambda arg: fr"\b\w{{1,{arg}}}\b"},
+    "📏": {"description": "Exact word length", "build": lambda arg: fr"\b\w{{{arg}}}\b"},
     "🖌️": {"description": "Ends in any listed suffix", "build": lambda arg: fr"({arg})$"},
     "📎": {"description": "Repeated characters", "build": lambda arg: fr"(.)\1{{{int(arg)-1},}}"},
     "📖": {"description": "Exact word match", "build": lambda arg: fr"\b{arg}\b"},
@@ -23,11 +23,12 @@ EMOJI_REGEX_LITERATURE = {
     "📝": {"description": "Exact sentence phrase", "build": lambda arg: 'SENTENCE:' + arg},
     "🖌️S": {"description": "Sentence starts with", "build": lambda arg: 'SENTENCE_REGEX:^' + arg},
     "📌": {"description": "Sentence ends with", "build": lambda arg: 'SENTENCE_REGEX:' + arg + '$'},
-    "🔍": {"description": "Sentence contains word", "build": lambda arg: 'SENTENCE_REGEX:\b' + arg + '\b'},
+    "🔍": {"description": "Sentence contains word", "build": lambda arg: fr"SENTENCE_REGEX:\b{arg}\b"},
     "🖋️": {"description": "Sentence contains any of listed words", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
     "🖍️": {"description": "Structured sentence pattern", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
     "🔧S": {"description": "Raw sentence regex", "build": lambda arg: 'SENTENCE_REGEX:' + arg}
 }
+
 BOOK_FOLDER = os.path.abspath(
      os.path.join(os.path.dirname(__file__),
                   os.pardir,

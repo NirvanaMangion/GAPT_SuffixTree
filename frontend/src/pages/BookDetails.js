@@ -1,87 +1,73 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+// src/pages/BookDetails.js
+import React, { useEffect, useState, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import './AllBooks.css';
-
-const getQueryParam = (location, name) => {
-  return new URLSearchParams(location.search).get(name);
-};
-
-// Extracts the term from emoji-prefixed query like "✏️:hel" → "hel"
-const extractSearchTerm = (query) => {
-  const parts = query.split(":", 2);
-  return parts.length === 2 ? parts[1] : query;
-};
-
-const highlight = (text, rawQuery) => {
-  if (typeof text !== "string") return text;
-  const term = extractSearchTerm(rawQuery);
-  const regex = new RegExp(`(${term})`, 'gi');
-  return text.split(regex).map((part, i) =>
-    regex.test(part) ? (
-      <span key={i} className="highlight">{part}</span>
-    ) : (
-      <span key={i}>{part}</span>
-    )
-  );
-};
+import { highlightMatch } from './highlighting';
 
 const BookDetails = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const word = getQueryParam(location, "word");
-
-  const book = decodeURIComponent(location.pathname.replace("/book/", ""));
+  const { title } = useParams();
   const [matches, setMatches] = useState([]);
+  const [pattern, setPattern] = useState('');
+  const [emoji, setEmoji] = useState('');
+  const [queryArg, setQueryArg] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const [rawQuery, setRawQuery] = useState('');
 
   useEffect(() => {
-    if (!book || !word) {
-      setError("Missing book or word in URL.");
-      setLoading(false);
-      return;
-    }
+    const queryParams = new URLSearchParams(window.location.search);
+    const query = queryParams.get("word") || "";
+    setRawQuery(query);
+    if (!query) return;
 
-    fetch(`http://localhost:5000/api/book/${encodeURIComponent(book)}?word=${encodeURIComponent(word)}`)
+    fetch(`http://localhost:5000/api/book/${encodeURIComponent(title)}?word=${encodeURIComponent(query)}`)
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data.matches)) {
+        if (data.matches) {
           setMatches(data.matches);
-        } else {
-          setMatches([]);
-          setError("No matches found.");
         }
       })
       .catch(err => {
         console.error(err);
-        setError("Failed to fetch book details.");
+        setError("Failed to fetch matches.");
+      });
+
+    fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.regex) setPattern(data.regex);
+        if (data.emoji) setEmoji(data.emoji);
+        if (data.query && data.query.includes(":")) {
+          const [, arg] = data.query.split(":", 2);
+          setQueryArg(arg);
+        }
       })
+      .catch(err => console.error("Failed to load regex pattern:", err))
       .finally(() => setLoading(false));
-  }, [book, word]);
+  }, [title]);
+
+  const highlightedMatches = useMemo(() => {
+    if (!pattern) return matches;
+    return matches.map(m => ({
+      ...m,
+      context: <>{highlightMatch(m.context, pattern, emoji, queryArg)}</>
+    }));
+  }, [matches, pattern, emoji, queryArg]);
 
   return (
     <div className="all-books-container">
-      <h1>Matches for "{word}" in {book}</h1>
+      <button onClick={() => window.history.back()} className="sort-button">← Back</button>
+      <h2>{decodeURIComponent(title)}</h2>
 
-      <button onClick={() => navigate(-1)} className="back-button">← Back</button>
-
-      {loading && <div className="spinner"></div>}
+      {loading && <p>Loading...</p>}
       {error && <p className="error-message">{error}</p>}
 
-      {!loading && matches.length > 0 && (
-        <ul className="matches-list">
-          {matches.map((match, index) => (
-            <li key={index} className="match-entry">
-              <p><strong>Offset:</strong> {match.offset}</p>
-              <p><strong>Context:</strong> {highlight(match.context, word)}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {!loading && matches.length === 0 && !error && (
-        <p>No matches found in this book.</p>
-      )}
+      {!loading && !error && highlightedMatches.map((match, index) => (
+        <div key={index} className="book-card">
+          <p><strong>Offset:</strong> {match.offset}</p>
+          <p><strong>Context:</strong> {match.context}</p>
+        </div>
+      ))}
     </div>
   );
 };

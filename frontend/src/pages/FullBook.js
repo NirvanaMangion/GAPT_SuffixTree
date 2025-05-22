@@ -1,7 +1,8 @@
 // src/pages/FullBook.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './FullBook.css';
+import { highlightMatch } from './highlighting';
 
 const PAGE_SIZE = 1800;
 
@@ -20,90 +21,72 @@ function splitIntoPages(text, pageSize = PAGE_SIZE) {
   return pages;
 }
 
-/** returns a sorted array of page numbers to show (no ellipses) */
-function getPageListNumbers(current, total) {
-  const set = new Set();
-
-  if (total <= 15) {
-    for (let i = 1; i <= total; i++) set.add(i);
-  } else {
-    // first 3
-    [1,2,3].forEach(n => set.add(n));
-    // window around current
-    for (let i = current - 2; i <= current + 9; i++) {
-      if (i > 3 && i < total - 2) set.add(i);
-    }
-    // last 3
-    [total-2, total-1, total].forEach(n => set.add(n));
-    // ensure current
-    if (current >=1 && current <= total) set.add(current);
-  }
-
-  return Array.from(set).sort((a,b) => a - b);
-}
-
-/** given that list of numbers, inject 'ELLIPSIS' markers where gaps appear */
-function getPageItems(current, total) {
-  const nums = getPageListNumbers(current, total);
-  const items = [];
-  nums.forEach((num, idx) => {
-    if (idx > 0 && num !== nums[idx-1] + 1) {
-      items.push('ELLIPSIS');
-    }
-    items.push(num);
-  });
-  return items;
-}
-
 const FullBook = () => {
-  const { title }    = useParams();
-  const navigate     = useNavigate();
+  const { title } = useParams();
+  const navigate = useNavigate();
 
-  const [fullText, setFullText]   = useState('');
-  const [pages, setPages]         = useState([]);
+  const [fullText, setFullText] = useState('');
+  const [pages, setPages] = useState([]);
   const [currentPage, setCurrent] = useState(0);
-  const [loading, setLoading]     = useState(true);
-  const [error, setError]         = useState('');
-  const [searchQuery, setSearch]  = useState('');
-  const [fontSize, setFontSize]   = useState(16);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [fontSize, setFontSize] = useState(16);
+
+  const [searchQuery, setSearch] = useState('');
+  const [regex, setRegex] = useState('');
+  const [emoji, setEmoji] = useState('');
+  const [queryArg, setQueryArg] = useState('');
 
   useEffect(() => {
     const cleanTitle = title.replace(/[\s-]+$/, '');
-    const filename   = `${cleanTitle}.txt`;
+    const filename = `${cleanTitle}.txt`;
 
+    const search = new URLSearchParams(window.location.search).get("word") || "";
+    setSearch(search);
+
+    // load book text
     fetch(`http://localhost:5000/api/book/full/${encodeURIComponent(filename)}`)
       .then(res => res.json())
       .then(data => {
         if (data.text) {
           setFullText(data.text);
-          const pg = splitIntoPages(data.text);
-          setPages(pg);
-          setCurrent(0);
+          setPages(splitIntoPages(data.text));
         } else {
-          setError('Book content unavailable.');
+          setError("Book content unavailable.");
         }
       })
       .catch(err => {
         console.error(err);
-        setError('Failed to load book.');
+        setError("Failed to load book.");
       })
       .finally(() => setLoading(false));
+
+    // load regex info
+    if (search) {
+      fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(search)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.regex) setRegex(data.regex);
+          if (data.emoji) setEmoji(data.emoji);
+          if (data.query && data.query.includes(":")) {
+            const [, arg] = data.query.split(":", 2);
+            setQueryArg(arg);
+          }
+        })
+        .catch(err => console.error("Regex fetch error:", err));
+    }
   }, [title]);
 
   const total = pages.length;
   const pageText = pages[currentPage] || '';
 
-  const highlighted = searchQuery
-    ? pageText
-        .split(new RegExp(`(${searchQuery})`, 'gi'))
-        .map((part, i) =>
-          part.toLowerCase() === searchQuery.toLowerCase()
-            ? <mark key={i}>{part}</mark>
-            : part
-        )
-    : pageText;
+  const highlightedPage = useMemo(() => {
+    return searchQuery && regex
+      ? highlightMatch(pageText, regex, emoji, queryArg)
+      : pageText;
+  }, [pageText, regex, emoji, queryArg, searchQuery]);
 
-  const downloadBlob = (text, name) => {
+  const handleDownloadBlob = (text, name) => {
     const blob = new Blob([text], { type: 'text/plain' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -114,32 +97,29 @@ const FullBook = () => {
   };
 
   const handleDownloadPage = () => {
-    const clean = decodeURIComponent(title).replace(/[\s-]+$/, '');
-    downloadBlob(pageText, `${clean}-page-${currentPage + 1}.txt`);
+    const safeName = decodeURIComponent(title).replace(/[\s-]+$/, '');
+    handleDownloadBlob(pageText, `${safeName}-page-${currentPage + 1}.txt`);
   };
 
   const handleDownloadFull = () => {
-    const clean = decodeURIComponent(title).replace(/[\s-]+$/, '');
-    downloadBlob(fullText, `${clean}.txt`);
+    const safeName = decodeURIComponent(title).replace(/[\s-]+$/, '');
+    handleDownloadBlob(fullText, `${safeName}.txt`);
   };
 
-  // build our pagination items (numbers + 'ELLIPSIS')
-  const pageItems = getPageItems(currentPage + 1, total);
+  const pageItems = useMemo(() => {
+    const range = [];
+    for (let i = 0; i < total; i++) range.push(i);
+    return range;
+  }, [total]);
 
   return (
     <div className="all-books-container full-book-container">
       <h1 className="book-title">{decodeURIComponent(title)}</h1>
 
       <div className="controls fullbook-controls">
-        <button onClick={() => navigate(-1)} className="sort-button">
-          ← Back
-        </button>
-        <button onClick={handleDownloadPage} className="sort-button">
-          📄 Download Page
-        </button>
-        <button onClick={handleDownloadFull} className="sort-button">
-          ⬇️ Download Full
-        </button>
+        <button onClick={() => navigate(-1)} className="sort-button">← Back</button>
+        <button onClick={handleDownloadPage} className="sort-button">📄 Download Page</button>
+        <button onClick={handleDownloadFull} className="sort-button">⬇️ Download Full</button>
         <input
           type="text"
           placeholder="Search in page..."
@@ -160,7 +140,7 @@ const FullBook = () => {
       </div>
 
       {loading && <div className="spinner"></div>}
-      {error   && <p className="error-message">{error}</p>}
+      {error && <p className="error-message">{error}</p>}
 
       {!loading && !error && (
         <>
@@ -168,7 +148,7 @@ const FullBook = () => {
             className="book-text"
             style={{ fontSize: `${fontSize}px` }}
           >
-            {highlighted}
+            {highlightedPage}
           </pre>
 
           <div className="pagination">
@@ -179,19 +159,15 @@ const FullBook = () => {
               &laquo; Prev
             </button>
 
-            {pageItems.map((item, idx) =>
-              item === 'ELLIPSIS' ? (
-                <span key={idx} className="ellipsis">…</span>
-              ) : (
-                <button
-                  key={idx}
-                  className={currentPage + 1 === item ? 'active' : ''}
-                  onClick={() => setCurrent(item - 1)}
-                >
-                  {item}
-                </button>
-              )
-            )}
+            {pageItems.map((item) => (
+              <button
+                key={item}
+                className={currentPage === item ? 'active' : ''}
+                onClick={() => setCurrent(item)}
+              >
+                {item + 1}
+              </button>
+            ))}
 
             <button
               onClick={() => setCurrent(p => Math.min(p + 1, total - 1))}

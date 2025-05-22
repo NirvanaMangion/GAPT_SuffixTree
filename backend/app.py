@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_file, abort
 from datrie_implementation.suffix_tree import build_suffix_tree, load_tree, save_tree
 from datrie_implementation.db_tree import setup_database, store_occurrences
 from datrie_implementation.index_books import index_books
-from datrie_implementation.main import parse_emoji_regex  # ✅ Imported for emoji-based parsing
+from datrie_implementation.main import parse_emoji_regex
 from flask_cors import CORS
 import os
 import re
@@ -49,7 +49,7 @@ else:
     trie, suffix_to_id = build_suffix_tree(words)
     save_tree(trie, suffix_to_id, TREE_FILE)
 
-# --- Updated: Search with emoji regex support ---
+# --- Search with emoji regex support ---
 @app.route("/api/search", methods=["GET"])
 def search():
     raw_query = request.args.get("q", "").strip()
@@ -60,7 +60,6 @@ def search():
     if not pattern:
         return jsonify({"error": "Invalid emoji prefix or format."}), 400
 
-    # Store in recent search DB
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute("INSERT INTO recent_searches (query) VALUES (?)", (raw_query,))
@@ -68,7 +67,7 @@ def search():
     conn.close()
 
     if pattern.startswith("SENTENCE:") or pattern.startswith("SENTENCE_REGEX:"):
-        return jsonify({"error": "Sentence-based search not supported via frontend."}), 400
+        return sentence_search_handler(pattern, raw_query)
 
     if pattern.startswith("RAW_REGEX:"):
         regex = pattern[len("RAW_REGEX:"):]
@@ -88,20 +87,22 @@ def search():
                 with open(path, "r", encoding="utf-8-sig", errors="ignore") as f:
                     text = f.read()
 
-                # ✅ Split by double newlines (paragraphs)
                 matches = []
                 for match in re.finditer(r'\b\w+\b', text):
                     word = match.group()
                     if compiled.search(word):
                         start = match.start()
-                        snippet = text[max(0, start - 30): start + len(word) + 30]
-                        matches.append(snippet.strip())
+                        snippet = text[max(0, start - 40): start + len(word) + 40]
+                        matches.append({
+                            "snippet": snippet.strip(),
+                            "word": word
+                        })
 
                 if matches:
                     results.append({
                         "book": filename,
                         "count": len(matches),
-                        "snippets": matches[:3]  # limit preview
+                        "snippets": matches[:3]
                     })
 
             except Exception as e:
@@ -110,32 +111,55 @@ def search():
 
     return jsonify({
         "query": raw_query,
+        "regex": regex,
+        "emoji": raw_query.split(":", 1)[0] if ":" in raw_query else "",
         "results": results
     })
 
-# --- Get word frequency in all books ---
-@app.route("/api/word/<word>", methods=["GET"])
-def word_info(word):
-    word = word.strip().lower()
-    book_data = {}
+# --- Sentence-based search handler ---
+def sentence_search_handler(pattern, raw_query):
+    if pattern.startswith("SENTENCE:"):
+        phrase = pattern[len("SENTENCE:"):].strip()
+        regex = re.compile(re.escape(phrase), re.IGNORECASE)
+    else:
+        raw_regex = pattern[len("SENTENCE_REGEX:"):].strip()
+        try:
+            regex = re.compile(raw_regex, re.IGNORECASE)
+        except re.error as e:
+            return jsonify({"error": f"Invalid sentence regex pattern: {e}"}), 400
 
+    results = []
     for filename in os.listdir(BOOK_FOLDER):
         if filename.endswith(".txt"):
             path = os.path.join(BOOK_FOLDER, filename)
             try:
                 with open(path, "r", encoding="utf-8-sig", errors="ignore") as f:
-                    text = f.read().lower()
-                    count = len(re.findall(rf'\b{re.escape(word)}\b', text))
-                    if count > 0:
-                        book_data[filename] = count
+                    text = f.read()
+
+                sentences = re.split(r'(?<=[.!?])\s+', text)
+                matches = []
+                for sentence in sentences:
+                    if regex.search(sentence):
+                        matches.append({"snippet": sentence.strip(), "word": ""})
+
+                if matches:
+                    results.append({
+                        "book": filename,
+                        "count": len(matches),
+                        "snippets": matches[:3]
+                    })
             except Exception as e:
                 print(f"Error reading {filename}: {e}")
                 continue
 
-    result = [{"title": title, "frequency": freq} for title, freq in book_data.items()]
-    return jsonify({"word": word, "books": result})
+    return jsonify({
+        "query": raw_query,
+        "regex": pattern,
+        "emoji": raw_query.split(":", 1)[0] if ":" in raw_query else "",
+        "results": results
+    })
 
-# --- Get word matches (with context) in a specific book ---
+# --- Get matches in a specific book ---
 @app.route("/api/book/<path:book_name>", methods=["GET"])
 def book_word_matches(book_name):
     query = request.args.get("word", "").strip()
@@ -149,10 +173,7 @@ def book_word_matches(book_name):
         text = f.read()
 
     pattern = parse_emoji_regex(query)
-    if not pattern:
-        return jsonify({"book": book_name, "word": query, "matches": []})
-
-    if pattern.startswith("SENTENCE:") or pattern.startswith("SENTENCE_REGEX:"):
+    if not pattern or pattern.startswith("SENTENCE"):
         return jsonify({"book": book_name, "word": query, "matches": []})
 
     if pattern.startswith("RAW_REGEX:"):

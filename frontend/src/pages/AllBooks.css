@@ -74,7 +74,7 @@ body {
 }
 
 .highlight {
-  background-color: var(--highlight-color);
+  background-color: var(--highlight-color, yellow); 
   font-weight: bold;
   padding: 0 4px;
   border-radius: 3px;

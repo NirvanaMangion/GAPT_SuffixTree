@@ -7,7 +7,6 @@ const AllBooks = () => {
   const [books, setBooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState('asc');
-
   const booksPerPage = 10;
   const navigate = useNavigate();
 
@@ -83,7 +82,7 @@ const AllBooks = () => {
 
       <div className="pagination">
         <button onClick={() => changePage(currentPage - 1)} disabled={currentPage === 1}>
-          &laquo; Prev
+          « Prev
         </button>
         {Array.from({ length: totalPages }, (_, i) => (
           <button
@@ -95,7 +94,7 @@ const AllBooks = () => {
           </button>
         ))}
         <button onClick={() => changePage(currentPage + 1)} disabled={currentPage === totalPages}>
-          Next &raquo;
+          Next »
         </button>
       </div>
     </div>

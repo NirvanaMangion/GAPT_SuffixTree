@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './AllBooks.css';
-
-const highlightMatch = (text, query) => {
-  if (!query) return text;
-  try {
-    const pattern = query.split(":", 2)[1] || query;
-    const regex = new RegExp(`(${pattern})`, "gi");
-    return text.split(regex).map((part, i) =>
-      regex.test(part) ? <span key={i} className="highlight">{part}</span> : part
-    );
-  } catch (e) {
-    return text;
-  }
-};
+import { highlightMatch } from './highlighting';
 
 const SearchResults = () => {
   const location = useLocation();
@@ -21,11 +9,12 @@ const SearchResults = () => {
 
   const queryParam = params.get("q");
   const mode = params.get("mode");
-  const type = params.get("type");
-
   const query = mode && queryParam ? `${mode}:${queryParam}` : queryParam;
 
   const [results, setResults] = useState([]);
+  const [searchPattern, setSearchPattern] = useState("");
+  const [searchMode, setSearchMode] = useState("");
+  const [searchArg, setSearchArg] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,9 +29,14 @@ const SearchResults = () => {
       fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
-          console.log("DEBUG API Response:", data);
           if (data.results) {
             setResults(data.results);
+            if (data.regex) setSearchPattern(data.regex);
+            if (data.emoji) setSearchMode(data.emoji);
+            if (data.query && data.query.includes(":")) {
+              const [, arg] = data.query.split(":", 2);
+              setSearchArg(arg);
+            }
           } else if (data.error) {
             setResults([]);
             setError(data.error);
@@ -88,8 +82,10 @@ const SearchResults = () => {
                   </h3>
                   <p className="book-author">Matches: {result.count}</p>
                   <ul>
-                    {result.snippets.map((snippet, i) => (
-                      <li key={i}><em>...{highlightMatch(snippet, queryParam)}...</em></li>
+                    {result.snippets.map((obj, i) => (
+                      <li key={i}>
+                        <em>...{highlightMatch(obj.snippet, searchPattern, searchMode, searchArg)}...</em>
+                      </li>
                     ))}
                   </ul>
                 </div>
