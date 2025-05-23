@@ -14,7 +14,7 @@ const cheatSheetData = [
   { emoji: '🔧', description: 'Raw custom regex' },
   { emoji: '  ', description: <span style={{ fontWeight: 'bold', textDecoration: 'underline', fontSize: '22px' }}>Sentence Regex</span> },
   { emoji: '📝', description: 'Exact sentence phrase' },
-  { emoji: '🖌️', description: 'Sentence starts with - ex: should ____ ___ ________.' },
+  { emoji: '📚', description: 'Sentence starts with - ex: should ____ ___ ________.' },
   { emoji: '📌', description: 'Sentence ends with - ex: __ _______ ____ ________ now.' },
   { emoji: '🔍', description: 'Sentence contains word' },
   { emoji: '🖋️', description: 'Sentence contains any listed words' },

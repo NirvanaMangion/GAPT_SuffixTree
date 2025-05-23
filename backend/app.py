@@ -52,7 +52,8 @@ else:
 # --- Search with emoji regex support ---
 @app.route("/api/search", methods=["GET"])
 def search():
-    raw_query = request.args.get("q", "").strip()
+    raw_query = request.args.get("q", "")
+    raw_query = urllib.parse.unquote_plus(raw_query).strip()
     if not raw_query:
         return jsonify({"error": "Query parameter 'q' is required."}), 400
 
@@ -136,7 +137,8 @@ def sentence_search_handler(pattern, raw_query):
                 with open(path, "r", encoding="utf-8-sig", errors="ignore") as f:
                     text = f.read()
 
-                sentences = re.split(r'(?<=[.!?])\s+', text)
+                sentences = re.split(r'(?<=[\.!?])\s+', text)
+                sentences = [s.strip() for s in sentences if s.strip()]
                 matches = []
                 for sentence in sentences:
                     if regex.search(sentence):
@@ -154,7 +156,7 @@ def sentence_search_handler(pattern, raw_query):
 
     return jsonify({
         "query": raw_query,
-        "regex": pattern,
+        "regex": regex.pattern,
         "emoji": raw_query.split(":", 1)[0] if ":" in raw_query else "",
         "results": results
     })

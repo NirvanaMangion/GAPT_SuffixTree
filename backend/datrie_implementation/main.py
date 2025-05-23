@@ -7,6 +7,7 @@ from .moby_words import load_moby_words
 from .sentence_search import search_sentences
 from .index_books import index_books, split_into_pages
 
+
 EMOJI_REGEX_LITERATURE = {
     # Word Search Literature
     "📄": {"description": "Ends with a suffix", "build": lambda arg: fr"{arg}$"},
@@ -21,8 +22,8 @@ EMOJI_REGEX_LITERATURE = {
 
     # Sentence Search Literature
     "📝": {"description": "Exact sentence phrase", "build": lambda arg: 'SENTENCE:' + arg},
-    "🖌️S": {"description": "Sentence starts with", "build": lambda arg: 'SENTENCE_REGEX:^' + arg},
-    "📌": {"description": "Sentence ends with", "build": lambda arg: 'SENTENCE_REGEX:' + arg + '$'},
+    "📚": {"description": "Sentence starts with","build": lambda arg: 'SENTENCE_REGEX:^' + arg},
+    "📌": {"description": "Sentence ends with","build": lambda arg: 'SENTENCE_REGEX:' + arg + r'[\.!?]?$'},
     "🔍": {"description": "Sentence contains word", "build": lambda arg: fr"SENTENCE_REGEX:\b{arg}\b"},
     "🖋️": {"description": "Sentence contains any of listed words", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
     "🖍️": {"description": "Structured sentence pattern", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
@@ -55,7 +56,7 @@ def build_sentence_map(BOOK_FOLDER):
         if filename.endswith(".txt"):
             with open(os.path.join(BOOK_FOLDER, filename), "r", encoding="utf-8", errors="ignore") as f:
                 text = f.read()
-            sentences = re.split(r'[.!?]', text)
+            sentences = re.split(r'(?<=[\.!?])\s+', text)
             sentence_map[filename] = [s.strip() for s in sentences if s.strip()]
     return sentence_map
 
@@ -181,7 +182,7 @@ def main():
 📝 Sentence Search Index
 
 📝:<phrase>        → Exact sentence phrase match (e.g. 📝:it was the best of times)
-🖌️S:<word>         → Sentence starts with word (e.g. 🖌️S:freedom)
+📚:<word>         → Sentence starts with word (e.g. 📚:freedom)
 📌:<word>          → Sentence ends with word (e.g. 📌:truth)
 🔍:<word>          → Sentence contains the exact word (e.g. 🔍:love)
 🖋️:<a|b|c>         → Sentence contains any listed word (e.g. 🖋️:life|death|hope)
