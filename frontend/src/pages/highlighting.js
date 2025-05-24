@@ -40,8 +40,16 @@ export const highlightMatch = (text, pattern, emoji, queryArg = '') => {
         break;
 
       case '🔧':
-      case '🔧S':
-        regex = new RegExp(queryArg, 'gi');
+        // raw-custom word regex: strip ^/$, turn .* → \S*, then force word-bounds
+        let raw = queryArg.replace(/^\^/, '').replace(/\$$/, '');
+        raw = raw.replace(/\.\*/g, '\\S*');
+        // now only match contiguous non-spaces between word-bounds
+        regex = new RegExp(`\\b(?:${raw})\\b`, 'gi');
+        break
+      case '🛠️':
+        let clean = pattern.replace(/^\^/, '').replace(/\$$/, '')
+        // build a global, case‐insensitive search inside the snippet
+        regex = new RegExp(`(${clean})`, 'gi')
         break;
 
       case '📝':

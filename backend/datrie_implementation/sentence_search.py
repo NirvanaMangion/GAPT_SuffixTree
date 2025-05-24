@@ -20,7 +20,9 @@ def search_sentences(query, sentence_map, use_regex=False):
         for idx, sentence in enumerate(sentences):
             text = sentence.strip()
             if use_regex:
-                if pattern.search(text):
+                # remove trailing punctuation so ^…$ can match
+                text_clean = re.sub(r'[\.!?]+$', '', text)
+                if pattern.search(text_clean):
                     print(f"📘 {book} [#{idx}]: {text}")
                     match_count += 1
             else:

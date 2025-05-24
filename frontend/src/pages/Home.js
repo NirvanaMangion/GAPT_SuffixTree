@@ -6,7 +6,7 @@ import Logo from '../assets/logo.png';
 import CheatSheet from '../components/CheatSheet';
 
 const wordEmojis = ["📄", "✏️", "📂", "📕", "📏", "🖌️", "📎", "📖", "🔧"];
-const sentenceEmojis = ["📝", "📚", "📌", "🔍", "🖋️", "🖍️", "🔧S"];
+const sentenceEmojis = ["📝", "📚", "📌", "🔍", "🖋️", "🖍️", "🛠️"];
 
 // ✅ Emoji descriptions for hover tooltips
 const emojiDescriptions = {
@@ -24,7 +24,8 @@ const emojiDescriptions = {
   "📌": "Sentence ends with",
   "🔍": "Sentence contains word",
   "🖋️": "Sentence contains any listed words",
-  "🖍️": "Structured sentence pattern"
+  "🖍️": "Structured sentence pattern",
+  "🛠️": "Raw Sentence regex"
 };
 
 const Home = () => {

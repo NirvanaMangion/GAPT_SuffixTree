@@ -141,8 +141,12 @@ def sentence_search_handler(pattern, raw_query):
                 sentences = [s.strip() for s in sentences if s.strip()]
                 matches = []
                 for sentence in sentences:
-                    if regex.search(sentence):
-                        matches.append({"snippet": sentence.strip(), "word": ""})
+                    text = sentence.strip()
+                    # strip any final ., ! or ?
+                    text_clean = re.sub(r'[\.!?]+$', '', text)
+                    if regex.search(text_clean):
+                        # return the original (with punctuation) for display
+                        matches.append({"snippet": text, "word": ""})
 
                 if matches:
                     results.append({

@@ -27,7 +27,7 @@ EMOJI_REGEX_LITERATURE = {
     "🔍": {"description": "Sentence contains word", "build": lambda arg: fr"SENTENCE_REGEX:\b{arg}\b"},
     "🖋️": {"description": "Sentence contains any of listed words", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
     "🖍️": {"description": "Structured sentence pattern", "build": lambda arg: 'SENTENCE_REGEX:' + arg},
-    "🔧S": {"description": "Raw sentence regex", "build": lambda arg: 'SENTENCE_REGEX:' + arg}
+    "🛠️": {"description": "Raw sentence regex", "build": lambda arg: 'SENTENCE_REGEX:' + arg}
 }
 
 BOOK_FOLDER = os.path.abspath(
@@ -46,7 +46,11 @@ def parse_emoji_regex(query):
     for emoji in sorted(EMOJI_REGEX_LITERATURE, key=len, reverse=True):
         prefix = emoji + ":"
         if query.startswith(prefix):
-            arg = query[len(prefix):].strip().lower()
+            raw_arg = query[len(prefix):].strip()
+            if emoji == "🛠️":
+                arg = raw_arg
+            else:
+                arg = raw_arg.lower()
             return EMOJI_REGEX_LITERATURE[emoji]["build"](arg)
     return None
 
@@ -187,7 +191,7 @@ def main():
 🔍:<word>          → Sentence contains the exact word (e.g. 🔍:love)
 🖋️:<a|b|c>         → Sentence contains any listed word (e.g. 🖋️:life|death|hope)
 🖍️:<pattern>       → Sentence with structure pattern (e.g. 🖍️:[A-Z][^.!?]*war)
-🔧S:<regex>        → Raw custom sentence regex (e.g. 🔧S:^The.*end$)
+🛠️:<regex>        → Raw custom sentence regex (e.g. 🛠️:^The.*end$)
             """ )
 
         query = input("🔎 Search Your Story: ").strip()
