@@ -11,8 +11,9 @@ import sqlite3
 from datetime import datetime
 from werkzeug.utils import secure_filename
 
+
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS
 
 # Paths
 DATA_FILE = os.path.join(os.path.dirname(__file__), "moby_words.txt")
@@ -21,7 +22,8 @@ BOOK_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Gut
 DB_FILE = os.path.join(os.path.dirname(__file__), "searches.db")
 LEAVES_DB = os.path.join(os.path.dirname(__file__), "leaves.db")
 
-# --- Initialize database ---
+
+# Create recent_searches table if not exists
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
@@ -37,10 +39,12 @@ def init_db():
 
 init_db()
 
-# mapping‐DB holds your suffix→offset data
+
+# Setup leaf database for suffix matches
 conn_tree, cursor_tree = setup_database(LEAVES_DB)
 
-# --- Load or build suffix tree ---
+
+# Load tree if saved, else build it from word list
 if os.path.exists(TREE_FILE):
     trie, suffix_to_id = load_tree(TREE_FILE)
 else:
@@ -49,18 +53,20 @@ else:
     trie, suffix_to_id = build_suffix_tree(words)
     save_tree(trie, suffix_to_id, TREE_FILE)
 
-# --- Search with emoji regex support ---
+
+# Search handler (emoji + regex-based)
 @app.route("/api/search", methods=["GET"])
 def search():
-    raw_query = request.args.get("q", "")
+    raw_query = request.args.get("q", "")  # Get query param
     raw_query = urllib.parse.unquote_plus(raw_query).strip()
     if not raw_query:
         return jsonify({"error": "Query parameter 'q' is required."}), 400
 
-    pattern = parse_emoji_regex(raw_query)
+    pattern = parse_emoji_regex(raw_query)  # Convert emoji query to regex
     if not pattern:
         return jsonify({"error": "Invalid emoji prefix or format."}), 400
 
+    # Log search
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute("INSERT INTO recent_searches (query) VALUES (?)", (raw_query,))
@@ -70,17 +76,17 @@ def search():
     if pattern.startswith("SENTENCE:") or pattern.startswith("SENTENCE_REGEX:"):
         return sentence_search_handler(pattern, raw_query)
 
-    if pattern.startswith("RAW_REGEX:"):
-        regex = pattern[len("RAW_REGEX:"):]
-    else:
-        regex = pattern
+    regex = pattern[len("RAW_REGEX:"):] if pattern.startswith("RAW_REGEX:") else pattern
 
     try:
-        compiled = re.compile(regex, re.IGNORECASE)
+        compiled = re.compile(regex, re.IGNORECASE)  # Compile regex
     except re.error as e:
         return jsonify({"error": f"Invalid regex pattern: {e}"}), 400
 
     results = []
+
+
+    # Search all books
     for filename in os.listdir(BOOK_FOLDER):
         if filename.endswith(".txt"):
             path = os.path.join(BOOK_FOLDER, filename)
@@ -91,7 +97,7 @@ def search():
                 matches = []
                 for match in re.finditer(r'\b\w+\b', text):
                     word = match.group()
-                    if compiled.search(word):
+                    if compiled.search(word):  # Match word
                         start = match.start()
                         snippet = text[max(0, start - 40): start + len(word) + 40]
                         matches.append({
@@ -103,7 +109,7 @@ def search():
                     results.append({
                         "book": filename,
                         "count": len(matches),
-                        "snippets": matches[:3]
+                        "snippets": matches[:3]  # Only return top 3
                     })
 
             except Exception as e:
@@ -117,7 +123,8 @@ def search():
         "results": results
     })
 
-# --- Sentence-based search handler ---
+
+# Sentence search handler
 def sentence_search_handler(pattern, raw_query):
     if pattern.startswith("SENTENCE:"):
         phrase = pattern[len("SENTENCE:"):].strip()
@@ -137,15 +144,13 @@ def sentence_search_handler(pattern, raw_query):
                 with open(path, "r", encoding="utf-8-sig", errors="ignore") as f:
                     text = f.read()
 
-                sentences = re.split(r'(?<=[\.!?])\s+', text)
+                sentences = re.split(r'(?<=[\.!?])\s+', text)  # Split by sentence
                 sentences = [s.strip() for s in sentences if s.strip()]
                 matches = []
                 for sentence in sentences:
                     text = sentence.strip()
-                    # strip any final ., ! or ?
                     text_clean = re.sub(r'[\.!?]+$', '', text)
-                    if regex.search(text_clean):
-                        # return the original (with punctuation) for display
+                    if regex.search(text_clean):  # Match sentence
                         matches.append({"snippet": text, "word": ""})
 
                 if matches:
@@ -165,7 +170,8 @@ def sentence_search_handler(pattern, raw_query):
         "results": results
     })
 
-# --- Get matches in a specific book ---
+
+# Search for matches in a specific book
 @app.route("/api/book/<path:book_name>", methods=["GET"])
 def book_word_matches(book_name):
     query = request.args.get("word", "").strip()
@@ -187,7 +193,7 @@ def book_word_matches(book_name):
 
     try:
         compiled = re.compile(pattern, re.IGNORECASE)
-    except re.error as e:
+    except re.error:
         return jsonify({"book": book_name, "word": query, "matches": []})
 
     matches = []
@@ -204,7 +210,8 @@ def book_word_matches(book_name):
         "matches": matches
     })
 
-# --- ✅ Get full book text ---
+
+# Return the full content of a book
 @app.route("/api/book/full/<path:book_name>", methods=["GET"])
 def get_full_book(book_name):
     book_name = urllib.parse.unquote(book_name.strip())
@@ -224,7 +231,8 @@ def get_full_book(book_name):
         "text": text
     })
 
-# --- List all books ---
+
+# List all available books
 @app.route("/api/books", methods=["GET"])
 def get_books():
     if not os.path.exists(BOOK_FOLDER):
@@ -232,7 +240,8 @@ def get_books():
     files = [f for f in os.listdir(BOOK_FOLDER) if f.endswith(".txt")]
     return jsonify(files)
 
-# --- Recent search history ---
+
+# Return last 10 recent queries
 @app.route("/api/recent", methods=["GET"])
 def get_recent_searches():
     conn = sqlite3.connect(DB_FILE)
@@ -247,7 +256,8 @@ def get_recent_searches():
     conn.close()
     return jsonify(results)
 
-# --- Clear recent search history ---
+
+# Clear recent searches
 @app.route("/api/clear", methods=["POST"])
 def clear_recent_searches():
     conn = sqlite3.connect(DB_FILE)
@@ -257,7 +267,8 @@ def clear_recent_searches():
     conn.close()
     return jsonify({"message": "Recent searches cleared."})
 
-# --- Upload .txt book ---
+
+# Upload a new .txt book file
 @app.route("/api/upload", methods=["POST"])
 def upload_book():
     if "file" not in request.files:
@@ -270,12 +281,12 @@ def upload_book():
     if not file.filename.endswith(".txt"):
         return jsonify({"error": "Only .txt files allowed."}), 400
 
-    filename = secure_filename(file.filename)
+    filename = secure_filename(file.filename)  # Sanitize filename
     save_path = os.path.join(BOOK_FOLDER, filename)
     file.save(save_path)
 
     return jsonify({"message": f"{filename} uploaded successfully."})
 
-# --- Run app ---
+# Run the app
 if __name__ == "__main__":
     app.run(debug=True)
