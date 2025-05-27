@@ -1,7 +1,7 @@
 import os
 import re
 
-from .suffix_tree import build_suffix_tree, save_tree, load_tree, add_suffix
+from .suffix_tree import build_suffix_tree, save_tree, load_tree
 from .db_tree import setup_database, store_occurrences, load_occurrences, get_or_create_book_id
 from .moby_words import load_moby_words
 from .sentence_search import search_sentences
@@ -191,39 +191,20 @@ def main():
         elif pattern.startswith("RAW_REGEX:"):
             raw_pattern = pattern.split(":", 1)[1]
             search_regex(raw_pattern, suffix_to_id, cursor)
-        elif query.startswith("📖:"):  # handle exact word match and add if missing
+        elif query.startswith("📖:"):  # handle exact word match, but do NOT add dynamically
             word = query.split(":", 1)[1].strip()
             wl = word.lower()
             full_key = f"#{wl}$"
 
             if full_key not in suffix_to_id:
-                occurrences = {}
-                for fn in os.listdir(BOOK_FOLDER):
-                    if not fn.endswith(".txt"): continue
-                    path = os.path.join(BOOK_FOLDER, fn)
-                    with open(path, "r", encoding="utf-8", errors="ignore") as f:
-                        text = f.read().lower()
-                    pages = split_into_pages(text)
-                    book_id = get_or_create_book_id(cursor, fn)
-                    for m in re.finditer(rf"\b{re.escape(wl)}\b", text):
-                        pos = m.start()
-                        page_idx = next(i for i,(s,e) in enumerate(pages) if pos < e)
-                        occurrences.setdefault(book_id, []).append((page_idx+1, pos))
-                if occurrences:
-                    add_suffix(trie, full_key)
-                    new_id = max(suffix_to_id.values()) + 1
-                    suffix_to_id[full_key] = new_id
-                    store_occurrences(cursor, { new_id: occurrences })
-                    conn.commit()
-                    print(f"Added “{word}” to the tree and indexed {sum(len(v) for v in occurrences.values())} hits.")
-                else:
-                    print(f"Word “{word}” truly not found in any book.")
-                    continue
+                print(f"Word “{word}” not found in the trie. Only words present during the original build are searchable.")
+                continue
             search_word(word, suffix_to_id, cursor)
         else:
             search_regex(pattern, suffix_to_id, cursor)
 
     conn.close()  # cleanup DB connection
+
 
 # Script execution starts here
 if __name__ == "__main__":

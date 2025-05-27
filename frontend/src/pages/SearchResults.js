@@ -25,11 +25,10 @@ const SearchResults = () => {
     if (query) {
       setLoading(true);
       setError("");
-
       fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
-          if (data.results) {
+          if (Array.isArray(data.results)) {
             setResults(data.results);
             if (data.regex) setSearchPattern(data.regex);
             if (data.emoji) setSearchMode(data.emoji);
@@ -56,7 +55,7 @@ const SearchResults = () => {
 
   const totalPages = Math.ceil(results.length / resultsPerPage);
   const startIndex = (currentPage - 1) * resultsPerPage;
-  const currentResults = results.slice(startIndex, startIndex + resultsPerPage);
+  const currentResults = Array.isArray(results) ? results.slice(startIndex, startIndex + resultsPerPage) : [];
 
   return (
     <div className="all-books-container">
@@ -76,13 +75,18 @@ const SearchResults = () => {
                 <span className="book-icon">📚</span>
                 <div className="book-details">
                   <h3 className="book-title">
-                    <a href={`/book/${encodeURIComponent(result.book)}?word=${encodeURIComponent(query)}`}>
-                      {result.book}
-                    </a>
+                    {result.book ? (
+                      <a href={`/book/${encodeURIComponent(result.book)}?word=${encodeURIComponent(query)}`}>
+                        {result.book}
+                      </a>
+                    ) : (
+                      // If result.book is missing, fallback to book_id or "Unknown"
+                      <span>{result.book_id || "Unknown Book"}</span>
+                    )}
                   </h3>
                   <p className="book-author">Matches: {result.count}</p>
                   <ul>
-                    {result.snippets.map((obj, i) => (
+                    {(result.snippets || []).map((obj, i) => (
                       <li key={i}>
                         <em>...{highlightMatch(obj.snippet, searchPattern, searchMode, searchArg)}...</em>
                       </li>

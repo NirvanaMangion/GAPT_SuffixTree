@@ -7,47 +7,31 @@ def create_suffix_tree():
     allowed_chars = "#" + string.ascii_lowercase + "$"
     return datrie.Trie(allowed_chars)
 
-
-# Add a suffix to the trie if it's not already present
-def add_suffix(trie, suffix):
-    if suffix not in trie:
-        trie[suffix] = True
-        return True
-    return False
-
-# Build suffix tree and map each suffix to a unique ID
+# Optimized: Build suffix tree and map each suffix to a unique ID, deduplicating all suffixes first
 def build_suffix_tree(word_list):
     trie = create_suffix_tree()
     suffix_to_id = {}
-    current_id = 1
+    all_suffixes = set()  # Deduplicate all suffixes before inserting
 
+    # Gather all unique suffixes (including full words with special marker)
     for word in word_list:
         word = word.strip().lower()
         if word:
-            full_word = '#' + word + '$'  # special marker for full word
-            if full_word not in suffix_to_id:
-                if add_suffix(trie, full_word):
-                    suffix_to_id[full_word] = current_id
-                    current_id += 1
+            all_suffixes.add('#' + word + '$')  # special marker for full word
+            all_suffixes.update(word[i:] + '$' for i in range(1, len(word) + 1))
 
-
-            # Add proper suffixes (excluding the first character)
-            for i in range(1, len(word) + 1):
-                suffix = word[i:] + '$'
-                if suffix not in suffix_to_id:
-                    if add_suffix(trie, suffix):
-                        suffix_to_id[suffix] = current_id
-                        current_id += 1
+    # Now insert all unique suffixes into trie and assign IDs
+    for current_id, suffix in enumerate(all_suffixes, 1):
+        trie[suffix] = True
+        suffix_to_id[suffix] = current_id
 
     return trie, suffix_to_id
-
 
 # Save trie and mapping to a pickle file
 def save_tree(trie, mapping, filename="suffix_tree.pkl"):
     with open(filename, "wb") as f:
         pickle.dump((trie, mapping), f)
     print(f"Suffix tree and mapping saved to {filename}")
-
 
 # Load trie and mapping from a pickle file
 def load_tree(filename="suffix_tree.pkl"):
