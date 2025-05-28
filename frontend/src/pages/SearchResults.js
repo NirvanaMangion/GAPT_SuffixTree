@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import './AllBooks.css';
 import { highlightMatch } from './highlighting';
@@ -6,10 +6,7 @@ import { highlightMatch } from './highlighting';
 const SearchResults = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-
-  const queryParam = params.get("q");
-  const mode = params.get("mode");
-  const query = mode && queryParam ? `${mode}:${queryParam}` : queryParam;
+  const query = params.get("q");
 
   const [results, setResults] = useState([]);
   const [searchPattern, setSearchPattern] = useState("");
@@ -25,6 +22,7 @@ const SearchResults = () => {
     if (query) {
       setLoading(true);
       setError("");
+
       fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
@@ -53,42 +51,50 @@ const SearchResults = () => {
     }
   }, [query]);
 
-  const totalPages = Math.ceil(results.length / resultsPerPage);
+  // Group results by book
+  const groupedResults = useMemo(() => {
+    const grouped = results.reduce((acc, curr) => {
+      const book = curr.book || "Unknown Book";
+      if (!acc[book]) acc[book] = [];
+      acc[book].push(curr);
+      return acc;
+    }, {});
+    return Object.entries(grouped);
+  }, [results]);
+
+  const totalPages = Math.ceil(groupedResults.length / resultsPerPage);
   const startIndex = (currentPage - 1) * resultsPerPage;
-  const currentResults = Array.isArray(results) ? results.slice(startIndex, startIndex + resultsPerPage) : [];
+  const paginatedBooks = groupedResults.slice(startIndex, startIndex + resultsPerPage);
 
   return (
     <div className="all-books-container">
-      <h1>Search Results for "{queryParam}"</h1>
+      <h1>Search Results for "{query}"</h1>
+
       {loading && <div className="spinner"></div>}
       {error && <p className="error-message">{error}</p>}
-      {!loading && results.length === 0 && !error && (
-        <p>No results found for "{queryParam}".</p>
+      {!loading && groupedResults.length === 0 && !error && (
+        <p>No results found for "{query}".</p>
       )}
 
-      {!loading && results.length > 0 && (
-        <div>
+      {!loading && groupedResults.length > 0 && (
+        <>
           <h2 className="group-title">Found In Books</h2>
           <div className="books-list">
-            {currentResults.map((result, index) => (
+            {paginatedBooks.map(([bookName, entries], index) => (
               <div key={index} className="book-card">
                 <span className="book-icon">📚</span>
                 <div className="book-details">
                   <h3 className="book-title">
-                    {result.book ? (
-                      <a href={`/book/${encodeURIComponent(result.book)}?word=${encodeURIComponent(query)}`}>
-                        {result.book}
-                      </a>
-                    ) : (
-                      // If result.book is missing, fallback to book_id or "Unknown"
-                      <span>{result.book_id || "Unknown Book"}</span>
-                    )}
+                    <a href={`/book/${encodeURIComponent(bookName)}?word=${encodeURIComponent(query)}`}>
+                      {bookName}
+                    </a>
                   </h3>
-                  <p className="book-author">Matches: {result.count}</p>
                   <ul>
-                    {(result.snippets || []).map((obj, i) => (
+                    {entries.slice(0, 3).map((entry, i) => (
                       <li key={i}>
-                        <em>...{highlightMatch(obj.snippet, searchPattern, searchMode, searchArg)}...</em>
+                        <span>
+                          {highlightMatch(entry.snippet || '', searchPattern, searchMode, searchArg)}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -98,7 +104,10 @@ const SearchResults = () => {
           </div>
 
           <div className="pagination">
-            <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1}>
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
               &laquo; Prev
             </button>
             {Array.from({ length: totalPages }, (_, i) => (
@@ -110,11 +119,14 @@ const SearchResults = () => {
                 {i + 1}
               </button>
             ))}
-            <button onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            >
               Next &raquo;
             </button>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -18,7 +18,6 @@ BOOK_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Gut
 LEAVES_DB = os.path.join(os.path.dirname(__file__), "leaves.db")
 DB_FILE = os.path.join(os.path.dirname(__file__), "searches.db")
 
-# --------- Helpers for mapping book ID <-> name ----------
 def get_book_id_to_name_map(cursor):
     cursor.execute("SELECT id, name FROM books")
     return {row[0]: row[1] for row in cursor.fetchall()}
@@ -27,7 +26,6 @@ def get_book_name_to_id_map(cursor):
     cursor.execute("SELECT id, name FROM books")
     return {row[1]: row[0] for row in cursor.fetchall()}
 
-# --------- Backend Setup -----------
 def extract_words_from_books(book_folder):
     word_set = set()
     for filename in os.listdir(book_folder):
@@ -51,7 +49,6 @@ def setup_backend():
         store_occurrences(cursor, occurrences_map)
         conn.commit()
         print("Indexed all books and saved suffix occurrences to the DB.")
-    # Build book_id <-> name map
     book_id_to_name = get_book_id_to_name_map(cursor)
     book_name_to_id = get_book_name_to_id_map(cursor)
     conn.close()
@@ -59,7 +56,6 @@ def setup_backend():
 
 trie, suffix_to_id, book_id_to_name, book_name_to_id = setup_backend()
 
-# --------- Recent Search DB Setup -----------
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
@@ -74,15 +70,6 @@ def init_db():
     conn.close()
 init_db()
 
-# --------- Highlight Helper -----------
-def highlight_snippet(text, word):
-    if not word:
-        return text
-    pattern = re.escape(word)
-    return re.sub(pattern, lambda m: f"<mark>{m.group(0)}</mark>", text, flags=re.IGNORECASE)
-
-# --------- API Endpoints -----------
-
 @app.route("/api/search", methods=["GET"])
 def search():
     raw_query = request.args.get("q", "")
@@ -94,7 +81,6 @@ def search():
     if not pattern:
         return jsonify({"error": "Invalid emoji prefix or format."}), 400
 
-    # Log search
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute("INSERT INTO recent_searches (query) VALUES (?)", (raw_query,))
@@ -105,72 +91,65 @@ def search():
     emoji = raw_query.split(":", 1)[0] if ":" in raw_query else ""
     arg = raw_query.split(":", 1)[1].strip().lower() if ":" in raw_query else ""
 
+    matching_keys = []
+
     if emoji in ["📄", "✏️", "📖", "📂", "📕", "📏", "🖌️", "📎", "🔧"]:
-        # Build matching_keys like before
-        if emoji == "📄":
-            suffix = arg + "$"
-            matching_keys = [k for k in trie.keys() if k.endswith(suffix)]
-        elif emoji == "✏️":
-            prefix = "#" + arg
-            matching_keys = trie.keys(prefix)
-        elif emoji == "📖":
-            key = "#" + arg + "$"
-            matching_keys = [key] if key in trie else []
-        elif emoji == "📂":
-            try:
+        try:
+            if emoji == "📄":
+                suffix = arg + "$"
+                matching_keys = [k for k in trie.keys() if k.endswith(suffix)]
+
+            elif emoji == "✏️":
+                prefix = "#" + arg
+                matching_keys = trie.keys(prefix)
+
+            elif emoji == "📖":
+                key = "#" + arg + "$"
+                matching_keys = [key] if key in trie else []
+
+            elif emoji == "📂":
                 n = int(arg)
                 matching_keys = [k for k in trie.keys() if k.startswith("#") and len(k) - 2 >= n]
-            except:
-                matching_keys = []
-        elif emoji == "📕":
-            try:
+
+            elif emoji == "📕":
                 n = int(arg)
                 matching_keys = [k for k in trie.keys() if k.startswith("#") and len(k) - 2 <= n]
-            except:
-                matching_keys = []
-        elif emoji == "📏":
-            try:
+
+            elif emoji == "📏":
                 n = int(arg)
                 matching_keys = [k for k in trie.keys() if k.startswith("#") and len(k) - 2 == n]
-            except:
-                matching_keys = []
-        elif emoji == "🖌️":
-            parts = arg.split("|")
-            matching_keys = [k for k in trie.keys() if any(k.endswith(part + "$") for part in parts)]
-        elif emoji == "📎":
-            try:
+
+            elif emoji == "🖌️":
+                parts = arg.split("|")
+                matching_keys = [k for k in trie.keys() if any(k.endswith(part + "$") for part in parts)]
+
+            elif emoji == "📎":
+                if not arg.isdigit():
+                    return jsonify({"error": "📎 expects a numeric value, e.g. 📎:2"}), 400
                 count = int(arg)
                 regex = re.compile(r'(.)\1{' + str(count - 1) + ',}')
                 matching_keys = [k for k in trie.keys() if regex.search(k[1:-1] if k.startswith("#") else k)]
-            except:
-                matching_keys = []
-        elif emoji == "🔧":
-            regex = arg
-            try:
-                compiled = re.compile(regex)
+
+            elif emoji == "🔧":
+                compiled = re.compile(arg)
                 matching_keys = [k for k in trie.keys() if compiled.search(k[1:-1] if k.startswith("#") else k)]
-            except re.error:
-                matching_keys = []
-        else:
-            matching_keys = []
+
+        except Exception as e:
+            return jsonify({"error": f"Failed to process search pattern: {e}"}), 400
+
         if not matching_keys:
             return jsonify({"results": [], "message": "No matches found."})
 
-        # Open DB and return BOOK NAME and SNIPPET!
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            print(f"Total matching keys: {len(matching_keys)}")  # Debug
             for key in matching_keys:
                 if key not in suffix_to_id:
-                    print(f"Skipping missing key: {key}")  # Debug
                     continue
                 leaf_id = suffix_to_id[key]
                 data = load_occurrences(cursor, leaf_id)
-                print(f"Leaf ID {leaf_id} has data for books: {list(data.keys())}")  # Debug
 
                 for book_id, offsets in data.items():
                     book_name = book_id_to_name.get(int(book_id), f"Book {book_id}")
-                    print(f"Book {book_id} ({book_name}) has {len(offsets)} offsets")  # Debug
                     for offset in offsets[:10]:
                         try:
                             book_path = os.path.join(BOOK_FOLDER, book_name)
@@ -180,24 +159,28 @@ def search():
                             start = max(0, start_offset - 60)
                             end = min(len(text), start_offset + 60)
                             snippet = text[start:end].replace('\n', ' ')
-                            snippet = highlight_snippet(snippet, arg)
                             results.append({
                                 "book": book_name,
                                 "offset": offset,
                                 "snippet": snippet
                             })
                         except Exception as e:
-                            print(f"Error reading snippet for {book_name} offset {offset}: {e}")
+                            try:
+                                print(f"[error] Reading {book_name} offset {offset}: {e}")
+                            except Exception:
+                                pass
         finally:
             conn.close()
+
         return jsonify({
             "query": raw_query,
             "emoji": emoji,
             "results": results
         })
 
-    # Sentence or regex fallback
     return regex_fallback_search(raw_query, pattern, emoji, arg)
+
+# (Other route code stays unchanged, no edits required unless you're printing inside those too.)
 
 def regex_fallback_search(raw_query, pattern, emoji, arg):
     results = []
@@ -231,14 +214,13 @@ def regex_fallback_search(raw_query, pattern, emoji, arg):
                         results.append({
                             "book": filename,
                             "offset": None,
-                            "snippet": highlight_snippet(s, arg)
+                            "snippet": s
                         })
                 else:
                     matches = [m for m in regex.finditer(text)]
                     for m in matches[:3]:
                         start, end = m.start(), m.end()
                         snippet = text[max(0, start-60):min(len(text), end+60)].replace('\n', ' ')
-                        snippet = highlight_snippet(snippet, arg)
                         results.append({
                             "book": filename,
                             "offset": start,
@@ -306,10 +288,10 @@ def book_word_matches(book_name):
                 with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
                     text = f.read()
                 for offset in offsets[:10]:
-                    start = max(0, offset - 60)
-                    end = min(len(text), offset + 60)
+                    start_offset = offset[0] if isinstance(offset, (list, tuple)) else offset
+                    start = max(0, start_offset - 60)
+                    end = min(len(text), start_offset + 60)
                     snippet = text[start:end]
-                    snippet = highlight_snippet(snippet, word)
                     results.append({"offset": offset, "snippet": snippet})
         finally:
             conn.close()

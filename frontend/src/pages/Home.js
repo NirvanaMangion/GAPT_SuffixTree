@@ -42,9 +42,12 @@ const Home = () => {
   const getEmojiOptions = () => (searchType === 'word' ? wordEmojis : sentenceEmojis);
 
   const handleSearch = () => {
-    if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query.trim())}&mode=${encodeURIComponent(selectedEmoji)}&type=${searchType}`);
-    }
+    if (!query.trim()) return;
+
+    // Automatically build the final emoji-prefixed query
+    const combinedQuery = `${selectedEmoji}:${query.trim()}`;
+
+    navigate(`/search?q=${encodeURIComponent(combinedQuery)}&type=${searchType}`);
   };
 
   const handleKeyPress = (e) => {
