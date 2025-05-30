@@ -28,11 +28,17 @@ const SearchResults = () => {
         .then(data => {
           if (Array.isArray(data.results)) {
             setResults(data.results);
+
+            // Set global pattern/mode/arg from API
             if (data.regex) setSearchPattern(data.regex);
             if (data.emoji) setSearchMode(data.emoji);
+
+            // Extract queryArg from query, e.g. for 📄:ing, arg is 'ing'
             if (data.query && data.query.includes(":")) {
               const [, arg] = data.query.split(":", 2);
-              setSearchArg(arg);
+              setSearchArg(arg.trim());
+            } else {
+              setSearchArg(""); // fallback
             }
           } else if (data.error) {
             setResults([]);
@@ -90,13 +96,19 @@ const SearchResults = () => {
                     </a>
                   </h3>
                   <ul>
-                    {entries.slice(0, 3).map((entry, i) => (
-                      <li key={i}>
-                        <span>
-                          {highlightMatch(entry.snippet || '', searchPattern, searchMode, searchArg)}
-                        </span>
-                      </li>
-                    ))}
+                    {entries.slice(0, 3).map((entry, i) => {
+                      // Try to use pattern/emoji/arg per entry (if backend sends them), otherwise fallback to global
+                      const pattern = entry.pattern || searchPattern || searchArg;
+                      const emoji = entry.emoji || searchMode;
+                      const arg = entry.arg || searchArg;
+                      return (
+                        <li key={i}>
+                          <span>
+                            {highlightMatch(entry.snippet || '', pattern, emoji, arg)}
+                          </span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               </div>

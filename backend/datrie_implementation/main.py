@@ -13,7 +13,7 @@ EMOJI_REGEX_LITERATURE = {
     "📄": {"description": "Ends with a suffix", "build": lambda arg: fr"{arg}$"},          # e.g., ment$
     "✏️": {"description": "Starts with a prefix", "build": lambda arg: fr"^{arg}"},         # e.g., ^un
     "📂": {"description": "Minimum word length", "build": lambda arg: fr"\b\w{{{arg},}}\b"}, # e.g., words >= N chars
-    "📕": {"description": "Maximum word length", "build": lambda arg: fr"\b\w{{1,{arg}}}\b"}, # e.g., words <= N chars
+    "📕": {"description": "Maximum word length", "build": lambda arg: fr"\b[a-zA-Z]{{1,{arg}}}\b"}, # e.g., words <= N chars
     "📏": {"description": "Exact word length", "build": lambda arg: fr"\b\w{{{arg}}}\b"},     # e.g., words = N chars
     "🖌️": {"description": "Ends in any listed suffix", "build": lambda arg: fr"({arg})$"},    # e.g., ed|ing$
     "📎": {"description": "Repeated characters", "build": lambda arg: fr"(.)\1{{{int(arg)-1},}}"}, # e.g., oo, ll
