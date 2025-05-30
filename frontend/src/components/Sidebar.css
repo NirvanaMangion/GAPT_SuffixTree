@@ -1,0 +1,47 @@
+.sidebar {
+  position: absolute;
+  top: 90px; /* Adjusted to fit better under the header */
+  right: 0px; /* Small margin from the edge */
+  min-width: 180px; /* Minimum width for consistency */
+  background-color: white;
+  border-radius: 12px; /* Softer rounded corners */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Smoother, larger shadow */
+  display: none;
+  flex-direction: column;
+  padding: 12px;
+  z-index: 1000;
+  animation: fadeSlideDown 0.3s ease forwards; /* ✅ Smooth dropdown animation */
+}
+
+.sidebar.visible {
+  display: flex;
+}
+
+.sidebar button {
+  margin: 8px 0;
+  padding: 10px 15px;
+  background-color: #07485b;
+  color: white;
+  border: none;
+  border-radius: 8px; /* More consistent with card designs */
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar button:hover {
+  background-color: #0a9396;
+  transform: translateX(3px); /* ✅ subtle movement on hover */
+}
+
+/* Smooth fade-slide animation */
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
