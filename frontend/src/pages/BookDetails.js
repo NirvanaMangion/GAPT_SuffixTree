@@ -64,8 +64,13 @@ const BookDetails = () => {
 
       {!loading && !error && highlightedMatches.map((match, index) => (
         <div key={index} className="book-card">
-          <p><strong>Offset:</strong> {match.offset}</p>
-          <p><strong>Context:</strong> {match.context}</p>
+          <div>
+            <p><strong>Offset:</strong> {match.offset[1]}</p>
+          </div>
+          <br/>
+          <div>
+            <p><strong>Context:</strong> {match.snippet}</p>
+          </div>
         </div>
       ))}
     </div>

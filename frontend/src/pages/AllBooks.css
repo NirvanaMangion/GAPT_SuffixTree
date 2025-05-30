@@ -35,7 +35,6 @@ body {
 }
 
 .book-card {
-  display: flex;
   align-items: center;
   background-color: var(--card-bg);
   padding: 16px 20px;

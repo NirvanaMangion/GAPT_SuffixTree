@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 from datrie_implementation.suffix_tree import build_suffix_tree, load_tree, save_tree
 from datrie_implementation.db_tree import setup_database, load_occurrences, store_occurrences, get_or_create_book_id
 from datrie_implementation.index_books import index_books
-from datrie_implementation.main import parse_emoji_regex
-from flask_cors import CORS
+from datrie_implementation.main import parse_emoji_regex, search_regex
+from flask_cors import CORS, cross_origin
 import os
 import re
 import urllib.parse
@@ -155,9 +155,9 @@ def search():
                             book_path = os.path.join(BOOK_FOLDER, book_name)
                             with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
                                 text = f.read()
-                            start_offset = offset[0] if isinstance(offset, (list, tuple)) else offset
+                            start_offset = offset[1] if isinstance(offset, (list, tuple)) else offset
                             start = max(0, start_offset - 60)
-                            end = min(len(text), start_offset + 60)
+                            end = min(len(text), start_offset + 60 )
                             snippet = text[start:end].replace('\n', ' ')
                             results.append({
                                 "book": book_name,
@@ -205,7 +205,7 @@ def regex_fallback_search(raw_query, pattern, emoji, arg):
         if filename.endswith(".txt"):
             path = os.path.join(BOOK_FOLDER, filename)
             try:
-                with open(path, "r", encoding="utf-8-sig", errors="ignore") as f:
+                with open(path, "r", encoding="utf-8", errors="ignore") as f:
                     text = f.read()
                 if pattern.startswith("SENTENCE"):
                     sentences = re.split(r'(?<=[\.!?])\s+', text)
@@ -249,7 +249,7 @@ def get_full_book(book_name):
     book_path = os.path.join(BOOK_FOLDER, book_name)
     if not os.path.exists(book_path):
         return jsonify({"error": "Book not found"}), 404
-    with open(book_path, "r", encoding="utf-8-sig", errors="ignore") as f:
+    with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
         text = f.read()
     return jsonify({
         "book": book_name,
@@ -257,6 +257,7 @@ def get_full_book(book_name):
     })
 
 @app.route("/api/book/<path:book_name>", methods=["GET"])
+# @cross_origin()
 def book_word_matches(book_name):
     query = request.args.get("word", "").strip()
     book_name = urllib.parse.unquote(book_name.strip())
@@ -276,11 +277,184 @@ def book_word_matches(book_name):
         return jsonify({"book": book_name, "word": query, "matches": []})
 
     results = []
-    if query.startswith("📖:"):
-        word = query.split(":", 1)[1].strip().lower()
-        key = "#" + word + "$"
+    # 📄 Ends with a suffix
+    if query.startswith("📄:"):
         conn, cursor = setup_database(LEAVES_DB)
         try:
+            pattern = parse_emoji_regex(query)  # e.g. 'ing$'
+            regex = re.compile(pattern, re.IGNORECASE)
+            matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
+            if matching_keys:
+                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+                    text = f.read()
+                for key in matching_keys:
+                    leaf_id = suffix_to_id.get(key)
+                    if not leaf_id: continue
+                    data = load_occurrences(cursor, leaf_id)
+                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
+                    for offset in offsets[:10]:
+                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
+                        start = max(0, pos - 240)
+                        end = min(len(text), pos + 240)
+                        snippet = text[start:end]
+                        results.append({"offset": offset, "snippet": snippet})
+        finally:
+            conn.close()
+
+    # ✏️ Starts with a prefix
+    elif query.startswith("✏️:"):
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            pattern = parse_emoji_regex(query)  # e.g. '^pre'
+            regex = re.compile(pattern, re.IGNORECASE)
+            matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
+            if matching_keys:
+                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+                    text = f.read()
+                for key in matching_keys:
+                    leaf_id = suffix_to_id.get(key)
+                    if not leaf_id: continue
+                    data = load_occurrences(cursor, leaf_id)
+                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
+                    for offset in offsets[:10]:
+                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
+                        start = max(0, pos - 240)
+                        end = min(len(text), pos + 240)
+                        snippet = text[start:end]
+                        results.append({"offset": offset, "snippet": snippet})
+        finally:
+            conn.close()
+
+    # 📂 Minimum word length
+    # 📂 Minimum word length
+    elif query.startswith("📂:"):
+        # 1) build the pattern
+        pattern = parse_emoji_regex(query)  # e.g. r"\b\w{8,}\b"
+
+        # 2) grab all occurrences in one shot
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
+        finally:
+            conn.close()
+
+        # 3) read the book once
+        with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+
+        # 4) slice out your snippets
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
+            start = max(0, pos - 240)
+            end = min(len(text), pos + 240)
+            snippet = text[start:end]
+            results.append({"offset": off, "snippet": snippet})
+
+    # 📕 Maximum word length
+    elif query.startswith("📕:"):
+        # 1) build the pattern
+        pattern = parse_emoji_regex(query)  # e.g. r"\b\w{8,}\b"
+
+        # 2) grab all occurrences in one shot
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
+        finally:
+            conn.close()
+
+        # 3) read the book once
+        with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+
+        # 4) slice out your snippets
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
+            start = max(0, pos - 240)
+            end = min(len(text), pos + 240)
+            snippet = text[start:end]
+            results.append({"offset": off, "snippet": snippet})
+
+    # 📏 Exact word length
+    elif query.startswith("📏:"):
+        # 1) build the pattern
+        pattern = parse_emoji_regex(query)  # e.g. r"\b\w{8,}\b"
+
+        # 2) grab all occurrences in one shot
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
+        finally:
+            conn.close()
+
+        # 3) read the book once
+        with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+
+        # 4) slice out your snippets
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
+            start = max(0, pos - 240)
+            end = min(len(text), pos + 240)
+            snippet = text[start:end]
+            results.append({"offset": off, "snippet": snippet})
+
+    # 🖌️ Ends in any listed suffix
+    elif query.startswith("🖌️:"):
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            pattern = parse_emoji_regex(query)  # e.g. '(ing|ed)$'
+            regex = re.compile(pattern, re.IGNORECASE)
+            matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
+            if matching_keys:
+                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+                    text = f.read()
+                for key in matching_keys:
+                    leaf_id = suffix_to_id.get(key)
+                    if not leaf_id: continue
+                    data = load_occurrences(cursor, leaf_id)
+                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
+                    for offset in offsets[:10]:
+                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
+                        start = max(0, pos - 240)
+                        end = min(len(text), pos + 240)
+                        snippet = text[start:end]
+                        results.append({"offset": offset, "snippet": snippet})
+        finally:
+            conn.close()
+
+    # 📎 Repeated characters
+    elif query.startswith("📎:"):
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            pattern = parse_emoji_regex(query)  # e.g. '(.)\1{2,}'
+            regex = re.compile(pattern)
+            matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
+            if matching_keys:
+                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+                    text = f.read()
+                for key in matching_keys:
+                    leaf_id = suffix_to_id.get(key)
+                    if not leaf_id: continue
+                    data = load_occurrences(cursor, leaf_id)
+                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
+                    for offset in offsets[:10]:
+                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
+                        start = max(0, pos - 240)
+                        end = min(len(text), pos + 240)
+                        snippet = text[start:end]
+                        results.append({"offset": offset, "snippet": snippet})
+        finally:
+            conn.close()
+
+    # 📖 Exact word match
+    elif query.startswith("📖:"):
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            word = query.split(":", 1)[1].strip().lower()
+            key = "#" + word + "$"
             if key in suffix_to_id:
                 leaf_id = suffix_to_id[key]
                 data = load_occurrences(cursor, leaf_id)
@@ -288,20 +462,34 @@ def book_word_matches(book_name):
                 with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
                     text = f.read()
                 for offset in offsets[:10]:
-                    start_offset = offset[0] if isinstance(offset, (list, tuple)) else offset
-                    start = max(0, start_offset - 60)
-                    end = min(len(text), start_offset + 60)
+                    start_offset = offset[1] if isinstance(offset, (list, tuple)) else offset
+                    start = max(0, start_offset - 240)
+                    end = min(len(text), start_offset + 240)
                     snippet = text[start:end]
                     results.append({"offset": offset, "snippet": snippet})
         finally:
             conn.close()
-    # Add more emoji logic as needed
 
-    return jsonify({
-        "book": book_name,
-        "word": query,
-        "matches": results
-    })
+    # 🔧 Raw custom regex
+    elif query.startswith("🔧:"):
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            pattern = parse_emoji_regex(query)  # raw regex after 'RAW_REGEX:'
+            regex = re.compile(pattern, re.IGNORECASE)
+            with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+                text = f.read()
+            for m in regex.finditer(text):
+                pos = m.start()
+                start = max(0, pos - 240)
+                end = min(len(text), pos + 240)
+                snippet = text[start:end]
+                results.append({"offset": pos, "snippet": snippet})
+        finally:
+            conn.close()
+
+    resp = jsonify({"book": book_name, "word": query, "matches": results})
+    resp.headers.add("Access-Control-Allow-Origin", "*")
+    return resp
 
 @app.route("/api/recent", methods=["GET"])
 def get_recent_searches():

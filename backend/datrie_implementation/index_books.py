@@ -35,7 +35,8 @@ def index_books(folder, suffix_to_id, cursor, page_size=1500, filenames=None):
             continue  # Only process .txt files
 
         path = os.path.join(folder, filename)
-        with open(path, "r", encoding="latin-1") as f:
+        print(filename)
+        with open(path, "r", encoding="utf-8") as f:
             text = f.read().lower()  # Read and lowercase the entire text
 
         # Prepare paginated text for this book

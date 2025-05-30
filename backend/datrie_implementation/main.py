@@ -131,6 +131,7 @@ def search_regex(pattern, suffix_to_id, cursor):
             for page, pos in sorted(offsets):
                 print(f"Book ID {book_id} — Page: {page} - Offset: {pos} — Matched: '{matched}'")
     print()
+    return combined_occurrences
 
 # Main function to run the CLI and manage interaction
 def main():
