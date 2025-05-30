@@ -270,7 +270,6 @@ def get_full_book(book_name):
     })
 
 @app.route("/api/book/<path:book_name>", methods=["GET"])
-# @cross_origin()
 def book_word_matches(book_name):
     query = request.args.get("word", "").strip()
     book_name = urllib.parse.unquote(book_name.strip())
@@ -488,9 +487,7 @@ def book_word_matches(book_name):
         finally:
             conn.close()
 
-    resp = jsonify({"book": book_name, "word": query, "matches": results})
-    resp.headers.add("Access-Control-Allow-Origin", "*")
-    return resp
+    return jsonify({"book": book_name, "word": query, "matches": results})
 
 @app.route("/api/recent", methods=["GET"])
 def get_recent_searches():
