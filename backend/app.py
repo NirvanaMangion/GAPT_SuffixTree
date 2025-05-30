@@ -292,53 +292,41 @@ def book_word_matches(book_name):
     results = []
     # 📄 Ends with a suffix
     if query.startswith("📄:"):
+        pattern = parse_emoji_regex(query)
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            pattern = parse_emoji_regex(query)
-            regex = re.compile(pattern, re.IGNORECASE)
-            matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
-            if matching_keys:
-                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
-                    text = f.read()
-                for key in matching_keys:
-                    leaf_id = suffix_to_id.get(key)
-                    if not leaf_id: continue
-                    data = load_occurrences(cursor, leaf_id)
-                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
-                    for offset in offsets[:10]:
-                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
-                        start = max(0, pos - 240)
-                        end = min(len(text), pos + 240)
-                        snippet = text[start:end]
-                        results.append({"offset": offset, "snippet": snippet})
+            with contextlib.redirect_stdout(buf):
+                occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
         finally:
             conn.close()
+        with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
+            start = max(0, pos - 240)
+            end = min(len(text), pos + 240)
+            snippet = text[start:end]
+            results.append({"offset": off, "snippet": snippet})
 
     # ✏️ Starts with a prefix
     elif query.startswith("✏️:"):
-        arg = query.split(":", 1)[1].strip().lower()  # ensure lowercase
+        pattern = parse_emoji_regex(query)
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            # Find all trie keys that START with the prefix (whole word)
-            matching_keys = [k for k in trie.keys() if k.startswith("#" + arg) and k.endswith("$")]
-            if matching_keys:
-                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
-                    text = f.read()
-                for key in matching_keys:
-                    leaf_id = suffix_to_id.get(key)
-                    if not leaf_id:
-                        continue
-                    data = load_occurrences(cursor, leaf_id)
-                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
-                    for offset in offsets[:10]:
-                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
-                        start = max(0, pos - 240)
-                        end = min(len(text), pos + 240)
-                        snippet = text[start:end]
-                        results.append({"offset": offset, "snippet": snippet})
+            with contextlib.redirect_stdout(buf):
+                occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
         finally:
             conn.close()
-
+        with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
+            start = max(0, pos - 240)
+            end = min(len(text), pos + 240)
+            snippet = text[start:end]
+            results.append({"offset": off, "snippet": snippet})
 
     # 📂 Minimum word length
     elif query.startswith("📂:"):
@@ -402,74 +390,65 @@ def book_word_matches(book_name):
 
    # 📏 Exact word length
     elif query.startswith("📏:"):
-        pattern = parse_emoji_regex(query)  # should be r"\b\w{N}\b"
-        regex = re.compile(pattern)
+        pattern = parse_emoji_regex(query)
+        conn, cursor = setup_database(LEAVES_DB)
+        try:
+            with contextlib.redirect_stdout(buf):
+                occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
+        finally:
+            conn.close()
 
         with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
             text = f.read()
 
-        count = 0
-        for m in regex.finditer(text):
-            pos = m.start()
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
             start = max(0, pos - 240)
             end = min(len(text), pos + 240)
             snippet = text[start:end]
-            results.append({"offset": pos, "snippet": snippet})
-            count += 1
-            if count >= 10:   # limit to 10
-
-                break
+            results.append({"offset": off, "snippet": snippet})
 
 
     # 🖌️ Ends in any listed suffix
     elif query.startswith("🖌️:"):
+        pattern = parse_emoji_regex(query)
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            pattern = parse_emoji_regex(query)  # e.g. '(ing|ed)$'
-            regex = re.compile(pattern, re.IGNORECASE)
-            matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
-            if matching_keys:
-                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
-                    text = f.read()
-                for key in matching_keys:
-                    leaf_id = suffix_to_id.get(key)
-                    if not leaf_id:
-                        continue
-                    data = load_occurrences(cursor, leaf_id)
-                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
-                    for offset in offsets[:10]:
-                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
-                        start = max(0, pos - 240)
-                        end = min(len(text), pos + 240)
-                        snippet = text[start:end]
-                        results.append({"offset": offset, "snippet": snippet})
+            with contextlib.redirect_stdout(buf):
+                occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
         finally:
             conn.close()
 
+        with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
+            start = max(0, pos - 240)
+            end = min(len(text), pos + 240)
+            snippet = text[start:end]
+            results.append({"offset": off, "snippet": snippet})
 
     # 📎 Repeated characters
     elif query.startswith("📎:"):
+        pattern = parse_emoji_regex(query)
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            pattern = parse_emoji_regex(query)  # e.g. '(.)\1{2,}'
-            regex = re.compile(pattern)
-            matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
-            if matching_keys:
-                with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
-                    text = f.read()
-                for key in matching_keys:
-                    leaf_id = suffix_to_id.get(key)
-                    if not leaf_id: continue
-                    data = load_occurrences(cursor, leaf_id)
-                    offsets = data.get(str(book_id), []) if isinstance(data, dict) else []
-                    for offset in offsets[:10]:
-                        pos = offset[1] if isinstance(offset, (list, tuple)) else offset
-                        start = max(0, pos - 240)
-                        end = min(len(text), pos + 240)
-                        snippet = text[start:end]
-                        results.append({"offset": offset, "snippet": snippet})
+            with contextlib.redirect_stdout(buf):
+                occ_map = search_regex(pattern, suffix_to_id, cursor)
+            offsets = occ_map.get(str(book_id), [])
         finally:
             conn.close()
+
+        with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
+            text = f.read()
+        for off in offsets[:10]:
+            pos = off[1] if isinstance(off, (list, tuple)) else off
+            start = max(0, pos - 240)
+            end = min(len(text), pos + 240)
+            snippet = text[start:end]
+            results.append({"offset": off, "snippet": snippet})
 
     # 📖 Exact word match
     elif query.startswith("📖:"):
