@@ -3,7 +3,7 @@ import re
 import time
 import requests
 
-# Configuration 
+# Configuration
 DOWNLOAD_DIR = "Gutenberg_Books"       # Folder to save downloaded books
 TARGET_COUNT = 130                     # Total number of books to download
 BOOKSHELVES = [                        # Bookshelf categories to pull from
@@ -19,7 +19,7 @@ BOOKSHELVES = [                        # Bookshelf categories to pull from
 API_URL = "https://gutendex.com/books" # Gutendex API endpoint
 SLEEP_BETWEEN_DOWNLOADS = 0.2          # Delay between downloads (seconds)
 
-# Helpers 
+# Helpers
 def sanitize_filename(filename):
     """Remove characters unsafe for filenames."""
     return re.sub(r'[\\/*?:"<>|]', "", filename).strip()
@@ -46,12 +46,12 @@ def looks_like_prose(text, letter_ratio_thresh=0.7, min_length=500):
     hits = sum(1 for w in common_words if w in low)
     return hits >= 2
 
-# Prepare download folder & state 
+# Prepare download folder & state
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)  # create folder if it doesn’t exist
-seen = set()   # track already downloaded books 
+seen = set()   # track already downloaded books
 count = 0      # current download count
 
-# Main loop: iterate bookshelves and pages 
+# Main loop: iterate bookshelves and pages
 for shelf in BOOKSHELVES:
     page = 1  # start from the first page
     while count < TARGET_COUNT:
@@ -100,7 +100,12 @@ for shelf in BOOKSHELVES:
             except requests.RequestException:
                 continue  # skip if download fails
 
-            text = r.content.decode("utf-8", errors="ignore")  # decode with fallback
+            try:
+                text = r.content.decode("utf-8")  # strict decoding
+            except UnicodeDecodeError:
+                print(f"Skipping (encoding error): {combined}")
+                continue
+
             if not looks_like_prose(text):
                 continue  # skip if it doesn’t look like valid prose
 

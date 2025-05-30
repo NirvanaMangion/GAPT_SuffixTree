@@ -1,8 +1,11 @@
+import contextlib
+import io
 from flask import Flask, request, jsonify
 from datrie_implementation.suffix_tree import build_suffix_tree, load_tree, save_tree
 from datrie_implementation.db_tree import setup_database, load_occurrences, store_occurrences, get_or_create_book_id
 from datrie_implementation.index_books import index_books
 from datrie_implementation.main import parse_emoji_regex, search_regex
+from datrie_implementation.moby_words import load_moby_words
 from flask_cors import CORS, cross_origin
 import os
 import re
@@ -17,6 +20,7 @@ TREE_FILE = os.path.join(os.path.dirname(__file__), "suffix_tree.pkl")
 BOOK_FOLDER = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Gutenberg_Books"))
 LEAVES_DB = os.path.join(os.path.dirname(__file__), "leaves.db")
 DB_FILE = os.path.join(os.path.dirname(__file__), "searches.db")
+buf = io.StringIO()
 
 def get_book_id_to_name_map(cursor):
     cursor.execute("SELECT id, name FROM books")
@@ -41,17 +45,24 @@ def setup_backend():
     if os.path.exists(TREE_FILE) and os.path.exists(LEAVES_DB):
         trie, suffix_to_id = load_tree(TREE_FILE)
     else:
-        words = extract_words_from_books(BOOK_FOLDER)
+        print("Loading Moby words...")
+        words = load_moby_words()
+        print(f"Loaded {len(words)} words from Moby.")
+        print("Building suffix tree...")
         trie, suffix_to_id = build_suffix_tree(words)
+        print(f"Built suffix tree with {len(suffix_to_id)} suffixes.")
+        print("Saving suffix tree")
         save_tree(trie, suffix_to_id, TREE_FILE)
         print("Indexing all book occurrences. This might take a while...")
         occurrences_map, _ = index_books(BOOK_FOLDER, suffix_to_id, cursor)
+        print("Storing occurrences in the database...")
         store_occurrences(cursor, occurrences_map)
         conn.commit()
         print("Indexed all books and saved suffix occurrences to the DB.")
     book_id_to_name = get_book_id_to_name_map(cursor)
     book_name_to_id = get_book_name_to_id_map(cursor)
     conn.close()
+    print('Setup complete. Suffix tree and database initialized.')
     return trie, suffix_to_id, book_id_to_name, book_name_to_id
 
 trie, suffix_to_id, book_id_to_name, book_name_to_id = setup_backend()
@@ -122,7 +133,7 @@ def search():
             elif emoji == "📏":
                 n = int(arg)
                 matching_keys = [k for k in trie.keys() if k.startswith("#") and len(k) - 2 == n]
-                
+
             elif emoji == "🖌️":
                 parts = [p.strip().rstrip('$') for p in arg.split("|")]
                 matching_keys = [k for k in trie.keys() if any(k.endswith(part + "$") for part in parts)]
@@ -183,8 +194,6 @@ def search():
         })
 
     return regex_fallback_search(raw_query, pattern, emoji, arg)
-
-# (Other route code stays unchanged, no edits required unless you're printing inside those too.)
 
 def regex_fallback_search(raw_query, pattern, emoji, arg):
     results = []
@@ -285,7 +294,7 @@ def book_word_matches(book_name):
     if query.startswith("📄:"):
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            pattern = parse_emoji_regex(query)  # e.g. 'ing$'
+            pattern = parse_emoji_regex(query)
             regex = re.compile(pattern, re.IGNORECASE)
             matching_keys = [k for k in trie.keys() if regex.search(k[1:-1])]
             if matching_keys:
@@ -332,24 +341,21 @@ def book_word_matches(book_name):
 
 
     # 📂 Minimum word length
-    # 📂 Minimum word length
     elif query.startswith("📂:"):
-        # 1) build the pattern
-        pattern = parse_emoji_regex(query)  # e.g. r"\b\w{8,}\b"
+        # build the pattern
+        pattern = parse_emoji_regex(query)
 
-        # 2) grab all occurrences in one shot
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            occ_map = search_regex(pattern, suffix_to_id, cursor)
+            with contextlib.redirect_stdout(buf):
+                occ_map = search_regex(pattern, suffix_to_id, cursor)
             offsets = occ_map.get(str(book_id), [])
         finally:
             conn.close()
 
-        # 3) read the book once
         with open(book_path, "r", encoding="utf-8", errors="ignore") as f:
             text = f.read()
 
-        # 4) slice out your snippets
         for off in offsets[:10]:
             pos = off[1] if isinstance(off, (list, tuple)) else off
             start = max(0, pos - 240)
@@ -362,7 +368,8 @@ def book_word_matches(book_name):
         pattern = parse_emoji_regex(query)
         conn, cursor = setup_database(LEAVES_DB)
         try:
-            occ_map = search_regex(pattern, suffix_to_id, cursor)
+            with contextlib.redirect_stdout(buf):
+                occ_map = search_regex(pattern, suffix_to_id, cursor)
             offsets = occ_map.get(str(book_id), [])
         finally:
             conn.close()
@@ -410,7 +417,7 @@ def book_word_matches(book_name):
             results.append({"offset": pos, "snippet": snippet})
             count += 1
             if count >= 10:   # limit to 10
-         
+
                 break
 
 
