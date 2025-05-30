@@ -136,7 +136,7 @@ def search_regex(pattern, suffix_to_id, cursor):
 # Main function to run the CLI and manage interaction
 def main():
     trie, suffix_to_id = load_tree()  # load prebuilt tree if available
-    
+
     if trie is None:
         words = load_moby_words()  # load full dictionary
         trie, suffix_to_id = build_suffix_tree(words)
@@ -168,9 +168,31 @@ def main():
 
         # Show available emoji commands
         if mode == "1":
-            print("""...Word Search Index...""")
+            print("""
+📚 Word Search Index
+
+📄:<ending>        → Ends with a suffix (e.g. 📄:ment)
+✏️:<prefix>        → Starts with a prefix (e.g. ✏️:un)
+📂:<number>        → Words with at least this many letters (e.g. 📂:5)
+📕:<number>        → Words with at most this many letters (e.g. 📕:3)
+📏:<number>        → Words of exact length (e.g. 📏:6)
+🖌️:<a|b|c>         → Ends in any of the listed suffixes (e.g. 🖌️:ed|ing)
+📎:<number>        → Repeated characters (e.g. 📎:2 matches book, cool)
+📖:<word>          → Exact word match (e.g. 📖:freedom)
+🔧:<regex>         → Raw custom regex (e.g. 🔧:^[bcd].*ing$)
+            """)
         else:
-            print("""...Sentence Search Index...""")
+            print("""
+📝 Sentence Search Index
+
+📝:<phrase>        → Exact sentence phrase match (e.g. 📝:it was the best of times)
+📚:<word>         → Sentence starts with word (e.g. 📚:freedom)
+📌:<word>          → Sentence ends with word (e.g. 📌:truth)
+🔍:<word>          → Sentence contains the exact word (e.g. 🔍:love)
+🖋️:<a|b|c>         → Sentence contains any listed word (e.g. 🖋️:life|death|hope)
+🖍️:<pattern>       → Sentence with structure pattern (e.g. 🖍️:[A-Z][^.!?]*war)
+🛠️:<regex>        → Raw custom sentence regex (e.g. 🛠️:^The.*end$)
+            """ )
 
         query = input("Search Your Story: ").strip()
         if query.lower() in ["exit", "q", "quit"]:
