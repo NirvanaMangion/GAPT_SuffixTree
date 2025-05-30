@@ -1,17 +1,14 @@
 import React from "react";
 
 /**
- * Highlights matches of the given pattern (based on emoji/search type) in the text.
- * @param {string} text - The text to highlight within.
- * @param {string} pattern - The regex/string pattern from backend (or frontend constructed).
- * @param {string} emoji - The search mode emoji.
- * @param {string} queryArg - The query argument (pattern after the emoji).
+ * @param {string} text 
+ * @param {string} pattern 
+ * @param {string} emoji 
+ * @param {string} queryArg 
  * @returns {React.ReactNode}
  */
 export const highlightMatch = (text, pattern, emoji, queryArg = '') => {
-  // Debug output to see what's being passed in
-  // Uncomment this to see values every time highlightMatch is called!
-  // console.log({ text, pattern, emoji, queryArg });
+ 
 
   let regex = null;
 
