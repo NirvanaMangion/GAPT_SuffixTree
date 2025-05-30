@@ -42,32 +42,33 @@ def index_books(folder, suffix_to_id, cursor, page_size=1500, filenames=None):
         # Prepare paginated text for this book
         book_pages = get_book_pages(text, page_size)
         book_id = get_or_create_book_id(cursor, filename)  # Get or assign a unique book ID
-        pages_map[book_id] = book_pages  
+        pages_map[book_id] = book_pages
 
         page_idx = 0  # Tracks current page index
         page_bounds = split_into_pages(text, page_size)  # Get page boundaries
 
         # Iterate through all word-like tokens in the text
         for match in re.finditer(r"\w+", text):
-            token = match.group(0)      
-            char_pos = match.start()    
+            token = match.group(0)
+            char_pos = match.start()
 
             # Move to the correct page index if necessary
             while page_idx < len(page_bounds) - 1 and char_pos >= page_bounds[page_idx][1]:
                 page_idx += 1
             page_no = page_idx + 1  # Pages are 1-based
 
-            # Add full word match 
+            # Add full word match
             full_key = f"#{token}$"
             if full_key in suffix_to_id:
                 leaf = suffix_to_id[full_key]
                 occurrences_map[leaf][book_id].append((page_no, char_pos))  # Record occurrence
 
-            # Add suffix matches 
+            # Add suffix matches
             for i in range(1, len(token) + 1):
                 suffix = f"{token[i:]}$"
                 if suffix in suffix_to_id:
                     leaf = suffix_to_id[suffix]
                     occurrences_map[leaf][book_id].append((page_no, char_pos + i))  # Offset starts from suffix position
 
-    return occurrences_map, pages_map  
+    return occurrences_map, pages_map
+#
