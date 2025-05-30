@@ -4,7 +4,6 @@ import re
 from .suffix_tree import build_suffix_tree, save_tree, load_tree
 from .db_tree import setup_database, store_occurrences, load_occurrences, get_or_create_book_id
 from .moby_words import load_moby_words
-from .sentence_search import search_sentences
 from .index_books import index_books, split_into_pages
 
 # Dictionary mapping emojis to their corresponding regex logic
@@ -19,15 +18,6 @@ EMOJI_REGEX_LITERATURE = {
     "📎": {"description": "Repeated characters", "build": lambda arg: fr"(.)\1{{{int(arg)-1},}}"}, # e.g., oo, ll
     "📖": {"description": "Exact word match", "build": lambda arg: fr"\b{arg}\b"},            # e.g., whole word
     "🔧": {"description": "Raw custom regex", "build": lambda arg: 'RAW_REGEX:' + arg},       # free-form regex
-
-    # Sentence Search
-    "📝": {"description": "Exact sentence phrase", "build": lambda arg: 'SENTENCE:' + arg},   # match full phrase
-    "📚": {"description": "Sentence starts with", "build": lambda arg: 'SENTENCE_REGEX:^' + arg}, # ^word
-    "📌": {"description": "Sentence ends with", "build": lambda arg: 'SENTENCE_REGEX:' + arg + r'[\.!?]?$'}, # word$
-    "🔍": {"description": "Sentence contains word", "build": lambda arg: fr"SENTENCE_REGEX:\b{arg}\b"}, # \bword\b
-    "🖋️": {"description": "Sentence contains any of listed words", "build": lambda arg: 'SENTENCE_REGEX:' + arg}, # a|b|c
-    "🖍️": {"description": "Structured sentence pattern", "build": lambda arg: 'SENTENCE_REGEX:' + arg}, # advanced regex
-    "🛠️": {"description": "Raw sentence regex", "build": lambda arg: 'SENTENCE_REGEX:' + arg} # free-form regex
 }
 
 # Absolute path to the Gutenberg_Books directory
@@ -45,20 +35,9 @@ def parse_emoji_regex(query):
         prefix = emoji + ":"
         if query.startswith(prefix):
             raw_arg = query[len(prefix):].strip()  # get argument after emoji:
-            arg = raw_arg if emoji == "🛠️" else raw_arg.lower()  # raw if custom sentence regex
+            arg = raw_arg  # no sentence logic anymore
             return EMOJI_REGEX_LITERATURE[emoji]["build"](arg)
     return None  # fallback if no emoji match
-
-# Builds a map from filename to a list of its sentences
-def build_sentence_map(BOOK_FOLDER):
-    sentence_map = {}
-    for filename in os.listdir(BOOK_FOLDER):
-        if filename.endswith(".txt"):
-            with open(os.path.join(BOOK_FOLDER, filename), "r", encoding="utf-8", errors="ignore") as f:
-                text = f.read()
-            sentences = re.split(r'(?<=[\.!?])\s+', text)  # split on sentence endings
-            sentence_map[filename] = [s.strip() for s in sentences if s.strip()]
-    return sentence_map
 
 # Handles exact word searches using the suffix tree
 def search_word(word, suffix_to_id, cursor):
@@ -150,25 +129,21 @@ def main():
     else:
         conn, cursor = setup_database("leaves.db")  # reuse DB if tree is already built
 
-    sentence_map = build_sentence_map(BOOK_FOLDER)  # build sentence index
-
     while True:  # CLI loop
-        print("\nChoose your search mode:")
+        print("\nWord Search Mode:")
         print("1️ Word Search")
-        print("2️ Sentence Search")
-        mode = input("Select 1 or 2 (or 'exit'): ").strip().lower()
+        mode = input("Select 1 or exit: ").strip().lower()
 
         if mode in ["exit", "q"]:
             print("Characters returned to their stories. Session closed.")
             break
 
-        if mode not in ["1", "2"]:
-            print("Invalid input. Please type 1 or 2 to continue.")
+        if mode != "1":
+            print("Invalid input. Please type 1 to continue.")
             continue
 
         # Show available emoji commands
-        if mode == "1":
-            print("""
+        print("""
 📚 Word Search Index
 
 📄:<ending>        → Ends with a suffix (e.g. 📄:ment)
@@ -180,19 +155,7 @@ def main():
 📎:<number>        → Repeated characters (e.g. 📎:2 matches book, cool)
 📖:<word>          → Exact word match (e.g. 📖:freedom)
 🔧:<regex>         → Raw custom regex (e.g. 🔧:^[bcd].*ing$)
-            """)
-        else:
-            print("""
-📝 Sentence Search Index
-
-📝:<phrase>        → Exact sentence phrase match (e.g. 📝:it was the best of times)
-📚:<word>         → Sentence starts with word (e.g. 📚:freedom)
-📌:<word>          → Sentence ends with word (e.g. 📌:truth)
-🔍:<word>          → Sentence contains the exact word (e.g. 🔍:love)
-🖋️:<a|b|c>         → Sentence contains any listed word (e.g. 🖋️:life|death|hope)
-🖍️:<pattern>       → Sentence with structure pattern (e.g. 🖍️:[A-Z][^.!?]*war)
-🛠️:<regex>        → Raw custom sentence regex (e.g. 🛠️:^The.*end$)
-            """ )
+        """)
 
         query = input("Search Your Story: ").strip()
         if query.lower() in ["exit", "q", "quit"]:
@@ -201,17 +164,11 @@ def main():
 
         pattern = parse_emoji_regex(query)
         if not pattern:
-            print("Invalid Story. Please use one of the listed emojis and formats.")
+            print("Invalid word. Please use one of the listed emojis and formats.")
             continue
 
         # Route based on parsed pattern
-        if pattern.startswith("SENTENCE_REGEX:"):
-            regex = pattern.split(":", 1)[1]
-            search_sentences(regex, sentence_map, use_regex=True)
-        elif pattern.startswith("SENTENCE:"):
-            phrase = pattern.split(":", 1)[1]
-            search_sentences(phrase, sentence_map, use_regex=False)
-        elif pattern.startswith("RAW_REGEX:"):
+        if pattern.startswith("RAW_REGEX:"):
             raw_pattern = pattern.split(":", 1)[1]
             search_regex(raw_pattern, suffix_to_id, cursor)
         elif query.startswith("📖:"):  # handle exact word match, but do NOT add dynamically
@@ -227,7 +184,6 @@ def main():
             search_regex(pattern, suffix_to_id, cursor)
 
     conn.close()  # cleanup DB connection
-
 
 # Script execution starts here
 if __name__ == "__main__":
